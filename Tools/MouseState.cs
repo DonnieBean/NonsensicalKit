@@ -8,11 +8,11 @@ namespace NonsensicalKit.Tools
     /// </summary>
     public class MouseState : MonoBehaviour
     {
-        public static bool IsApplicationFocused { get; private set; }   //是否拥有程序焦点
+        public static bool IsApplicationFocused { get; private set; } = true;   //是否拥有程序焦点
 
-        public static bool IncludedByWindow { get; private set; }    //鼠标是否在视窗中
+        public static bool IncludedByWindow { get; private set; } = true;     //鼠标是否在视窗中
 
-        public static bool FocusedAndIncluded { get { return IsApplicationFocused && IncludedByWindow; } }    //拥有程序焦点且鼠标在视窗中
+        public static bool FocusedAndIncluded { get { return IsApplicationFocused && IncludedByWindow; } }      //拥有程序焦点且鼠标在视窗中
 
         private void Awake()
         {
