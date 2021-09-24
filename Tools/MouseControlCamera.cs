@@ -3,6 +3,13 @@ using NonsensicalKit.Tools;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// 分为四级
+/// 第一级挂载脚本，负责平移
+/// 第二级swivel负责旋转
+/// 第三级stick负责远近
+/// 第四级为摄像机
+/// </summary>
 public class MouseControlCamera : NonsensicalMono
 {
     private Vector3 tarPos;
@@ -48,8 +55,8 @@ public class MouseControlCamera : NonsensicalMono
         tarPos = transform.position;
         targetZoom = (stick.localPosition.z / (stickMinZoom + stickMaxZoom));
         zoom = targetZoom;
-        yAngle = transform.localEulerAngles.y;
-        xAngle = transform.localEulerAngles.x;
+        yAngle = swivel. transform.localEulerAngles.y;
+        xAngle = swivel.transform.localEulerAngles.x;
     }
 
     private void Start()
@@ -162,12 +169,12 @@ public class MouseControlCamera : NonsensicalMono
             xAngle -= 360f;
         }
 
-        transform.localRotation = Quaternion.Euler(xAngle, yAngle, 0f);
+        swivel.transform.localRotation = Quaternion.Euler(xAngle, yAngle, 0f);
     }
 
     private void AdjustPosition(float xDelta, float yDelta)
     {
-        Vector3 direction = transform.localRotation * new Vector3(xDelta, yDelta, 0f).normalized;
+        Vector3 direction = swivel.transform.localRotation * new Vector3(xDelta, yDelta, 0f).normalized;
         float damping = Mathf.Max(Mathf.Abs(xDelta), Mathf.Abs(yDelta));
         float distance = Mathf.Lerp(moveSpeedMinZoom, moveSpeedMaxZoom, zoom) * damping * Time.deltaTime;
 
