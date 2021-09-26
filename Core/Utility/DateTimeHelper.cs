@@ -2,7 +2,7 @@
 
 namespace NonsensicalKit.Utility
 {
-    public class DateHelper
+    public class DateTimeHelper
     {
         private void Test()
         {
@@ -39,7 +39,7 @@ namespace NonsensicalKit.Utility
 
             DateTime dt = DateTime.Now;
             int n = 3;
-            //n为一个数,可以数整数,也可以事小数
+            //n为一个数,可以是整数,也可以是小数
             dt.AddYears(n).ToString();      //时间加n年
             dt.AddDays(n).ToString();       //加n天
             dt.AddHours(n).ToString();      //加n小时
@@ -53,10 +53,33 @@ namespace NonsensicalKit.Utility
         /// 获取当前日期的字符串
         /// </summary>
         /// <returns>当前日期的字符串</returns>
-        internal static string GetDateString(string divider="_")
+        public static string GetDateString(string divider = "_")
+        {
+            return DateTime.Today.ToString($"yyyy{divider}mm{divider}dd hh:mm:ss");
+        }
+
+        /// <summary>
+        /// 获取当前日期时间的字符串
+        /// </summary>
+        /// <returns>当前日期的字符串</returns>
+        public static string GetDateTimeString(string divider = "_")
         {
             return DateTime.Today.ToString($"yyyy{divider}mm{divider}dd");
         }
+
+        public static string ToHMS(int time)
+        {
+            int hour = time / 3600;
+            int minute = (time - hour * 3600) / 60;
+            int second = time % 60;
+            return string.Format("{0:D2}:{1:D2}:{2:D2}", hour, minute, second);
+        }
+
+        public static string ToMS(int time)
+        {
+            int minute = time / 60;
+            int second = time % 60;
+            return string.Format("{0:D2}:{1:D2}", minute, second);
+        }
     }
 }
-
