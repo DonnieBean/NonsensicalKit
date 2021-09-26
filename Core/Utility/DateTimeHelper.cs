@@ -55,7 +55,7 @@ namespace NonsensicalKit.Utility
         /// <returns>当前日期的字符串</returns>
         public static string GetDateString(string divider = "_")
         {
-            return DateTime.Today.ToString($"yyyy{divider}mm{divider}dd hh:mm:ss");
+            return DateTime.Today.ToString($"yyyy{divider}MM{divider}dd");
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace NonsensicalKit.Utility
         /// <returns>当前日期的字符串</returns>
         public static string GetDateTimeString(string divider = "_")
         {
-            return DateTime.Today.ToString($"yyyy{divider}mm{divider}dd");
+            return DateTime.Now.ToString($"yyyy{divider}MM{divider}dd hh{divider}mm{divider}ss");
         }
 
         public static string ToHMS(int time)

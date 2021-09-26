@@ -42,6 +42,11 @@ namespace NonsensicalKit.Utility
             return new Color(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(),reader.ReadSingle());
         }
 
+        public static void Create(string path)
+        {
+            FileStream fs = new FileStream(path,FileMode.Create);
+            fs.Close();
+        }
         public static string DirSelector()
         {
             string directoryPath = "null";
@@ -122,7 +127,57 @@ namespace NonsensicalKit.Utility
             return directoryPath;
         }
 
-        public static List<string> FileSelector(string typeName, params string[] filter)
+        public static string FileSelector(string typeName, params string[] filter)
+        {
+            var openFileName = new Win32API.OpenFileName();
+            openFileName.structSize = Marshal.SizeOf(openFileName);
+            if (filter == null || filter.Length == 0)
+            {
+                openFileName.filter = "所有文件(*.*)\0*.*\0";
+            }
+            else
+            {
+                string typeStr1 = string.Empty;
+                string typeStr2 = string.Empty;
+
+                typeStr1 = "*." + filter[0];
+                typeStr2 = "*." + filter[0];
+
+                for (int i = 1; i < filter.Length; i++)
+                {
+                    typeStr1 += "," + "*." + filter[i];
+                    typeStr2 += ";" + "*." + filter[i];
+                }
+
+                openFileName.filter = $"{typeName}({typeStr1})\0{typeStr2}\0";
+            }
+            openFileName.fileTitle = new string(new char[64]);
+            openFileName.maxFileTitle = openFileName.fileTitle.Length;
+            openFileName.initialDir = Application.streamingAssetsPath.Replace('/', '\\');//默认路径
+            openFileName.title = "选择文件";
+            openFileName.flags = 0x00000004 | 0x00080000 | 0x00001000 | 0x00000800 | 0x00000008;
+
+            // Create buffer for file names
+            string fileNames = new String(new char[2048]);
+            openFileName.file = Marshal.StringToBSTR(fileNames);
+            openFileName.maxFile = fileNames.Length;
+
+
+            if (Win32API.Comdlg32.GetOpenFileName(openFileName))
+            {
+                List<string> selectedFilesList = new List<string>();
+
+                long pointer = (long)openFileName.file;
+                string file = Marshal.PtrToStringAuto(openFileName.file);
+                return file;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static List<string> FilesSelector(string typeName, params string[] filter)
         {
             List<string> fileFullNames = new List<string>();
 
@@ -273,12 +328,17 @@ namespace NonsensicalKit.Utility
         /// </summary>
         /// <param name="_path">文件路径</param>
         /// <param name="_text">写入的文本</param>
-        /// <returns>创建并写入成功则返回true，否则返回false</returns>
         public static void WriteTxt(string _path, string _text)
         {
             string dirpath = StringHelper.GetDirpathByPath(_path);
             EnsureDir(dirpath);
             File.WriteAllText(_path, _text);
+        }
+        public static void AutoWriteTxt(string _text)
+        {
+            EnsureDir(Application.streamingAssetsPath);
+            string path = Path.Combine(Application.streamingAssetsPath,DateTimeHelper.GetDateTimeString()+".txt");
+            File.WriteAllText(path, _text);
         }
 
         public static bool FileAppendWrite(string _path, string _name, string _text)

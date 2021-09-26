@@ -104,7 +104,64 @@ namespace NonsensicalKit.Joint
             StartCoroutine(ChangeStateCoroutine(jd));
         }
 
+        public float[] GetJointsValue()
+        {
+            float[] values = new float[joints.Length];
 
+            for (int i = 0; i < joints.Length; i++)
+            {
+                float crtValue = 0;
+                Vector3 gap = Vector3.zero;
+
+                if (joints[i].axisType == AxisType.position)
+                {
+                    gap = (joints[i].jointsNode.localPosition - joints[i].zeroState) / joints[i].conversionRate;
+
+
+                }
+                else if (joints[i].axisType == AxisType.rotation)
+                {
+
+                    //gap = Vector3.one* Quaternion.Angle(Quaternion.Euler(joints[i].jointsNode.localEulerAngles), Quaternion.Euler(joints[i].zeroState));
+
+                    gap = (joints[i].jointsNode.localEulerAngles - joints[i].zeroState) / joints[i].conversionRate;
+                }
+
+                switch (joints[i].dirType)
+                {
+                    case DirType.X:
+                        crtValue = gap.x;
+                        break;
+                    case DirType.Y:
+                        crtValue = gap.y;
+                        break;
+                    case DirType.Z:
+                        crtValue = gap.z;
+                        break;
+                    case DirType.X_:
+                        crtValue = -gap.x;
+                        break;
+                    case DirType.Y_:
+                        crtValue = -gap.y;
+                        break;
+                    case DirType.Z_:
+                        crtValue = -gap.z;
+                        break;
+                    default:
+                        crtValue = 0;
+                        break;
+                }
+
+
+                if (joints[i].axisType == AxisType.rotation && crtValue < -180)
+                {
+                    crtValue += 360;
+                }
+
+                values[i] = crtValue;
+            }
+            return values;
+        }
         /// <summary>
         /// 用于编辑器环境下的零点重置
         /// </summary>

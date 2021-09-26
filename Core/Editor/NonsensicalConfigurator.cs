@@ -61,7 +61,7 @@ namespace NonsensicalKit.Editor
                 string cscFilePath = Path.Combine(Application.dataPath, "csc.rsp");
                 if (File.Exists(cscFilePath) == false)
                 {
-                    File.Create(cscFilePath);
+                    FileHelper.Create(cscFilePath);
                 }
                 var s = File.ReadAllLines(cscFilePath);
                 List<string> temp = new List<string>(s);
@@ -72,17 +72,17 @@ namespace NonsensicalKit.Editor
                     {
                         temp[temp.Count - 1] += ',';
                     }
+                }
 
-                    for (int i = 0; i < Data.Lines.Length; i++)
+                for (int i = 0; i < Data.Lines.Length; i++)
+                {
+                    if (Data.useStates[i] && temp.Contains(Data.Lines[i]) == false)
                     {
-                        if (Data.useStates[i] && temp.Contains(Data.Lines[i]) == false)
-                        {
-                            temp.Add(Data.Lines[i]);
-                        }
-                        else if (Data.useStates[i] == false && temp.Contains(Data.Lines[i]))
-                        {
-                            temp.Remove(Data.Lines[i]);
-                        }
+                        temp.Add(Data.Lines[i]);
+                    }
+                    else if (Data.useStates[i] == false && temp.Contains(Data.Lines[i]))
+                    {
+                        temp.Remove(Data.Lines[i]);
                     }
                 }
 

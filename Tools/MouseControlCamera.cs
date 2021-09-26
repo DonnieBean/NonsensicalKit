@@ -12,7 +12,6 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class MouseControlCamera : NonsensicalMono
 {
-    private Vector3 tarPos;
     /// <summary>
     /// 旋轴（与视点旋转）
     /// </summary>
@@ -24,19 +23,11 @@ public class MouseControlCamera : NonsensicalMono
 
     public float stickMinZoom = -1;
     public float stickMaxZoom = -10;
-    public float swivelMinZoom = 90;
-    public float swivelMaxZoom = 45;
     public float moveSpeedMinZoom = 1;
     public float moveSpeedMaxZoom = 10;
     public float rotationSpeed = 30;
     public float zoomSpeed = 0.001f;
 
-
-    private float zoom;
-    private float yAngle;
-    private float xAngle;
-
-    private float targetZoom;
     private float TargetZoom
     {
         get
@@ -48,6 +39,17 @@ public class MouseControlCamera : NonsensicalMono
             targetZoom = Mathf.Clamp01(value);
         }
     }
+
+    private Vector3 tarPos;
+    private float zoom;
+    private float yAngle;
+    private float xAngle;
+    private float targetZoom;
+
+    private EventSystem crtEventSystem;
+  
+    private bool leftOn;
+    private bool rightOn;
 
     protected override void Awake()
     {
@@ -64,23 +66,8 @@ public class MouseControlCamera : NonsensicalMono
         crtEventSystem = EventSystem.current;
     }
 
-
-    EventSystem crtEventSystem;
-
-    bool leftOn;
-    bool rightOn;
-
     private void Update()
     {
-        if (crtEventSystem == null)
-        {
-            if (EventSystem.current == null)
-            {
-                return;
-            }
-            crtEventSystem = EventSystem.current;
-        }
-
         if (Input.GetMouseButtonDown(0) && crtEventSystem.IsPointerOverGameObject() == false)
         {
             leftOn = true;
@@ -98,8 +85,7 @@ public class MouseControlCamera : NonsensicalMono
             rightOn = false;
         }
 
-
-        if (crtEventSystem.IsPointerOverGameObject() == false)
+        if (crtEventSystem == null||crtEventSystem.IsPointerOverGameObject() == false)
         {
             var v = -Input.GetAxisRaw("Mouse ScrollWheel");
             if (v > 0)
