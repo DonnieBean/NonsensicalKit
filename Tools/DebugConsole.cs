@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace NonsensicalKit.Tools
+namespace NonsensicalKit
 {
     /// <summary>
     /// A console to display Unity's debug logs in-game.

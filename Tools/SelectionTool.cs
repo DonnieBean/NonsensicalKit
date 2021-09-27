@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NonsensicalKit.Tools
+namespace NonsensicalKit
 {
     /// <summary>
     /// 框选工具

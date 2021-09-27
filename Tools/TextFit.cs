@@ -5,9 +5,8 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NonsensicalKit.Tools
+namespace NonsensicalKit
 {
-
     public class TextFit : Text
     {
         /// <summary>

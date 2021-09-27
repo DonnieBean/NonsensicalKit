@@ -1,6 +1,6 @@
 using UnityEngine.Networking;
 
-namespace NonsensicalKit.Custom
+namespace NonsensicalKit
 {
     public interface IHandleWebError
     {

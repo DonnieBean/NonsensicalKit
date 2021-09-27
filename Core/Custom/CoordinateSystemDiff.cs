@@ -1,7 +1,7 @@
 ﻿using NonsensicalKit.Utility;
 using UnityEngine;
 
-namespace NonsensicalKit.Custom
+namespace NonsensicalKit
 {
     /// <summary>
     /// 坐标系差异运算，保存差异量，大量运算时效率更高

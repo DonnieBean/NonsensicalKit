@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class CollisionReference : MonoBehaviour
+namespace NonsensicalKit
 {
-    public GameObject Target;
+    public class CollisionReference : MonoBehaviour
+    {
+        public GameObject Target;
+    }
 }

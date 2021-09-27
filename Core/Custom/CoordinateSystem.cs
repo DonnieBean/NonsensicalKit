@@ -1,7 +1,7 @@
 ﻿using NonsensicalKit.Utility;
 using UnityEngine;
 
-namespace NonsensicalKit.Custom
+namespace NonsensicalKit
 {
     /// <summary>
     /// 坐标系

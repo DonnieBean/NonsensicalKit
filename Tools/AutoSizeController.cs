@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace NonsensicalKit.Tools
+namespace NonsensicalKit
 {
 
     /// <summary>

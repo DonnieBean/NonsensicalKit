@@ -1,6 +1,4 @@
-﻿
-
-namespace NonsensicalKit.Custom
+﻿namespace NonsensicalKit
 {
     public struct Int3
     {

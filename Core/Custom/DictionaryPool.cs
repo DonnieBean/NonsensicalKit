@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace NonsensicalKit.Custom
+namespace NonsensicalKit
 {
     public static class DictionaryPool<T1, T2>
     {

@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JustEditor : MonoBehaviour
+namespace NonsensicalKit
 {
-    private void Awake()
+    public class JustEditor : MonoBehaviour
     {
-        if (Application.platform != RuntimePlatform.OSXEditor
-            && Application.platform != RuntimePlatform.WindowsEditor
-            && Application.platform != RuntimePlatform.LinuxEditor)
+        private void Awake()
         {
-            Destroy(gameObject);
+            if (Application.platform != RuntimePlatform.OSXEditor
+                && Application.platform != RuntimePlatform.WindowsEditor
+                && Application.platform != RuntimePlatform.LinuxEditor)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

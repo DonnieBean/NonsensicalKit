@@ -1,4 +1,4 @@
-﻿namespace NonsensicalKit.Custom
+﻿namespace NonsensicalKit
 {
     public struct Array4<T>
     {

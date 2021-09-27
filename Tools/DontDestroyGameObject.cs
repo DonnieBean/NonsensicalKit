@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NonsensicalKit.Tools
+namespace NonsensicalKit
 {
     public class DontDestroyGameObject : MonoBehaviour
     {

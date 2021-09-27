@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NonsensicalKit.Custom
+namespace NonsensicalKit
 {
     public class ObjectPool<T> where T : class, new()
     {

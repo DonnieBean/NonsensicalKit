@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NonsensicalKit.Custom
+namespace NonsensicalKit
 {
     public abstract class MonoSingleton<T> : NonsensicalMono where T : MonoBehaviour
     {

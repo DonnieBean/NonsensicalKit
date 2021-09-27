@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace NonsensicalKit.Custom
+namespace NonsensicalKit
 {
     /// <summary>
     /// 可观察链表，可以监听改变的事件

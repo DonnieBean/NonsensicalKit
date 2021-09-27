@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NonsensicalKit.Custom
+namespace NonsensicalKit
 {
     public abstract class Singleton<T> where T : class
     {

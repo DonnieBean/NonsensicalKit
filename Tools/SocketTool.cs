@@ -5,104 +5,107 @@ using System.Text;
 using System.Threading;
 using UnityEngine;
 
-/// <summary>
-/// 连接本机socket服务端
-/// </summary>
-public class SocketTool
+namespace NonsensicalKit
 {
-    private readonly int post;
-
-    public Encoding encoding = Encoding.UTF8;
-
-    private Socket socket;
-
-    public Action onConnectSuccess;
-    public Action<string> onConnectFail;
-    public Action<string> onReceived;
-
-    private Thread receiveThread;
-    private Thread connectThread;
-
-    public SocketTool(int post)
+    /// <summary>
+    /// 连接本机socket服务端
+    /// </summary>
+    public class SocketTool
     {
-        this.post = post;
-    }
+        private readonly int post;
 
-    ~SocketTool()
-    {
-        connectThread?.Abort();
-        receiveThread?.Abort();
-    }
+        public Encoding encoding = Encoding.UTF8;
 
-    public void Send(string msg)
-    {
-        socket.Send(encoding.GetBytes(msg));
-    }
+        private Socket socket;
 
-    public void Connect()
-    {
-        connectThread = new Thread(new ThreadStart(SocketConnect));
-        connectThread.Start();
-    }
+        public Action onConnectSuccess;
+        public Action<string> onConnectFail;
+        public Action<string> onReceived;
 
-    public void SocketConnect()
-    {
-        string host = Dns.GetHostName();
-        IPHostEntry hostEntry = Dns.GetHostEntry(host);
-        foreach (IPAddress address in hostEntry.AddressList)
+        private Thread receiveThread;
+        private Thread connectThread;
+
+        public SocketTool(int post)
         {
-            IPEndPoint ipe = new IPEndPoint(address, post);
-            Socket tempSocket =
-                new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            this.post = post;
+        }
 
-            try
+        ~SocketTool()
+        {
+            connectThread?.Abort();
+            receiveThread?.Abort();
+        }
+
+        public void Send(string msg)
+        {
+            socket.Send(encoding.GetBytes(msg));
+        }
+
+        public void Connect()
+        {
+            connectThread = new Thread(new ThreadStart(SocketConnect));
+            connectThread.Start();
+        }
+
+        public void SocketConnect()
+        {
+            string host = Dns.GetHostName();
+            IPHostEntry hostEntry = Dns.GetHostEntry(host);
+            foreach (IPAddress address in hostEntry.AddressList)
             {
-                tempSocket.Connect(ipe);
+                IPEndPoint ipe = new IPEndPoint(address, post);
+                Socket tempSocket =
+                    new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-                if (tempSocket.Connected)
+                try
                 {
-                    onConnectSuccess?.Invoke();
-                    socket = tempSocket;
-                    receiveThread = new Thread(new ThreadStart(ReceiveMsg));
-                    receiveThread.Start();
+                    tempSocket.Connect(ipe);
 
-                    break;
+                    if (tempSocket.Connected)
+                    {
+                        onConnectSuccess?.Invoke();
+                        socket = tempSocket;
+                        receiveThread = new Thread(new ThreadStart(ReceiveMsg));
+                        receiveThread.Start();
+
+                        break;
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    continue;
+                    onConnectFail?.Invoke(address.ToString() + "\n错误原因: " + e.ToString());
+                }
+
+            }
+            if (socket == null)
+            {
+                onConnectFail?.Invoke("无可用连接");
+            }
+        }
+
+        void ReceiveMsg()
+        {
+            while (true)
+            {
+                byte[] buffer = new byte[socket.ReceiveBufferSize];
+                int length = socket.Receive(buffer);
+                string resMsg = encoding.GetString(buffer, 0, length);
+                if (string.IsNullOrEmpty(resMsg) == false)
+                {
+                    onReceived?.Invoke(resMsg);
                 }
             }
-            catch (Exception e)
-            {
-                onConnectFail?.Invoke(address.ToString() + "\n错误原因: " + e.ToString());
-            }
-
         }
-        if (socket == null)
+
+        public void Abort()
         {
-            onConnectFail?.Invoke("无可用连接");
+            socket?.Close();
+            connectThread?.Abort();
+            receiveThread?.Abort();
         }
-    }
-
-    void ReceiveMsg()
-    {
-        while (true)
-        {
-            byte[] buffer = new byte[socket.ReceiveBufferSize];
-            int length = socket.Receive(buffer);
-            string resMsg = encoding.GetString(buffer, 0, length);
-            if (string.IsNullOrEmpty(resMsg) == false)
-            {
-                onReceived?.Invoke(resMsg);
-            }
-        }
-    }
-
-    public void Abort()
-    {
-        socket?.Close();
-        connectThread?.Abort();
-        receiveThread?.Abort();
     }
 }

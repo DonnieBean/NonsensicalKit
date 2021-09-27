@@ -1,39 +1,41 @@
 using UnityEngine;
-
-public class ScrollUV : MonoBehaviour
+namespace NonsensicalKit
 {
-    public enum Direction
+    public class ScrollUV : MonoBehaviour
     {
-        Vertical, Horizontal
-    }
-
-    public float speed;
-    public Direction direction;
-    public Material material;
-    private Vector2 offset;
-
-
-
-    private void Update()
-    {
-        if (direction == Direction.Vertical)
+        public enum Direction
         {
-            offset.y += speed * Time.deltaTime;
-            if (offset.y >= 1)
-            {
-                offset.y = 0;
-            }
-
-        }
-        else
-        {
-            offset.x += speed * Time.deltaTime;
-            if (offset.x >= 1)
-            {
-                offset.x = 0;
-            }
+            Vertical, Horizontal
         }
 
-        material.mainTextureOffset = offset;
+        public float speed;
+        public Direction direction;
+        public Material material;
+        private Vector2 offset;
+
+
+
+        private void Update()
+        {
+            if (direction == Direction.Vertical)
+            {
+                offset.y += speed * Time.deltaTime;
+                if (offset.y >= 1)
+                {
+                    offset.y = 0;
+                }
+
+            }
+            else
+            {
+                offset.x += speed * Time.deltaTime;
+                if (offset.x >= 1)
+                {
+                    offset.x = 0;
+                }
+            }
+
+            material.mainTextureOffset = offset;
+        }
     }
 }

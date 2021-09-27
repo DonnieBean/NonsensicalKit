@@ -1,47 +1,46 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using NonsensicalKit.Manager;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
-using NonsensicalKit;
 
-public abstract class ContextCatcher<T> : NonsensicalMono, IUseProtocols<T> 
+namespace NonsensicalKit
 {
-    private Dictionary<FieldInfo, Action<object>> fieldCatchs=new Dictionary<FieldInfo, Action<object>>();
-
-    private Dictionary<PropertyInfo, Action<object>> propertyCatchs= new Dictionary<PropertyInfo, Action<object>>();
-
-    Type t = typeof(T);
-
-    public void OnReceivedMessage(T value)
+    public abstract class ContextCatcher<T> : NonsensicalMono, IUseProtocols<T>
     {
-        foreach (var item in fieldCatchs)
-        {
-            item.Value(item.Key.GetValue(value));
-        }
-        foreach (var item in propertyCatchs)
-        {
-            item.Value(item.Key.GetValue(value));
-        }
-    }
+        private Dictionary<FieldInfo, Action<object>> fieldCatchs = new Dictionary<FieldInfo, Action<object>>();
 
-    public void SetFieldCatch(NonsensicalMono user, string fieldName, Action<object> callback)
-    {
-        var v = t.GetField(fieldName);
-        if (v != null)
+        private Dictionary<PropertyInfo, Action<object>> propertyCatchs = new Dictionary<PropertyInfo, Action<object>>();
+
+        Type t = typeof(T);
+
+        public void OnReceivedMessage(T value)
         {
-            fieldCatchs.Add(v, callback);
-            user.DestroyAction += () => { fieldCatchs.Remove(v); };
+            foreach (var item in fieldCatchs)
+            {
+                item.Value(item.Key.GetValue(value));
+            }
+            foreach (var item in propertyCatchs)
+            {
+                item.Value(item.Key.GetValue(value));
+            }
         }
-    }
-    public void SetPropertyCatch(NonsensicalMono user, string propertyName, Action<object> callback)
-    {
-        var v = t.GetProperty(propertyName);
-        if (v != null)
+
+        public void SetFieldCatch(NonsensicalMono user, string fieldName, Action<object> callback)
         {
-            propertyCatchs.Add(v, callback);
-            user.DestroyAction += () => { propertyCatchs.Remove(v); };
+            var v = t.GetField(fieldName);
+            if (v != null)
+            {
+                fieldCatchs.Add(v, callback);
+                user.DestroyAction += () => { fieldCatchs.Remove(v); };
+            }
+        }
+        public void SetPropertyCatch(NonsensicalMono user, string propertyName, Action<object> callback)
+        {
+            var v = t.GetProperty(propertyName);
+            if (v != null)
+            {
+                propertyCatchs.Add(v, callback);
+                user.DestroyAction += () => { propertyCatchs.Remove(v); };
+            }
         }
     }
 }

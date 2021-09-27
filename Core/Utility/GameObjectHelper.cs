@@ -6,6 +6,11 @@ namespace NonsensicalKit.Utility
 {
     public static class GameObjectHelper
     {
+        /// <summary>
+        /// 获取对象上的所有组件名称
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public static string[] GetComponentsName(Transform t)
         {
             string[] defaultComponent = new string[] { "GameObject", "Transform" };

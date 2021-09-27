@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NonsensicalKit.Custom
+namespace NonsensicalKit
 {
     /// <summary>
     /// 在2018.1.1版本中    

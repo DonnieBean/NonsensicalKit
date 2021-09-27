@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 
-namespace NonsensicalKit.Tools
+namespace NonsensicalKit
 {
-
     /// <summary>
     /// 与目标ui保持相同Height
     /// </summary>

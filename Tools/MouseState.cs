@@ -1,8 +1,7 @@
 using UnityEngine;
 
-namespace NonsensicalKit.Tools
+namespace NonsensicalKit
 {
-
     /// <summary>
     /// 鼠标当前状态，防止交互冲突
     /// </summary>

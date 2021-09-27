@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace NonsensicalKit.Tools
+namespace NonsensicalKit
 {
     [RequireComponent(typeof(Image))]
     public class RandomColor : MonoBehaviour

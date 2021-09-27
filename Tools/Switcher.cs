@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace NonsensicalKit.Tools
+namespace NonsensicalKit
 {
     [System.Serializable]
     public class TargetArray

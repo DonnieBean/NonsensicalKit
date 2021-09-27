@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Threading;
 
-namespace NonsensicalKit.Custom
+namespace NonsensicalKit
 {
     public class ThreadJob
     {

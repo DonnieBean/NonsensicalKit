@@ -1,4 +1,3 @@
-using NonsensicalKit.Tools;
 using UnityEngine;
 
 namespace NonsensicalKit.Highlight

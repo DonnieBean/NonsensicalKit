@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NonsensicalKit.Custom
+namespace NonsensicalKit
 {
     /// <summary>
     /// 使字段在Inspector中显示自定义的名称。

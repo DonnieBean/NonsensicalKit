@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace NonsensicalKit.Tools
+namespace NonsensicalKit
 {
-
     public class FreedomCamera : MonoBehaviour
     {
         public Texture2D handTexture;

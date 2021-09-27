@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NonsensicalKit.Custom
+namespace NonsensicalKit
 {
     public struct Float3
     {

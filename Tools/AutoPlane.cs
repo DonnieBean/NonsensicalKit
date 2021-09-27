@@ -1,7 +1,7 @@
 using NonsensicalKit.Utility;
 using UnityEngine;
 
-namespace NonsensicalKit.Tools
+namespace NonsensicalKit
 {
     public class AutoPlane : MonoBehaviour
     {
