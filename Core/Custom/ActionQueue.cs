@@ -18,10 +18,12 @@ namespace NonsensicalKit
         {
             actions = new Queue<Action>();
         }
+
         public void AddAction(Action action)
         {
             actions.Enqueue(action);
         }
+
         public void DoNext()
         {
             Action action = actions.Dequeue();

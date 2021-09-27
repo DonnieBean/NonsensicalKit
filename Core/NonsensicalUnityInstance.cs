@@ -18,6 +18,7 @@ namespace NonsensicalKit
             {
                 if (instance == null)
                 {
+                    Application.quitting += () => applicationIsQuitting = true;
                     GameObject instanceGameobject = new GameObject("Nonsensical Unity Instance");
                     DontDestroyOnLoad(instanceGameobject);
                     instance = instanceGameobject.AddComponent<NonsensicalUnityInstance>();
@@ -25,6 +26,8 @@ namespace NonsensicalKit
                 return instance;
             }
         }
+
+        public static bool applicationIsQuitting=false;
 
         public Queue<string> messages;
 
