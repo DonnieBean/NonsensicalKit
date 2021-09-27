@@ -1,9 +1,6 @@
-
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NonsensicalKit.Utility;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -89,7 +86,5 @@ namespace NonsensicalKit.Joint
         }
     }
 #endif
-
-
 }
 

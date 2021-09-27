@@ -64,7 +64,8 @@ namespace NonsensicalKit.Utility
         /// <returns>当前日期的字符串</returns>
         public static string GetDateTimeString(string divider = "_")
         {
-            return DateTime.Now.ToString($"yyyy{divider}MM{divider}dd hh{divider}mm{divider}ss");
+            DateTime dt = DateTime.Now;
+            return DateTime.Now.ToString($"yyyy{divider}MM{divider}dd {dt.Hour}{divider}mm{divider}ss");
         }
 
         public static string ToHMS(int time)

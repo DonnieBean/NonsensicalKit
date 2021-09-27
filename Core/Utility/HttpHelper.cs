@@ -134,7 +134,37 @@ namespace NonsensicalKit.Utility
             yield return SendRequest(unityWebRequest, callback, iHandleWebError);
         }
 
-        public static IEnumerator SendRequest(UnityWebRequest unityWebRequest, Action<UnityWebRequest> callback, IHandleWebError iHandleWebError = null)
+      
+
+        #region PrivateMethod
+
+
+        private static WWWForm CreateForm(Dictionary<string, string> formData)
+        {
+            WWWForm form = new WWWForm();
+            if (formData != null)
+            {
+                foreach (var item in formData)
+                {
+                    form.AddField(item.Key, item.Value);
+                }
+            }
+            return form;
+        }
+
+        private static void IncreaseHeader(UnityWebRequest unityWebRequest, Dictionary<string, string> headerData)
+        {
+            if (headerData != null)
+            {
+                foreach (var tmp in headerData)
+                {
+                    unityWebRequest.SetRequestHeader(tmp.Key, tmp.Value);
+                }
+                DictionaryPool<string, string>.Set(headerData);
+            }
+        }
+
+        private static IEnumerator SendRequest(UnityWebRequest unityWebRequest, Action<UnityWebRequest> callback, IHandleWebError iHandleWebError = null)
         {
             yield return unityWebRequest.SendWebRequest();
 
@@ -162,32 +192,6 @@ namespace NonsensicalKit.Utility
                 }
             }
             unityWebRequest.Dispose();
-        }
-
-        #region PrivateMethod
-        private static WWWForm CreateForm(Dictionary<string, string> formData)
-        {
-            WWWForm form = new WWWForm();
-            if (formData != null)
-            {
-                foreach (var item in formData)
-                {
-                    form.AddField(item.Key, item.Value);
-                }
-            }
-            return form;
-        }
-
-        private static void IncreaseHeader(UnityWebRequest unityWebRequest, Dictionary<string, string> headerData)
-        {
-            if (headerData != null)
-            {
-                foreach (var tmp in headerData)
-                {
-                    unityWebRequest.SetRequestHeader(tmp.Key, tmp.Value);
-                }
-                DictionaryPool<string, string>.Set(headerData);
-            }
         }
 
         #endregion

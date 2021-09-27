@@ -1,14 +1,13 @@
-using NonsensicalKit.Utility;
 #if USE_FINALIK
+using NonsensicalKit.Utility;
 using RootMotion.FinalIK;
-#endif
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace NonsensicalKit.Joint
 {
-#if USE_FINALIK
     [System.Serializable]
     public struct ValueLimit
     {
@@ -197,6 +196,5 @@ namespace NonsensicalKit.Joint
 
 
     }
-#endif
-
 }
+#endif
