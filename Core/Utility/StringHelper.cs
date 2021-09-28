@@ -37,9 +37,34 @@ namespace NonsensicalKit.Utility
             return $"({v3.x:f5},{v3.y:f5},{v3.z:f5})";
         }
 
-        public static string TrimBOM(string str)
+        public static bool CheckBom(byte[] data)
         {
-            return str.Substring(1);
+            if (data.Length < 3)
+            {
+                return false;
+            }
+
+            return data[0] == 239 && data[1] == 187 && data[2] == 191;
+        }
+
+        public static bool CheckBom(string str)
+        {
+            if (str.Length < 1)
+            {
+                return false;
+            }
+            return str[0] == 65279;
+
+        }
+
+
+        public static string TrimBOM(this string str)
+        {
+            if (CheckBom(str))
+            {
+                return str.Substring(1);
+            }
+            return str;
         }
         public static string TrimClone(string str)
         {

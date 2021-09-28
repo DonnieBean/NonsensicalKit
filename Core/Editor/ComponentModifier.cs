@@ -8,7 +8,7 @@ namespace NonsensicalKit.Editor
 {
     public class ComponentModifier : EditorWindow
     {
-        [MenuItem("TBTools/组件内容修改器")]
+        [MenuItem("Tools/NonsensicalKit/组件内容修改器")]
         public static void ShowWindow()
         {
             EditorWindow.GetWindow(typeof(ComponentModifier));
@@ -70,10 +70,10 @@ namespace NonsensicalKit.Editor
 
         private void ButtonModify()
         {
-            var tArray = Resources.FindObjectsOfTypeAll(typeof(Button));
-            for (int i = 0; i < tArray.Length; i++)
+            var tArray = GetSelectComponent<Button>();
+            for (int i = 0; i < tArray.Count; i++)
             {
-                Button button = tArray[i] as Button;
+                Button button = tArray[i];
 
                 Undo.RecordObject(button, button.gameObject.name);
 
@@ -86,11 +86,10 @@ namespace NonsensicalKit.Editor
 
         private void FontModify()
         {
-            var tArray = Resources.FindObjectsOfTypeAll(typeof(Text));
-
-            for (int i = 0; i < tArray.Length; i++)
+            var tArray = GetSelectComponent<Text>();
+            for (int i = 0; i < tArray.Count; i++)
             {
-                Text t = tArray[i] as Text;
+                Text t = tArray[i];
 
                 Undo.RecordObject(t, t.gameObject.name);
 
@@ -103,16 +102,28 @@ namespace NonsensicalKit.Editor
 
         private void TransformModify()
         {
-            var tArray = Resources.FindObjectsOfTypeAll(typeof(Transform));
-            for (int i = 0; i < tArray.Length; i++)
+            var tArray = GetSelectComponent<Transform>();
+            for (int i = 0; i < tArray.Count; i++)
             {
-                Transform temp = tArray[i] as Transform;
+                Transform temp = tArray[i];
 
                 Undo.RecordObject(temp, temp.gameObject.name);
 
                 temp.localScale = CompontentModifierPanel.scale;
             }
             Debug.Log($"{CompontentModifierPanel.components[CompontentModifierPanel.choiceComponent]} 组件修改成功");
+        }
+
+        private List<T> GetSelectComponent<T>()
+        {
+            var v = NonsensicalEditorManager.selectGameObjects;
+            List<T> components = new List<T>();
+
+            foreach (var item in v)
+            {
+                components.AddRange(item.GetComponentsInChildren<T>());
+            }
+            return components;
         }
     }
 

@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace NonsensicalKit.Editor
 {
-    public static class TBTManager
+    public static class NonsensicalEditorManager
     {
         public static GameObject[] selectGameObjects;
         public static Transform selectTransform;
@@ -45,55 +45,10 @@ namespace NonsensicalKit.Editor
 
     public class Lab
     {
-        [MenuItem("Tools/NonsensicalKit/Items/清空图片")]
-        private static void DeleteAllImages()
-        {
-            DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath + @"/images");
-
-            foreach (var item in di.GetFiles())
-            {
-                File.Delete(item.FullName);
-            }
-        }
-
-        [MenuItem("Tools/NonsensicalKit/Items/预制体应用")]
-        private static void SaveAssets()
-        {
-            GameObject[] roots = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
-            AssetDatabase.SaveAssets();
-            foreach (var item in roots)
-            {
-                ApplyPrefab(item);
-            }
-
-            Debug.Log("所有根节点预制体应用完毕");
-        }
-
         /// <summary>
-        /// 应用对象预制体（Apply）
-        /// 由于预制体机制大幅修改，此处需要重新研究
+        /// 检测Resources文件夹内是否存在同名文件（无视后缀名）
         /// </summary>
-        /// <param name="obj"></param>
-        private static void ApplyPrefab(GameObject obj)
-        {
-            PrefabAssetType type = PrefabUtility.GetPrefabAssetType((UnityEngine.Object)obj);
-
-            if (type == PrefabAssetType.NotAPrefab)
-            {
-                return;
-            }
-
-            //if (obj != null)
-            //{
-            //    UnityEngine.Object prefabAsset = PrefabUtility.GetCorrespondingObjectFromSource(obj);
-
-            //    if (prefabAsset != null)
-            //    {
-            //        PrefabUtility.SaveAsPrefabAsset(obj, prefabAsset, ReplacePrefabOptions.ConnectToPrefab);
-            //    }
-            //}
-        }
-
+        /// <returns></returns>
         [MenuItem("Tools/NonsensicalKit/Items/检测资源重名")]
         private static bool CheckResoureDuplicateName()
         {
@@ -150,6 +105,9 @@ namespace NonsensicalKit.Editor
             Debug.Log("刷新完成");
         }
 
+        /// <summary>
+        /// 根据名称排序场景内对象
+        /// </summary>
         [MenuItem("Tools/NonsensicalKit/Items/根据名称排序")]
         private static void NameSort()
         {

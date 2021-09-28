@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace NonsensicalKit.Editor
 {
-    public class PlayerPrefsModifier : EditorWindow
+    public class PrefsModifier : EditorWindow
     {
-        [MenuItem("Tools/NonsensicalKit/PlayerPrefs修改器")]
+        [MenuItem("Tools/NonsensicalKit/Prefs修改器")]
         static void ShowWindow()
         {
-            GetWindow(typeof(PlayerPrefsModifier));
+            GetWindow(typeof(PrefsModifier));
         }
 
         private void OnGUI()
@@ -18,6 +18,10 @@ namespace NonsensicalKit.Editor
             if (GUILayout.Button("清空所有PlayerPrefs"))
             {
                 PlayerPrefs.DeleteAll();
+            }
+            if (GUILayout.Button("清空所有EditorPrefs"))
+            {
+                EditorPrefs.DeleteAll();
             }
         }
     }

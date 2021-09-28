@@ -81,8 +81,6 @@ namespace NonsensicalKit.Joint
                     jc.StartRecord();
                 }
             }
-           
-           
         }
     }
 #endif

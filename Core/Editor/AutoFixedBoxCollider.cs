@@ -10,7 +10,7 @@ namespace NonsensicalKit.Editor
     {
         private static string showText; //显示给用户的文本
 
-        [MenuItem("TBTools/自动添加自适应大小盒子碰撞器")]
+        [MenuItem("Tools/NonsensicalKit/自动添加自适应大小盒子碰撞器")]
         static void AddComponentToCrtTarget()
         {
             showText = "这是一条信息";
@@ -26,27 +26,6 @@ namespace NonsensicalKit.Editor
                 }
 
                 showText = "盒子碰撞器自适应完成";
-            }
-
-            EditorWindow.GetWindow(typeof(AutoFixedBoxCollider));
-        }
-
-        [MenuItem("TBTools/自动删除盒子碰撞器")]
-        static void DeleteComponentToCrtTarget()
-        {
-            showText = "这是一条信息";
-            if (Selection.gameObjects.Length == 0)
-            {
-                showText = "未选中任何对象";
-            }
-            else
-            {
-                for (int i = 0; i < Selection.gameObjects.Length; i++)
-                {
-                    AutoDelete(Selection.gameObjects[i].transform);
-                }
-
-                showText = "盒子碰撞器删除完成";
             }
 
             EditorWindow.GetWindow(typeof(AutoFixedBoxCollider));
@@ -75,27 +54,6 @@ namespace NonsensicalKit.Editor
                 else
                 {
                     FitCollider(crt.gameObject);
-                }
-
-                foreach (Transform item in crt)
-                {
-                    crtTargets.Push(item);
-                }
-            }
-        }
-
-        private static void AutoDelete(Transform tran)
-        {
-            Stack<Transform> crtTargets = new Stack<Transform>();
-            crtTargets.Push(tran);
-
-            while (crtTargets.Count > 0)
-            {
-                Transform crt = crtTargets.Pop();
-
-                if (crt.GetComponent<BoxCollider>() != null)
-                {
-                    DestroyImmediate(crt.GetComponent<BoxCollider>());
                 }
 
                 foreach (Transform item in crt)

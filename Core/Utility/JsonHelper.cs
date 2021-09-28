@@ -130,6 +130,7 @@ namespace NonsensicalKit.Utility
         public static T DeserializeObject<T>(string str)
         {
 #if USE_NEWTONSOFTJSON
+            str = str.TrimBOM();
             return JsonConvert.DeserializeObject<T>(str);
 #else
             return JsonUtility.FromJson<T>(str);

@@ -40,7 +40,7 @@ public class #类名# : MonoBehaviour
 
         private static EditorWindow window;
 
-        private static readonly string defaultScriptPath = @"Scripts/NodeManager";
+        private static readonly string defaultScriptPath = @"Scripts/NodeBuilder/NodeManager";
 
         private static string scriptPath;
 
@@ -78,12 +78,12 @@ public class #类名# : MonoBehaviour
             }
         }
 
-        [MenuItem("TBTools/代码生成/节点管理代码生成", false, 101)]
+        [MenuItem("Tools/NonsensicalKit/节点管理代码生成", false, 101)]
         private static void ShowWindow()
         {
             CreateClassBuilder();
 
-            scriptPath = EditorPrefs.GetString("tb_nodeBuilder_lastScriptPath", defaultScriptPath);
+            scriptPath = EditorPrefs.GetString("nk_nodeBuilder_lastScriptPath", defaultScriptPath);
 
             window = EditorWindow.GetWindow(typeof(NodeBuilder));
         }
@@ -107,7 +107,7 @@ public class #类名# : MonoBehaviour
                 raw = classStrTemp.Replace("#类名#", className);
             }
 
-            if (TBTManager.selectTransform != null)
+            if (NonsensicalEditorManager.selectTransform != null)
             {
 
                 if (File.Exists(jsonFilePath))
@@ -136,25 +136,25 @@ public class #类名# : MonoBehaviour
         [InitializeOnLoadMethod]
         private static void App()
         {
-            scriptPath = EditorPrefs.GetString("tb_nodeBuilder_lastScriptPath", defaultScriptPath);
+            scriptPath = EditorPrefs.GetString("nk_nodeBuilder_lastScriptPath", defaultScriptPath);
 
-            TBTManager.selectChanged += () =>
+            NonsensicalEditorManager.selectChanged += () =>
             {
                 if (window != null)
                 {
 
-                    if (TBTManager.selectTransform == null)
+                    if (NonsensicalEditorManager.selectTransform == null)
                     {
-                        EditorPrefs.SetString("tb_nodeBuilder_lastScriptPath", defaultScriptPath);
+                        EditorPrefs.SetString("nk_nodeBuilder_lastScriptPath", defaultScriptPath);
                     }
                     else
                     {
-                        EditorPrefs.SetString("tb_nodeBuilder_lastScriptPath", Path.Combine(@"Scripts", $"{TBTManager.selectTransform.name}Manager"));
+                        EditorPrefs.SetString("nk_nodeBuilder_lastScriptPath", Path.Combine(@"Scripts", "NodeBuilder", $"{NonsensicalEditorManager.selectTransform.name}Manager"));
                     }
 
                     if (autoPath == true)
                     {
-                        scriptPath = EditorPrefs.GetString("tb_nodeBuilder_lastScriptPath", defaultScriptPath);
+                        scriptPath = EditorPrefs.GetString("nk_nodeBuilder_lastScriptPath", defaultScriptPath);
                     }
 
                     CreateClassBuilder();
@@ -189,10 +189,10 @@ public class #类名# : MonoBehaviour
 
                 if (autoPath == true)
                 {
-                    scriptPath = EditorPrefs.GetString("tb_nodeBuilder_lastScriptPath", defaultScriptPath);
+                    scriptPath = EditorPrefs.GetString("nk_nodeBuilder_lastScriptPath", defaultScriptPath);
                 }
                 scriptPath = EditorGUILayout.TextField("生成脚本路径：", scriptPath);
-                EditorPrefs.SetString("tb_nodeBuilder_lastScriptPath", scriptPath);
+                EditorPrefs.SetString("nk_nodeBuilder_lastScriptPath", scriptPath);
 
                 GUI.enabled = true;
             }
@@ -200,7 +200,7 @@ public class #类名# : MonoBehaviour
             EditorGUILayout.Space();
 
             {
-                GUI.enabled = TBTManager.selectTransform != null;
+                GUI.enabled = NonsensicalEditorManager.selectTransform != null;
 
                 EditorGUILayout.BeginHorizontal();
 
@@ -235,7 +235,7 @@ public class #类名# : MonoBehaviour
 
         public void MountScript()
         {
-            if (TBTManager.selectTransform == false)
+            if (NonsensicalEditorManager.selectTransform == false)
             {
                 return;
             }
@@ -246,11 +246,11 @@ public class #类名# : MonoBehaviour
                 Debug.LogWarning($"脚本{className}不存在");
             }
 
-            var target = TBTManager.selectTransform.GetComponent(scriptType);
+            var target = NonsensicalEditorManager.selectTransform.GetComponent(scriptType);
 
             if (target == null)
             {
-                target = TBTManager.selectTransform.gameObject.AddComponent(scriptType);
+                target = NonsensicalEditorManager.selectTransform.gameObject.AddComponent(scriptType);
             }
 
 
@@ -268,7 +268,7 @@ public class #类名# : MonoBehaviour
                              BindingFlags.SetField |
                              BindingFlags.Instance |
                              BindingFlags.NonPublic,
-                             null, target, new object[] { TBTManager.selectTransform.Find(info.path).gameObject }, null, null, null);
+                             null, target, new object[] { NonsensicalEditorManager.selectTransform.Find(info.path).gameObject }, null, null, null);
                 }
                 else if (info.type == "Transform")
                 {
@@ -276,7 +276,7 @@ public class #类名# : MonoBehaviour
                            BindingFlags.SetField |
                            BindingFlags.Instance |
                            BindingFlags.NonPublic,
-                           null, target, new object[] { TBTManager.selectTransform.Find(info.path).transform }, null, null, null);
+                           null, target, new object[] { NonsensicalEditorManager.selectTransform.Find(info.path).transform }, null, null, null);
                 }
                 else
                 {
@@ -284,7 +284,7 @@ public class #类名# : MonoBehaviour
                               BindingFlags.SetField |
                               BindingFlags.Instance |
                               BindingFlags.NonPublic,
-                              null, target, new object[] { TBTManager.selectTransform.Find(info.path).GetComponent(info.type) }, null, null, null);
+                              null, target, new object[] { NonsensicalEditorManager.selectTransform.Find(info.path).GetComponent(info.type) }, null, null, null);
                 }
             }
 
@@ -329,7 +329,7 @@ public class #类名# : MonoBehaviour
 
             tablePos = EditorGUILayout.BeginScrollView(tablePos);
             {
-                if (TBTManager.selectTransform != null)
+                if (NonsensicalEditorManager.selectTransform != null)
                 {
                     classBuilder.DrawTable(classBuilder.rootNode);
                 }
@@ -347,26 +347,26 @@ public class #类名# : MonoBehaviour
                 GUI.Box(rect, "代码预览", "GroupBox");
                 GUILayout.Space(20);
 
-                {
-                    viewPos = EditorGUILayout.BeginScrollView(viewPos, GUILayout.Width(position.width * 0.5f));
-                    {
-                        if (TBTManager.selectTransform != null)
-                        {
-                            var str = classBuilder.ToString();
-                            var array = StringHelper.SplitStringByLength(str);
-                            EditorGUILayout.BeginVertical();
-                            {
-                                foreach (var item in array)
-                                {
-                                    GUILayout.Label(item);
-                                }
-                            }
-                            EditorGUILayout.EndVertical();
 
+                viewPos = EditorGUILayout.BeginScrollView(viewPos, GUILayout.Width(position.width * 0.5f));
+
+                if (NonsensicalEditorManager.selectTransform != null)
+                {
+                    var str = classBuilder.ToString();
+                    var array = StringHelper.SplitStringByLength(str);
+                    EditorGUILayout.BeginVertical();
+                    {
+                        foreach (var item in array)
+                        {
+                            GUILayout.Label(item);
                         }
                     }
-                    EditorGUILayout.EndScrollView();
+                    EditorGUILayout.EndVertical();
+
                 }
+
+                EditorGUILayout.EndScrollView();
+
             }
             EditorGUILayout.EndVertical();
         }
@@ -390,7 +390,7 @@ public class #类名# : MonoBehaviour
             public ClassBuilder(string raw)
             {
                 this.raw = raw;
-                rootNode = new NodeInfo(TBTManager.selectTransform, string.Empty);
+                rootNode = new NodeInfo(NonsensicalEditorManager.selectTransform, string.Empty);
             }
 
             public ClassBuilder(string raw, string jsonText)

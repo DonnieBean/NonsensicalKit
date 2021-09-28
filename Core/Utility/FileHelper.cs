@@ -47,6 +47,7 @@ namespace NonsensicalKit.Utility
             FileStream fs = new FileStream(path,FileMode.Create);
             fs.Close();
         }
+
         public static string DirSelector()
         {
             string directoryPath = "null";

@@ -9,7 +9,7 @@ namespace NonsensicalKit.Editor
 
     public class ComponentMountModifier : EditorWindow
     {
-        [MenuItem("TBTools/组件挂载修改器")]
+        [MenuItem("Tools/NonsensicalKit/组件挂载修改器")]
         public static void ShowWindow()
         {
             EditorWindow.GetWindow(typeof(ComponentMountModifier));
@@ -46,10 +46,8 @@ namespace NonsensicalKit.Editor
 
             if (GUILayout.Button("应用"))
             {
-                Debug.Log(1);
                 for (int i = 0; i < ComponentMountModifierPanel.components.Length; i++)
                 {
-                    Debug.Log(2);
                     UnityEngine.Object[] tArray = Resources.FindObjectsOfTypeAll(typeof(Transform));
 
                     foreach (var item in tArray)

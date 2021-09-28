@@ -8,7 +8,7 @@ namespace NonsensicalKit.Editor
 
     public class NameCopyer : EditorWindow
     {
-        [MenuItem("TBTools/快速命名工具")]
+        [MenuItem("Tools/NonsensicalKit/快速命名工具")]
         static void ShowWindow()
         {
             EditorWindow.GetWindow(typeof(NameCopyer));
@@ -20,15 +20,15 @@ namespace NonsensicalKit.Editor
             {
                 copyBuffer = new NameTree();
 
-                Copy(Selection.gameObjects[0].transform, copyBuffer);
+                Copy(NonsensicalEditorManager.selectTransform, copyBuffer);
 
                 Debug.Log("复制成功");
             }
 
             if (GUILayout.Button("粘贴"))
             {
-                Paste(Selection.gameObjects[0].transform, copyBuffer);
-
+                Paste(NonsensicalEditorManager.selectTransform, copyBuffer);
+                Undo.RecordObject(NonsensicalEditorManager.selectTransform,"PasteName");
                 Debug.Log("粘贴成功");
             }
         }
@@ -49,7 +49,8 @@ namespace NonsensicalKit.Editor
         {
             node.name = nameTree.name;
 
-            for (int i = 0; i < nameTree.childs.Count; i++)
+            int min = Mathf.Min(node.childCount, nameTree.childs.Count);
+            for (int i = 0; i < min; i++)
             {
                 Paste(node.GetChild(i), nameTree.childs[i]);
             }
