@@ -14,7 +14,7 @@ namespace NonsensicalKit.Editor
         private static Font m_font;
         private static EditorWindow window;
 
-        [MenuItem("CustomTool/设置默认字体")]
+        [MenuItem("Tools/NonsensicalKit/设置默认字体")]
         public static void OpenWindow()
         {
             window = GetWindow(typeof(SetDefaultFont));
@@ -48,9 +48,10 @@ namespace NonsensicalKit.Editor
 
             if (f != null && Selection.activeGameObject != null)
             {
-                if (Selection.activeGameObject.TryGetComponent<Text>(out var v))
+                var v = Selection.activeGameObject.GetComponentsInChildren<Text>();
+                foreach (var item in v)
                 {
-                    v.font = f;
+                    item.font = f;
                 }
             }
         }
@@ -64,7 +65,7 @@ namespace NonsensicalKit.Editor
         private static void SetFont(Font f)
         {
             string path = AssetDatabase.GetAssetPath(f);
-            PlayerPrefs.SetString("nk_setDefaultFont_DefaultFontPath", path);
+            PlayerPrefs.SetString("nk_setDefaultFont_defaultFontPath", path);
         }
     }
 }
