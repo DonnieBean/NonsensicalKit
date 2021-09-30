@@ -5,11 +5,11 @@ namespace NonsensicalKit.Utility
 {
     public static class VectorHelper
     {
-        public static Vector3 Division(this Vector3 detailed,Vector3 divisor)
+        public static Vector3 Division(this Vector3 detailed, Vector3 divisor)
         {
-            return new Vector3(detailed.x/ divisor.x, detailed.y / divisor.y, detailed.z / divisor.z);
+            return new Vector3(detailed.x / divisor.x, detailed.y / divisor.y, detailed.z / divisor.z);
         }
-        public static Vector3 GetNearValue(Vector3 rawVector3,int magnification)
+        public static Vector3 GetNearValue(Vector3 rawVector3, int magnification)
         {
             Vector3 temp = rawVector3 / magnification;
 
@@ -134,13 +134,31 @@ namespace NonsensicalKit.Utility
             return result;
         }
 
+        /// <summary>
+        /// 获取点与直线的距离
+        /// </summary>
+        /// <returns></returns>
+        public static float GetFootDropDistance(Vector3 singlePoint, Vector3 linePoint1, Vector3 linePoint2)
+        {
+            var v = GetFootDrop(singlePoint, linePoint1, linePoint2);
+
+            return Vector3.Distance(v, singlePoint);
+        }
+
+        /// <summary>
+        /// 获取点在轴上的投影与轴对应原点的距离
+        /// </summary>
+        /// <param name="singlePoint"></param>
+        /// <param name="axisCenterPoint"></param>
+        /// <param name="axisPositivePoint"></param>
+        /// <returns></returns>
         public static float GetAxisValue(Vector3 singlePoint, Vector3 axisCenterPoint, Vector3 axisPositivePoint)
         {
             Vector3 axisPoint = GetFootDrop(singlePoint, axisCenterPoint, axisPositivePoint);
 
             float value = (axisPoint - axisCenterPoint).magnitude;
 
-            if (Vector3.Angle(axisPoint- axisCenterPoint,axisPositivePoint- axisCenterPoint)>90)
+            if (Vector3.Angle(axisPoint - axisCenterPoint, axisPositivePoint - axisCenterPoint) > 90)
             {
                 value = -value;
             }
@@ -248,7 +266,7 @@ namespace NonsensicalKit.Utility
             Vector3 n = plane.normal;
 
             //直线向量和法线向量垂直时（即直线和面平行）
-            if (Vector3.Dot(l, n) == 0)
+            if (IsVertical(l, n))
             {
                 //直线与平面重合时
                 if (Vector3.Dot(p0 - l0, n) == 0)
@@ -286,6 +304,49 @@ namespace NonsensicalKit.Utility
             Vector3 worldPoint = targetCamera.ScreenToWorldPoint(screenPoint);
 
             changeTarget.position = worldPoint;
+        }
+
+        /// <summary>
+        /// 是否平行
+        /// </summary>
+        /// <param name="dir1"></param>
+        /// <param name="dir2"></param>
+        /// <returns></returns>
+        public static bool IsParallel(Vector3 dir1,Vector3 dir2)
+        {
+            return Vector3.Cross(dir1, dir2) == Vector3.zero;
+        }
+
+        /// <summary>
+        /// 是否垂直
+        /// </summary>
+        /// <param name="dir1"></param>
+        /// <param name="dir2"></param>
+        /// <returns></returns>
+        public static bool IsVertical(Vector3 dir1, Vector3 dir2)
+        {
+            return Vector3.Dot(dir1, dir2) == 0;
+        }
+
+        /// <summary>
+        /// 获取异面直线的距离
+        /// </summary>
+        /// <returns></returns>
+        public static float GetSkewLinesDistance(Vector3 dir1, Vector3 dir2, Vector3 point1, Vector3 point2)
+        {
+            if(IsParallel(dir1, dir2))
+            {
+                return GetFootDropDistance(point1, point2, point2 + dir2);
+            }
+            else
+            {
+
+                Vector3 normal = GetCommonVerticalLine(dir1, dir2);
+                Vector3 m = point1 - point2;
+                return Mathf.Abs(Vector3.Dot(m, normal)) / normal.magnitude;
+
+            }
+
         }
 
         /// <summary>
@@ -533,8 +594,6 @@ namespace NonsensicalKit.Utility
                 default: return Vector3.zero;
             }
         }
-
-
 
         public static Float3 GetEightPosF3(int pos, float size)
         {
