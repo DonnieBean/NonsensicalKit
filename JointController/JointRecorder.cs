@@ -45,6 +45,7 @@ namespace NonsensicalKit.Joint
         public void OnReceivedMessage(VirtualRobotData value)
         {
             jc.ChangeState(new ActionData(value.data, 0.2f));
+            
         }
     }
     public class VirtualRobotData
