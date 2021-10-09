@@ -15,7 +15,7 @@ namespace NonsensicalKit
         {
             base.Awake();
 
-            Subscribe(showSignal, OnHideTarget);
+            Subscribe(showSignal, OnShowTarget);
             Subscribe(hideSignal, OnHideTarget);
         }
 

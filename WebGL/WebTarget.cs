@@ -30,9 +30,7 @@ public class WebTarget : NonsensicalMono
 
     public void ChoiceFile(string nameWithUrl)
     {
-        Debug.Log("受到选择文件数据"+nameWithUrl);
         string[] ss = nameWithUrl.Split('|');
-        Debug.Log(ss.Length);
         
         if ((ss.Length&1)==1)
         {

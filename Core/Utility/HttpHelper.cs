@@ -14,6 +14,7 @@ namespace NonsensicalKit.Utility
             UnityWebRequest unityWebRequest = UnityWebRequestAssetBundle.GetAssetBundle(uri, version, crc);
             yield return SendRequest(unityWebRequest, callback, iHandleWebError);
         }
+
         public static IEnumerator Post(string url, Dictionary<string, string> header, Action<UnityWebRequest> callback, IHandleWebError iHandleWebError = null)
         {
             UnityWebRequest unityWebRequest = UnityWebRequest.Post(url, new WWWForm());
@@ -21,6 +22,7 @@ namespace NonsensicalKit.Utility
             IncreaseHeader(unityWebRequest, header);
             yield return SendRequest(unityWebRequest, callback, iHandleWebError);
         }
+
         public static IEnumerator Post(string url, List<IMultipartFormSection> formData, Dictionary<string, string> header, Action<UnityWebRequest> callback, IHandleWebError iHandleWebError=null)
         {
             UnityWebRequest unityWebRequest = UnityWebRequest.Post(url, formData);
@@ -76,6 +78,7 @@ namespace NonsensicalKit.Utility
 
             yield return SendRequest(unityWebRequest, callback, iHandleWebError);
         }
+
         public static IEnumerator Get(string url, Action<UnityWebRequest> callback)
         {
             UnityWebRequest unityWebRequest = new UnityWebRequest(url)
@@ -134,11 +137,7 @@ namespace NonsensicalKit.Utility
             yield return SendRequest(unityWebRequest, callback, iHandleWebError);
         }
 
-      
-
         #region PrivateMethod
-
-
         private static WWWForm CreateForm(Dictionary<string, string> formData)
         {
             WWWForm form = new WWWForm();
@@ -193,7 +192,6 @@ namespace NonsensicalKit.Utility
             }
             unityWebRequest.Dispose();
         }
-
         #endregion
     }
 }
