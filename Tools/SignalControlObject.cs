@@ -8,24 +8,18 @@ namespace NonsensicalKit
     public class SignalControlObject : NonsensicalMono
     {
         [SerializeField] private GameObject target;
-        [SerializeField] private string showSignal;
-        [SerializeField] private string hideSignal;
+        [SerializeField] private string signal;
 
         protected override void Awake()
         {
             base.Awake();
 
-            Subscribe(showSignal, OnShowTarget);
-            Subscribe(hideSignal, OnHideTarget);
+            Subscribe<bool>(signal, OnShowTarget);
         }
 
-        private void OnShowTarget()
+        private void OnShowTarget(bool state)
         {
-            target.SetActive(true);
-        }
-        private void OnHideTarget()
-        {
-            target.SetActive(false);
+            target.SetActive(state);
         }
     }
 

@@ -86,6 +86,7 @@ namespace NonsensicalKit.Utility
         protected float scheduleTime;
 
         public bool NeedAbort;
+        private bool isPause;
 
         public delegate void OnCompleteHander();
         public OnCompleteHander OnCompleteEvent;
@@ -100,6 +101,11 @@ namespace NonsensicalKit.Utility
 
         public bool DoIt(float _deltaTime)
         {
+            if (!isPause)
+            {
+                return false;
+            }
+
             scheduleTime += _deltaTime;
 
             float schedule = (scheduleTime - delay) / duration;
@@ -115,6 +121,16 @@ namespace NonsensicalKit.Utility
                 NeedAbort = DoSpecific(schedule);
                 return false;
             }
+        }
+
+        public void Pause()
+        {
+            isPause = true;
+        }
+
+        public void Resume()
+        {
+            isPause = false;
         }
 
         public void Abort()
