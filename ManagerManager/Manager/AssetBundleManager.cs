@@ -25,7 +25,7 @@ namespace NonsensicalKit.Manager
 
         protected override void LateInitStart()
         {
-            if (AppConfigManager.Instance!=null)
+            if (AppConfigManager.Instance != null)
             {
                 if (AppConfigManager.Instance.TryGetConfig(out NonsensicalConfigDataTemplate t))
                 {
@@ -43,7 +43,7 @@ namespace NonsensicalKit.Manager
                 assetBundlePath = Path.Combine(Application.streamingAssetsPath, "AssetBundles");
                 NonsensicalUnityInstance.Instance.StartCoroutine(InitAssetBundleManager(Path.Combine(assetBundlePath, "AssetBundles")));
             }
-            
+
         }
 
         /// <summary>
@@ -64,6 +64,7 @@ namespace NonsensicalKit.Manager
 
             if (assetBundle == null)
             {
+                Debug.LogWarning("未找到AssetBundles");
                 LateInitComplete();
                 yield break;
             }
@@ -134,7 +135,7 @@ namespace NonsensicalKit.Manager
 
             var request = UnityWebRequestAssetBundle.GetAssetBundle(bundlePath);
 
-            if (_onLoading==null)
+            if (_onLoading == null)
             {
                 yield return request.SendWebRequest();
             }
@@ -173,7 +174,7 @@ namespace NonsensicalKit.Manager
         /// <param name="resourcesName">资源名</param>
         /// <param name="bundleName">包名</param>
         /// <param name="onComplete">完成回调</param>
-        public void LoadResource<T>(string resourcesName, string bundleName, Action<T> onComplete,Action<float> onLoad=null) where T : UnityEngine.Object
+        public void LoadResource<T>(string resourcesName, string bundleName, Action<T> onComplete, Action<float> onLoad = null) where T : UnityEngine.Object
         {
             if (assstBundleDic.ContainsKey(bundleName) == false)
             {
@@ -205,11 +206,11 @@ namespace NonsensicalKit.Manager
         /// <param name="assetBundle"></param>
         /// <param name="onComplete"></param>
         /// <returns></returns>
-        private IEnumerator LoadResourceCoroutine<T>(string resourcesNameOrPath, AssetBundle assetBundle, Action<T> onComplete,Action<float> onLoad) where T : UnityEngine.Object
+        private IEnumerator LoadResourceCoroutine<T>(string resourcesNameOrPath, AssetBundle assetBundle, Action<T> onComplete, Action<float> onLoad) where T : UnityEngine.Object
         {
             AssetBundleRequest assetBundleRequest = assetBundle.LoadAssetAsync<T>(resourcesNameOrPath);
 
-            if (onLoad==null)
+            if (onLoad == null)
             {
                 yield return assetBundleRequest;
             }
@@ -221,7 +222,7 @@ namespace NonsensicalKit.Manager
 
                     onLoad(assetBundleRequest.progress);
 
-                } while (assetBundleRequest.isDone);
+                } while (!assetBundleRequest.isDone);
             }
 
             if (assetBundleRequest.asset != null)

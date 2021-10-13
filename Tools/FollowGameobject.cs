@@ -1,9 +1,10 @@
+using NonsensicalKit.UI;
 using NonsensicalKit.Utility;
 using UnityEngine;
 
 namespace NonsensicalKit
 {
-    public class FollowGameobject : MonoBehaviour
+    public class FollowGameobject : NonsensicalUI
     {
         public GameObject target;
 
@@ -20,13 +21,16 @@ namespace NonsensicalKit
 
         public float xOffset;
 
-        private void Awake()
+        protected override  void Awake()
         {
+            base.Awake();
             rectTransform = transform.GetComponent<RectTransform>();
         }
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
+            Debug.Log(IsShow);
             if (mainCamera == null)
             {
                 mainCamera = Camera.main;
@@ -35,10 +39,27 @@ namespace NonsensicalKit
 
         private void Update()
         {
-
+            return;
             if (target != null)
             {
                 Vector3 pos = mainCamera.WorldToScreenPoint(target.transform.position);
+                if (pos.z <0)
+                {
+                    if (IsShow)
+                    {
+                        Debug.Log(111);
+                        CloseSelf();
+                    }
+                    return;
+                }
+                else
+                {
+                    if (!IsShow)
+                    {
+                        Debug.Log(222);
+                        OpenSelf();
+                    }
+                }
                 pos.x += xOffset;
                 pos.y += yOffset;
                 Vector3 worldPoint;
