@@ -14,7 +14,7 @@ namespace NonsensicalKit
         protected override void Awake()
         {
             base.Awake();
-
+            
             Subscribe<int, float>(signal, OnMove);
         }
 
