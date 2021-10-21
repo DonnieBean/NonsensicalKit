@@ -69,7 +69,7 @@ namespace NonsensicalKit.Utility
                 }
                 else
                 {
-                    //直接使用jd[a[pos]] = temp;会导致堆栈溢出异常
+                    //直接使用jd[a[pos]] = temp;会导致堆栈溢出异常(litjson)
                     JObject temp = jd;
                     jd = new JObject();
                     jd[a[pos]] = temp;

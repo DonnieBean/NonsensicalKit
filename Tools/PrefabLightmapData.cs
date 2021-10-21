@@ -163,7 +163,7 @@ namespace NonsensicalKit
         }
 
 #if UNITY_EDITOR
-        [UnityEditor.MenuItem("Assets/Bake Prefab Lightmaps")]
+        [UnityEditor.MenuItem("Tools/Bake Prefab Lightmaps")]
         static void GenerateLightmapInfo()
         {
             if (UnityEditor.Lightmapping.giWorkflowMode != UnityEditor.Lightmapping.GIWorkflowMode.OnDemand)

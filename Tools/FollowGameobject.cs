@@ -4,9 +4,11 @@ using UnityEngine;
 
 namespace NonsensicalKit
 {
-    public class FollowGameobject : NonsensicalUI
+    public class FollowGameobject : MonoBehaviour
     {
         public GameObject target;
+
+        public float scale;
 
         public Camera mainCamera;
 
@@ -15,22 +17,25 @@ namespace NonsensicalKit
         /// </summary>
         public Camera RenderCamera;
 
-        RectTransform rectTransform;
-
         public float yOffset;
 
         public float xOffset;
 
-        protected override  void Awake()
+
+        [SerializeField] private bool scaleByDistance;
+        public float normalDistance;
+
+        public bool back { get; set; }
+
+        private RectTransform rectTransformSelf;
+
+        private void Awake()
         {
-            base.Awake();
-            rectTransform = transform.GetComponent<RectTransform>();
+            rectTransformSelf = transform.GetComponent<RectTransform>();
         }
 
-        protected override void Start()
+        private void Start()
         {
-            base.Start();
-            Debug.Log(IsShow);
             if (mainCamera == null)
             {
                 mainCamera = Camera.main;
@@ -39,36 +44,33 @@ namespace NonsensicalKit
 
         private void Update()
         {
-            return;
             if (target != null)
             {
-                Vector3 pos = mainCamera.WorldToScreenPoint(target.transform.position);
-                if (pos.z <0)
+                Vector3 pos = Vector3.zero;
+
+                if (scaleByDistance && normalDistance != 0)
                 {
-                    if (IsShow)
+                    float dis = Vector3.Distance(target.transform.position, mainCamera.transform.position);
+                    if (dis > 1f)
                     {
-                        Debug.Log(111);
-                        CloseSelf();
+                        transform.localScale = Vector3.one * (normalDistance / dis) * scale;
                     }
-                    return;
                 }
                 else
                 {
-                    if (!IsShow)
-                    {
-                        Debug.Log(222);
-                        OpenSelf();
-                    }
+                    transform.localScale = Vector3.one * scale;
                 }
+
+                pos = mainCamera.WorldToScreenPoint(target.transform.position);
+                back = pos.z < 0;
+
                 pos.x += xOffset;
                 pos.y += yOffset;
-                Vector3 worldPoint;
-                if (RectTransformUtility.ScreenPointToWorldPointInRectangle(rectTransform, pos, RenderCamera, out worldPoint))
+                if (RectTransformUtility.ScreenPointToWorldPointInRectangle(rectTransformSelf, pos, RenderCamera, out Vector3 worldPoint))
                 {
                     transform.position = worldPoint;
                 }
             }
         }
     }
-
 }

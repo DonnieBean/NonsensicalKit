@@ -79,6 +79,15 @@ namespace NonsensicalKit.Utility
             yield return SendRequest(unityWebRequest, callback, iHandleWebError);
         }
 
+
+        public static IEnumerator GetNoSSL(string url, Action<UnityWebRequest> callback)
+        {
+            UnityWebRequest unityWebRequest =  UnityWebRequest.Get(url);
+            unityWebRequest.certificateHandler = new BypassCertificate();
+
+            yield return SendRequest(unityWebRequest, callback);
+        }
+
         public static IEnumerator Get(string url, Action<UnityWebRequest> callback)
         {
             UnityWebRequest unityWebRequest = new UnityWebRequest(url)
@@ -176,8 +185,10 @@ namespace NonsensicalKit.Utility
                 switch (unityWebRequest.result)
                 {
                     case UnityWebRequest.Result.Success:
-                    case UnityWebRequest.Result.ProtocolError:
                         callback?.Invoke(unityWebRequest);
+                        break;
+                    case UnityWebRequest.Result.ProtocolError:
+                        iHandleWebError?.OnProtocolError(unityWebRequest);
                         break;
                     case UnityWebRequest.Result.ConnectionError:
                         iHandleWebError?.OnConnectionError(unityWebRequest);
@@ -193,5 +204,14 @@ namespace NonsensicalKit.Utility
             unityWebRequest.Dispose();
         }
         #endregion
+    }
+
+
+    public class BypassCertificate : CertificateHandler
+    {
+        protected override bool ValidateCertificate(byte[] certificateData)
+        {
+            return true;
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace NonsensicalKit
         public float rotationSpeed = 30;
         public float zoomSpeed = 0.001f;
 
-        private float TargetZoom
+        protected float TargetZoom
         {
             get
             {
@@ -41,20 +41,41 @@ namespace NonsensicalKit
             }
         }
 
-        private Vector3 tarPos;
-        private float zoom;
-        private float yAngle;
-        private float xAngle;
-        private float targetZoom;
+        protected Vector3 tarPos;
+        protected float zoom;
+        protected float yAngle;
+        protected float xAngle;
+        protected float targetZoom;
 
-        private EventSystem crtEventSystem;
+        protected EventSystem crtEventSystem;
 
-        private bool leftOn;
-        private bool rightOn;
+        protected InputCenter inputCenter;
+
+        [SerializeField] protected bool checkUI;
+
+        protected bool mouseNotInUI
+        {
+            get
+            {
+                if (!checkUI)
+                {
+                    return true;
+                }
+
+                if (crtEventSystem == null)
+                {
+                    return true;
+                }
+
+                return !crtEventSystem.IsPointerOverGameObject();
+
+            }
+        }
 
         protected override void Awake()
         {
             base.Awake();
+            inputCenter = InputCenter.Instance;
             tarPos = transform.position;
             targetZoom = (stick.localPosition.z / (stickMinZoom + stickMaxZoom));
             zoom = targetZoom;
@@ -62,33 +83,26 @@ namespace NonsensicalKit
             xAngle = swivel.transform.localEulerAngles.x;
         }
 
-        private void Start()
+        public void Foucs(Transform tsf)
+        {
+            transform.position = tsf.position;
+        }
+
+        protected virtual void Start()
         {
             crtEventSystem = EventSystem.current;
         }
 
-        private void Update()
+        protected virtual void Update()
         {
-            if (Input.GetMouseButtonDown(0) && crtEventSystem.IsPointerOverGameObject() == false)
+            if (crtEventSystem == null && EventSystem.current != null)
             {
-                leftOn = true;
-            }
-            if (Input.GetMouseButtonUp(0))
-            {
-                leftOn = false;
-            }
-            if (Input.GetMouseButtonDown(1) && crtEventSystem.IsPointerOverGameObject() == false)
-            {
-                rightOn = true;
-            }
-            if (Input.GetMouseButtonUp(1))
-            {
-                rightOn = false;
+                crtEventSystem = EventSystem.current;
             }
 
-            if (crtEventSystem == null || crtEventSystem.IsPointerOverGameObject() == false)
+            if (mouseNotInUI)
             {
-                var v = -Input.GetAxisRaw("Mouse ScrollWheel");
+                var v = -inputCenter.zoom;
                 if (v > 0)
                 {
                     v = 120;
@@ -101,19 +115,20 @@ namespace NonsensicalKit
                 {
                     AdjustZoom(v);
                 }
-                if (leftOn)
+                if (inputCenter.mouseLeftKeyHold)
                 {
-                    AdjustRotation(new Vector2(Input.GetAxis("Mouse X"), -Input.GetAxis("Mouse Y")));
+                    AdjustRotation(inputCenter.look);
                 }
-                if (rightOn)
+                if (inputCenter.mouseRightKeyHold)
                 {
-                    AdjustPosition(-Input.GetAxis("Mouse X"), -Input.GetAxis("Mouse Y"));
+                    AdjustPosition(inputCenter.mouseMove);
                 }
-
             }
+
+
         }
 
-        private void LateUpdate()
+        protected void LateUpdate()
         {
             transform.position = Vector3.Lerp(transform.position, tarPos, 0.05f);
             zoom = zoom * 0.95f + TargetZoom * 0.05f;
@@ -125,7 +140,7 @@ namespace NonsensicalKit
         /// 根据改变量进行缩放
         /// </summary>
         /// <param name="delta"></param>
-        private void AdjustZoom(float delta)
+        protected void AdjustZoom(float delta)
         {
             TargetZoom += delta * zoomSpeed;
         }
@@ -134,7 +149,7 @@ namespace NonsensicalKit
         /// 根据改变量进行旋转
         /// </summary>
         /// <param name="delta"></param>
-        private void AdjustRotation(Vector2 delta)
+        protected void AdjustRotation(Vector2 delta)
         {
             yAngle += delta.x * rotationSpeed * Time.deltaTime;
             if (yAngle < 0f)
@@ -159,10 +174,10 @@ namespace NonsensicalKit
             swivel.transform.localRotation = Quaternion.Euler(xAngle, yAngle, 0f);
         }
 
-        private void AdjustPosition(float xDelta, float yDelta)
+        protected void AdjustPosition(Vector2 delta)
         {
-            Vector3 direction = swivel.transform.localRotation * new Vector3(xDelta, yDelta, 0f).normalized;
-            float damping = Mathf.Max(Mathf.Abs(xDelta), Mathf.Abs(yDelta));
+            Vector3 direction = swivel.transform.localRotation * new Vector3(delta.x, delta.y, 0f).normalized;
+            float damping = Mathf.Max(Mathf.Abs(delta.x), Mathf.Abs(delta.y));
             float distance = Mathf.Lerp(moveSpeedMinZoom, moveSpeedMaxZoom, zoom) * damping * Time.deltaTime;
 
             tarPos += direction * distance;

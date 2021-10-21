@@ -13,6 +13,7 @@ namespace NonsensicalKit
 
     public class Switcher : NonsensicalMono
     {
+        [SerializeField] private string signal;
         [SerializeField] private TargetArray[] targetArray;
 
         [SerializeField] private int crtIndex;
@@ -22,6 +23,8 @@ namespace NonsensicalKit
             base.Awake();
 
             Init();
+
+            Subscribe<int>(signal, ChangeMode);
         }
 
         private void Init()

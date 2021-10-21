@@ -5,45 +5,49 @@ using UnityEngine;
 
 public class WebTarget : NonsensicalMono
 {
-    private Queue<string> buffer = new Queue<string>();
+    private Queue<string[]> buffer = new Queue<string[]>();
 
     private void Update()
     {
         while (buffer.Count > 0)
         {
-            string str = buffer.Dequeue();
-            Publish("ReceviedSocketIOMessage", str);
+            var v = buffer.Dequeue();
+
+            Publish(v[0], v);
         }
     }
 
-    public void GetMessage(string msg)
+    public void SendMessageToUnity(string[] values)
     {
-        //Debug.Log("socketIOÊý¾Ý" + msg);
-        string str = msg.Replace("\\", "");
-        buffer.Enqueue(str);
+        switch (values[0])
+        {
+            case "ChoiceFiles":
+                ChoiceFiles(values[1]);
+                break;
+            default:
+                buffer.Enqueue(values);
+                break;
+        }
     }
 
-    public void ChoiceFile(string nameWithUrl)
+    public void ChoiceFiles(string nameWithUrl)
     {
         string[] ss = nameWithUrl.Split('|');
 
-        if ((ss.Length & 1) == 1)
+        List<string> names = new List<string>();
+        List<string> urls = new List<string>();
+        for (int i = 0; i < ss.Length - 1; i++)
         {
-            List<string> names = new List<string>();
-            List<string> urls = new List<string>();
-            for (int i = 0; i < ss.Length - 1; i++)
+            if ((i & 1) == 0)
             {
-                if ((i & 1) == 0)
-                {
-                    names.Add(ss[i]);
-                }
-                else
-                {
-                    urls.Add(ss[i]);
-                }
+                names.Add(ss[i]);
             }
-
-            Publish("WebGLChoiceFile", new Tuple<List<string>, List<string>>(names, urls));
+            else
+            {
+                urls.Add(ss[i]);
+            }
         }
+
+        Publish("WebGLChoiceFile", new Tuple<List<string>, List<string>>(names, urls));
     }
 }

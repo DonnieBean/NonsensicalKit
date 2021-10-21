@@ -39,7 +39,7 @@ namespace NonsensicalKit
                 Type messageHandler;
                 switch (types.Length)
                 {
-                   case  0:
+                    case 0:
                         {
                             messageAggregator = typeof(MessageAggregator);
                             instance = messageAggregator.GetField("Instance", BindingFlags.Static | BindingFlags.Public).GetValue(null);
@@ -145,6 +145,113 @@ namespace NonsensicalKit
         }
         #endregion
 
+        #region Unsubscribe
+        protected void Unsubscribe<T1, T2, T3>(uint index, MessageHandler<T1, T2, T3> func)
+        {
+            MessageAggregator<T1, T2, T3>.Instance.Unsubscribe(index, func);
+
+            for (int i = 0; i < listenerInfos.Count; i++)
+            {
+                if (func == (listenerInfos[i].Func as MessageHandler<T1, T2, T3>))
+                {
+                    listenerInfos.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+        protected void Unsubscribe<T1, T2>(uint index, MessageHandler<T1, T2> func)
+        {
+            MessageAggregator<T1, T2>.Instance.Unsubscribe(index, func);
+
+            for (int i = 0; i < listenerInfos.Count; i++)
+            {
+                if (func == (listenerInfos[i].Func as MessageHandler<T1, T2>))
+                {
+                    listenerInfos.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+        protected void Unsubscribe<T>(uint index, MessageHandler<T> func)
+        {
+            MessageAggregator<T>.Instance.Unsubscribe(index, func);
+
+            for (int i = 0; i < listenerInfos.Count; i++)
+            {
+                if (func == (listenerInfos[i].Func as MessageHandler<T>))
+                {
+                    listenerInfos.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+        protected void Unsubscribe(uint index, MessageHandler func)
+        {
+            MessageAggregator.Instance.Unsubscribe(index, func);
+
+            for (int i = 0; i < listenerInfos.Count; i++)
+            {
+                if (func == (listenerInfos[i].Func as MessageHandler))
+                {
+                    listenerInfos.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+        protected void Unsubscribe<T1, T2, T3>(string str, MessageHandler<T1, T2, T3> func)
+        {
+            MessageAggregator<T1, T2, T3>.Instance.Unsubscribe(str, func);
+
+            for (int i = 0; i < listenerInfos.Count; i++)
+            {
+                if (func == (listenerInfos[i].Func as MessageHandler<T1, T2, T3>))
+                {
+                    listenerInfos.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+        protected void Unsubscribe<T1, T2>(string str, MessageHandler<T1, T2> func)
+        {
+            MessageAggregator<T1, T2>.Instance.Unsubscribe(str, func);
+
+            for (int i = 0; i < listenerInfos.Count; i++)
+            {
+                if (func == (listenerInfos[i].Func as MessageHandler<T1, T2>))
+                {
+                    listenerInfos.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+        protected void Unsubscribe<T>(string str, MessageHandler<T> func)
+        {
+            MessageAggregator<T>.Instance.Unsubscribe(str, func);
+
+            for (int i = 0; i < listenerInfos.Count; i++)
+            {
+                if (func == (listenerInfos[i].Func as MessageHandler<T>))
+                {
+                    listenerInfos.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+        protected void Unsubscribe(string str, MessageHandler func)
+        {
+            MessageAggregator.Instance.Unsubscribe(str, func);
+
+            for (int i = 0; i < listenerInfos.Count; i++)
+            {
+                if (func == (listenerInfos[i].Func as MessageHandler))
+                {
+                    listenerInfos.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+        #endregion
+
         #region Publish
         protected void Publish<T1, T2, T3>(uint index, T1 data1, T2 data2, T3 data3)
         {
@@ -224,7 +331,7 @@ namespace NonsensicalKit
                                 Type pt2 = PIs[1].ParameterType;
                                 ma = typeof(MessageAggregator<,>).MakeGenericType(pt1, pt2);
                                 mh = typeof(MessageHandler<,>).MakeGenericType(pt1, pt2);
-                                types = new Type[2] { pt1,pt2 };
+                                types = new Type[2] { pt1, pt2 };
                             }
                             break;
                         case 3:

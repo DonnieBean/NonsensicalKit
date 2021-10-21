@@ -34,6 +34,7 @@ namespace NonsensicalKit
             {
                 GameObject t = GameObject.Instantiate(prefab);
                 onetimeInitAction?.Invoke(t);
+                initAction?.Invoke(t);
 
                 return t;
             }

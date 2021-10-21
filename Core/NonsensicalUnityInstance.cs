@@ -65,6 +65,11 @@ namespace NonsensicalKit
             }
         }
 
+        public void Open()
+        {
+
+        }
+
         public void LogOnGUI(string text,float time=3)
         {
             GUIText = text;
