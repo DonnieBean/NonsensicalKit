@@ -18,8 +18,21 @@ namespace NonsensicalKit
             Subscribe<int, float>(signal, OnMove);
         }
 
+
+       protected void ResetPos()
+        {
+            crtTweener?.Abort();
+            target.DoMove(pos[0].position,0.1f);
+        }
+
+
+
         private void OnMove(int index, float value)
         {
+            if (crtTweener!=null)
+            {
+                crtTweener.Abort();
+            }
             if (isSpeed)
             {
                 float distance = Vector3.Distance(target.position,pos[index].position);

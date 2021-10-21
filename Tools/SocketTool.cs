@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -10,9 +11,9 @@ namespace NonsensicalKit
     /// <summary>
     /// 连接本机socket服务端
     /// </summary>
-    public class SocketTool
+    public class SocketTool:MonoBehaviour
     {
-        private readonly int post;
+        private  int post;
 
         public Encoding encoding = Encoding.UTF8;
 
@@ -25,26 +26,53 @@ namespace NonsensicalKit
         private Thread receiveThread;
         private Thread connectThread;
 
-        public SocketTool(int post)
+        public  bool state
+        {
+            get
+            {
+                return socket.Connected;
+            }
+        }
+
+        public void Init(int post)
         {
             this.post = post;
         }
 
-        ~SocketTool()
+        Queue<string> datas=new Queue<string>();
+
+        private void Update()
+        {
+            while (datas.Count>0)
+            {
+                onReceived?.Invoke(datas.Dequeue());
+            }
+        }
+
+        private void OnDestroy()
         {
             connectThread?.Abort();
             receiveThread?.Abort();
         }
-
         public void Send(string msg)
         {
-            socket.Send(encoding.GetBytes(msg));
+            if (socket!=null&&socket.Connected)
+            {
+
+                socket.Send(encoding.GetBytes(msg));
+            }
+        }
+
+        public void Caoa(string str)
+        {
+            datas.Enqueue(str);
         }
 
         public void Connect()
         {
+
             connectThread = new Thread(new ThreadStart(SocketConnect));
-            connectThread.Start();
+            connectThread.Start(); 
         }
 
         public void SocketConnect()
@@ -96,7 +124,8 @@ namespace NonsensicalKit
                 string resMsg = encoding.GetString(buffer, 0, length);
                 if (string.IsNullOrEmpty(resMsg) == false)
                 {
-                    onReceived?.Invoke(resMsg);
+                    Caoa(resMsg);
+                       //onReceived?.Invoke(resMsg);
                 }
             }
         }

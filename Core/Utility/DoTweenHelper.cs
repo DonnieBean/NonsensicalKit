@@ -97,12 +97,12 @@ namespace NonsensicalKit.Utility
             scheduleTime = 0;
             delay = 0;
             NeedAbort = false;
-            isPause = true;
+            isPause = false;
         }
 
         public bool DoIt(float _deltaTime)
         {
-            if (!isPause)
+            if (isPause)
             {
                 return false;
             }

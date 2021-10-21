@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class WebTarget : NonsensicalMono
 {
-    private Queue<string> buffer=new Queue<string>();
+    private Queue<string> buffer = new Queue<string>();
 
     private void Update()
     {
-        while (buffer.Count>0)
+        while (buffer.Count > 0)
         {
             string str = buffer.Dequeue();
             Publish("ReceviedSocketIOMessage", str);
@@ -18,7 +18,7 @@ public class WebTarget : NonsensicalMono
 
     public void GetMessage(string msg)
     {
-        Debug.Log("socketIO数据" + msg);
+        //Debug.Log("socketIO数据" + msg);
         string str = msg.Replace("\\", "");
         buffer.Enqueue(str);
     }
@@ -45,6 +45,5 @@ public class WebTarget : NonsensicalMono
 
             Publish("WebGLChoiceFile", new Tuple<List<string>, List<string>>(names, urls));
         }
-
     }
 }

@@ -9,11 +9,11 @@ using HighlightingSystem;
 
 public class SendSignalObject : NonsensicalMono
 {
-
     [SerializeField] private string signal;
 
-
+#if USE_HIGHLIGHTINGSYSTEM
     [SerializeField] private Highlighter highlighter;
+#endif
 
     protected Action OnEnter;
     protected Action OnExit;

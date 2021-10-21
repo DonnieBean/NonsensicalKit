@@ -8,6 +8,7 @@ namespace NonsensicalKit.Manager
     {
         public string ServiceUri = "https://localhost:5001/";
         public string AssetBundlesPath = "AssetBundle";
+        public float fValue = 0.2f;
     }
 
     public class NonsensicalConfigDataBase : ScriptableObject
@@ -24,6 +25,7 @@ namespace NonsensicalKit.Manager
         [TextArea]
         public string info = "AssetBundle";
         public bool e ;
+
     }
 }
 

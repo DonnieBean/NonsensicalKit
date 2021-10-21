@@ -58,7 +58,7 @@ namespace NonsensicalKit.Joint
 
         }
 
-        public ActionData(float[] values, float time=0)
+        public ActionData(float[] values, float time = 0)
         {
             Values = values;
             Time = time;
@@ -92,8 +92,24 @@ namespace NonsensicalKit.Joint
 
         public JointSetting[] joints;
 
+        private float listTimer;
+        private float listTime;
+
+        private bool isList;
+
+        protected virtual void Update()
+        {
+            if (!IsPause)
+            {
+                listTimer += Time.deltaTime;
+            }
+        }
+
         public void ChangeStates(IEnumerable<ActionData> jds)
         {
+            isList = true;
+            listTimer = 0;
+            listTime = 0;
             StopAllCoroutines();
             StartCoroutine(ChangeStatesCoroutine(jds));
         }
@@ -188,6 +204,7 @@ namespace NonsensicalKit.Joint
 
         private IEnumerator ChangeStatesCoroutine(IEnumerable<ActionData> jds)
         {
+            
             foreach (var item in jds)
             {
                 yield return ChangeStateCoroutine(item);
@@ -196,14 +213,21 @@ namespace NonsensicalKit.Joint
 
         private IEnumerator ChangeStateCoroutine(ActionData jd)
         {
+            float time = jd.Time;
+            if (isList)
+            {
+                listTime += jd.Time;
+
+                time = listTime - listTimer;
+            }
             int min = joints.Length > jd.Length ? joints.Length : jd.Length;
 
             for (int i = 0; i < min - 1; i++)
             {
-                StartCoroutine(ChangeJoint(i, jd.Values[i], jd.Time));
+                StartCoroutine(ChangeJoint(i, jd.Values[i], time));
             }
 
-            yield return ChangeJoint(min - 1, jd.Values[min - 1], jd.Time);
+            yield return ChangeJoint(min - 1, jd.Values[min - 1], time);
         }
 
         private IEnumerator ChangeJoint(int index, float targetValue, float time)
@@ -253,15 +277,17 @@ namespace NonsensicalKit.Joint
                 targetTsf.localEulerAngles = targetLocalEuler;
                 yield break;
             }
+
             float timer = 0;
+
             Quaternion startQuaternion = targetTsf.localRotation;
             Quaternion targetQuaternion = Quaternion.Euler(targetLocalEuler);
             while (true)
             {
-                do
+                while (IsPause)
                 {
                     yield return null;
-                } while (IsPause);
+                }
 
                 timer += Time.deltaTime;
 
@@ -272,8 +298,19 @@ namespace NonsensicalKit.Joint
                 }
                 else
                 {
-                    targetTsf.localRotation = Quaternion.Lerp(startQuaternion, targetQuaternion, timer / time);
+                    if (isList)
+                    {
+
+                        targetTsf.localRotation = Quaternion.Lerp(startQuaternion, targetQuaternion, timer  / time );
+                    }
+                    else
+                    {
+
+                        targetTsf.localRotation = Quaternion.Lerp(startQuaternion, targetQuaternion, timer / time);
+                    }
                 }
+
+                yield return null;
             }
         }
 
