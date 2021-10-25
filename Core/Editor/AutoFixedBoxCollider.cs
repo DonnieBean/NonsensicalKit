@@ -124,6 +124,7 @@ namespace NonsensicalKit.Editor
                 collider = go.AddComponent<BoxCollider>();
             }
 
+
             collider.isTrigger = true;
             collider.center = bounds.center - go.transform.position;
 

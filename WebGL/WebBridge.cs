@@ -1,28 +1,49 @@
 using NonsensicalKit;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class WebTarget : NonsensicalMono
+public class WebBridge : NonsensicalMono
 {
+    [DllImport("__Internal")]
+    private static extern void sendMessageToJs(string key, string[] values);
+
     private Queue<string[]> buffer = new Queue<string[]>();
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        Subscribe<string, string[]>("SendMessageToJS", SendMessageToJS);
+    }
 
     private void Update()
     {
         while (buffer.Count > 0)
         {
             var v = buffer.Dequeue();
-
+            
             Publish(v[0], v);
         }
     }
 
-    public void SendMessageToUnity(string[] values)
+    public void SendMessageToJS(string key, string[] values)
     {
+        sendMessageToJs(key, values);
+    }
+
+    public void SendMessageToUnity(string str)
+    {
+        Debug.Log("webglÊý¾Ý  "+str);
+        string[] values = str.Split('|');
         switch (values[0])
         {
-            case "ChoiceFiles":
+            case "choiceFiles":
                 ChoiceFiles(values[1]);
+                break;
+            case "urlQuery":
+                Publish("urlQuery", values[1]);
                 break;
             default:
                 buffer.Enqueue(values);
@@ -30,7 +51,7 @@ public class WebTarget : NonsensicalMono
         }
     }
 
-    public void ChoiceFiles(string nameWithUrl)
+    private void ChoiceFiles(string nameWithUrl)
     {
         string[] ss = nameWithUrl.Split('|');
 
@@ -48,6 +69,6 @@ public class WebTarget : NonsensicalMono
             }
         }
 
-        Publish("WebGLChoiceFile", new Tuple<List<string>, List<string>>(names, urls));
+        Publish("JSChoiceFile", new Tuple<List<string>, List<string>>(names, urls));
     }
 }

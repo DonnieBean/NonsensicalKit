@@ -41,6 +41,8 @@ namespace NonsensicalKit
             }
         }
 
+        [SerializeField] protected string swtichSingal;
+
         protected Vector3 tarPos;
         protected float zoom;
         protected float yAngle;
@@ -52,6 +54,10 @@ namespace NonsensicalKit
         protected InputCenter inputCenter;
 
         [SerializeField] protected bool checkUI;
+        [SerializeField] protected bool canMove = true;
+        [SerializeField] protected bool switchWithReset = false;
+
+        protected bool isCrtCamera = true;
 
         protected bool mouseNotInUI
         {
@@ -72,9 +78,44 @@ namespace NonsensicalKit
             }
         }
 
+        private Vector3 startPos;
+        private Vector3 startRot;
+        private Vector3 startZoom;
+
         protected override void Awake()
         {
             base.Awake();
+            startPos = transform.localPosition;
+            startRot = swivel.transform.localEulerAngles;
+            startZoom = stick.localPosition;
+
+            Init();
+
+            Subscribe<string>("switchCamera", OnSwitchCamera);
+            Subscribe("CameraReset", ResetState);
+
+        }
+
+        private void OnSwitchCamera(string str)
+        {
+            isCrtCamera = str == swtichSingal;
+            if (switchWithReset)
+            {
+                ResetState();
+            }
+        }
+
+        public void ResetState()
+        {
+            transform.localPosition = startPos;
+            swivel.transform.localEulerAngles = startRot;
+            stick.localPosition = startZoom;
+
+            Init();
+        }
+
+        protected void Init()
+        {
             inputCenter = InputCenter.Instance;
             tarPos = transform.position;
             targetZoom = (stick.localPosition.z / (stickMinZoom + stickMaxZoom));
@@ -100,7 +141,7 @@ namespace NonsensicalKit
                 crtEventSystem = EventSystem.current;
             }
 
-            if (mouseNotInUI)
+            if (isCrtCamera && mouseNotInUI)
             {
                 var v = -inputCenter.zoom;
                 if (v > 0)
@@ -119,9 +160,12 @@ namespace NonsensicalKit
                 {
                     AdjustRotation(inputCenter.look);
                 }
-                if (inputCenter.mouseRightKeyHold)
+                if (canMove)
                 {
-                    AdjustPosition(inputCenter.mouseMove);
+                    if (inputCenter.mouseRightKeyHold)
+                    {
+                        AdjustPosition(inputCenter.mouseMove);
+                    }
                 }
             }
 

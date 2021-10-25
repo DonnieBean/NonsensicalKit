@@ -152,7 +152,7 @@ namespace NonsensicalKit
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (func == (listenerInfos[i].Func as MessageHandler<T1, T2, T3>))
+                if (listenerInfos[i].UseUint && index == listenerInfos[i].Index && func == (listenerInfos[i].Func as MessageHandler<T1, T2, T3>))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
@@ -165,7 +165,7 @@ namespace NonsensicalKit
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (func == (listenerInfos[i].Func as MessageHandler<T1, T2>))
+                if (listenerInfos[i].UseUint && index == listenerInfos[i].Index && func == (listenerInfos[i].Func as MessageHandler<T1, T2>))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
@@ -178,7 +178,7 @@ namespace NonsensicalKit
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (func == (listenerInfos[i].Func as MessageHandler<T>))
+                if (listenerInfos[i].UseUint && index == listenerInfos[i].Index && func == (listenerInfos[i].Func as MessageHandler<T>))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
@@ -191,7 +191,7 @@ namespace NonsensicalKit
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (func == (listenerInfos[i].Func as MessageHandler))
+                if (listenerInfos[i].UseUint && index == listenerInfos[i].Index && func == (listenerInfos[i].Func as MessageHandler))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
@@ -204,7 +204,7 @@ namespace NonsensicalKit
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (func == (listenerInfos[i].Func as MessageHandler<T1, T2, T3>))
+                if (!listenerInfos[i].UseUint && str == listenerInfos[i].Str && func == (listenerInfos[i].Func as MessageHandler<T1, T2, T3>))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
@@ -217,7 +217,7 @@ namespace NonsensicalKit
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (func == (listenerInfos[i].Func as MessageHandler<T1, T2>))
+                if (!listenerInfos[i].UseUint && str == listenerInfos[i].Str && func == (listenerInfos[i].Func as MessageHandler<T1, T2>))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
@@ -230,7 +230,7 @@ namespace NonsensicalKit
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (func == (listenerInfos[i].Func as MessageHandler<T>))
+                if (!listenerInfos[i].UseUint && str == listenerInfos[i].Str && func == (listenerInfos[i].Func as MessageHandler<T>))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
@@ -243,7 +243,7 @@ namespace NonsensicalKit
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (func == (listenerInfos[i].Func as MessageHandler))
+                if (!listenerInfos[i].UseUint && str == listenerInfos[i].Str && func == (listenerInfos[i].Func as MessageHandler))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
@@ -306,8 +306,6 @@ namespace NonsensicalKit
                     Type mh;
                     Type[] types = new Type[0];
 
-
-
                     switch (PIs.Length)
                     {
                         case 0:
@@ -353,8 +351,6 @@ namespace NonsensicalKit
                     var d = Delegate.CreateDelegate(mh, this, crtMI);
 
                     subMethod.Invoke(instance, new object[] { $"{crtInterface.Name}+{crtMI.Name}", d });
-
-
 
                     ListenerInfo temp = new ListenerInfo($"{crtInterface.Name}+{crtMI.Name}", d, types);
                     listenerInfos.Add(temp);
