@@ -1,13 +1,17 @@
 using NonsensicalKit;
+using NonsensicalKit.Utility;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class WebBridge : NonsensicalMono
+public class WebBridge : MonoSingleton<WebBridge>
 {
     [DllImport("__Internal")]
     private static extern void sendMessageToJs(string key, string[] values);
+    [DllImport("__Internal")]
+    private static extern void sendMessageToJsTest(string key, string values);
 
     private Queue<string[]> buffer = new Queue<string[]>();
 
@@ -23,32 +27,63 @@ public class WebBridge : NonsensicalMono
         while (buffer.Count > 0)
         {
             var v = buffer.Dequeue();
-            
-            Publish(v[0], v);
+            switch (v[0])
+            {
+                case "choiceFiles":
+                    ChoiceFiles(v[1]);
+                    break;
+                case "urlQuery":
+                    Publish("urlQuery", v[1]);
+                    break;
+                case "socketIOMessage":
+                    Publish("socketIOMessage", v[1],v[2]);
+                    break;
+                default:
+                    Publish(v[0], v);
+                    break;
+            }
         }
     }
 
+    #region SendMethod
     public void SendMessageToJS(string key, string[] values)
     {
         sendMessageToJs(key, values);
     }
+    public void SendMessageToJS(string key, ArrayList values)
+    {
+        sendMessageToJsTest(key, JsonHelper.SerializeObject(values)) ;
+    }
 
+    public void SendChoiceFile(string type, bool isMultiple)
+    {
+        SendMessageToJS("fileSelector", new string[] { type, isMultiple ? "true" : "false" });
+    }
+    public void SendChoiceFileTest(string type, bool isMultiple)
+    {
+        SendMessageToJS("fileSelector", new ArrayList { type, isMultiple  });
+    }
+    public void ConnectSocketIO(string url)
+    {
+        SendMessageToJS("socketIO", new string[] { "connectSocketIO" , url });
+    }
+    public void SocketIOAddListener(string eventName)
+    {
+        SendMessageToJS("socketIO", new string[] { "addListener", eventName });
+    }
+    public void SocketIOSendMessage(string eventName, string msg)
+    {
+        SendMessageToJS("socketIO", new string[] { "sendMessage", eventName,msg });
+    }
+    #endregion
+
+
+    #region ReceiveMethod
     public void SendMessageToUnity(string str)
     {
-        Debug.Log("webgl数据  "+str);
+        Debug.Log("webgl数据  " + str);
         string[] values = str.Split('|');
-        switch (values[0])
-        {
-            case "choiceFiles":
-                ChoiceFiles(values[1]);
-                break;
-            case "urlQuery":
-                Publish("urlQuery", values[1]);
-                break;
-            default:
-                buffer.Enqueue(values);
-                break;
-        }
+        buffer.Enqueue(values);
     }
 
     private void ChoiceFiles(string nameWithUrl)
@@ -71,4 +106,6 @@ public class WebBridge : NonsensicalMono
 
         Publish("JSChoiceFile", new Tuple<List<string>, List<string>>(names, urls));
     }
+
+    #endregion
 }
