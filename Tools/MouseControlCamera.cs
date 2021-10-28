@@ -81,6 +81,8 @@ namespace NonsensicalKit
         private Vector3 startPos;
         private Vector3 startRot;
         private Vector3 startZoom;
+        private float trueX;
+        private float trueY;
 
         protected override void Awake()
         {
@@ -125,7 +127,9 @@ namespace NonsensicalKit
             targetZoom = (stick.localPosition.z / (stickMinZoom + stickMaxZoom));
             zoom = targetZoom;
             yAngle = swivel.transform.localEulerAngles.y;
+            trueY = yAngle;
             xAngle = swivel.transform.localEulerAngles.x;
+            trueX = xAngle;
         }
 
         public void Foucs(Transform tsf)
@@ -177,6 +181,14 @@ namespace NonsensicalKit
             zoom = zoom * 0.95f + TargetZoom * 0.05f;
             float distance = Mathf.Lerp(stickMinZoom, stickMaxZoom, zoom);
             stick.localPosition = new Vector3(0f, 0f, distance);
+
+
+            transform.position = Vector3.Lerp(transform.position, tarPos, 0.05f);
+
+            trueX = trueX * 0.95f + xAngle * 0.05f;
+            trueY = trueY * 0.95f + yAngle * 0.05f;
+
+            swivel.transform.localRotation = Quaternion.Euler(trueX, trueY, 0f);
         }
 
         /// <summary>
@@ -195,27 +207,26 @@ namespace NonsensicalKit
         protected void AdjustRotation(Vector2 delta)
         {
             yAngle += delta.x * rotationSpeed * Time.deltaTime;
-            if (yAngle < 0f)
-            {
-                yAngle += 360f;
-            }
-            else if (yAngle >= 360f)
-            {
-                yAngle -= 360f;
-            }
+            //if (yAngle < 0f)
+            //{
+            //    yAngle += 360f;
+            //}
+            //else if (yAngle >= 360f)
+            //{
+            //    yAngle -= 360f;
+            //}
 
             xAngle += delta.y * rotationSpeed * Time.deltaTime;
-            if (xAngle < 0f)
-            {
-                xAngle += 360f;
-            }
-            else if (xAngle >= 360f)
-            {
-                xAngle -= 360f;
-            }
-
-            swivel.transform.localRotation = Quaternion.Euler(xAngle, yAngle, 0f);
+            //if (xAngle < 0f)
+            //{
+            //    xAngle += 360f;
+            //}
+            //else if (xAngle >= 360f)
+            //{
+            //    xAngle -= 360f;
+            //}
         }
+
 
         protected void AdjustPosition(Vector2 delta)
         {

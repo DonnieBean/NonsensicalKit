@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace NonsensicalKit.Editor
 {
-    public class AssestBundleAuxiliaryTool : EditorWindow
+    public class AssetBundleAuxiliaryTool : EditorWindow
     {
 
-        AssestBundleAuxiliaryTool()
+        AssetBundleAuxiliaryTool()
         {
             optionsEnumArray = Enum.GetValues(typeof(BuildAssetBundleOptions));
             options = new bool[optionsEnumArray.Length];
@@ -18,7 +18,7 @@ namespace NonsensicalKit.Editor
         [MenuItem("Tools/NonsensicalKit/AssestBundle辅助工具")]
         static void ShowWindow()
         {
-            EditorWindow.GetWindow(typeof(AssestBundleAuxiliaryTool));
+            EditorWindow.GetWindow(typeof(AssetBundleAuxiliaryTool));
         }
 
         Array optionsEnumArray;
@@ -77,7 +77,7 @@ namespace NonsensicalKit.Editor
                 BuildPipeline.BuildAssetBundles(buildPath, buildOption, buildTarget);
 
                 AssetDatabase.Refresh();
-                Debug.Log("打包完成");
+                Debug.Log("打包完成，版本为"+ buildTarget);
             }
 
             if (GUILayout.Button("ClearCache"))

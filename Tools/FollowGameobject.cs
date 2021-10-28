@@ -29,6 +29,7 @@ namespace NonsensicalKit
 
         private RectTransform rectTransformSelf;
 
+
         private void Awake()
         {
             rectTransformSelf = transform.GetComponent<RectTransform>();
@@ -44,7 +45,7 @@ namespace NonsensicalKit
 
         private void Update()
         {
-            if (target != null)
+            if ( target != null)
             {
                 Vector3 pos = Vector3.zero;
 
