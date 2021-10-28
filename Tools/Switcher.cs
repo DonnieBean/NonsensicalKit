@@ -40,14 +40,21 @@ namespace NonsensicalKit
 
         public void ChangeMode(int index)
         {
-            foreach (var item in targetArray[crtIndex].Array)
+            if (crtIndex>=0&&crtIndex< targetArray.Length)
             {
-                item.SetActive(false);
+                foreach (var item in targetArray[crtIndex].Array)
+                {
+                    item.SetActive(false);
+                }
             }
-            foreach (var item in targetArray[index].Array)
+            if (index >= 0&& index < targetArray.Length)
             {
-                item.SetActive(true);
+                foreach (var item in targetArray[index].Array)
+                {
+                    item.SetActive(true);
+                }
             }
+                
             crtIndex = index;
         }
 
