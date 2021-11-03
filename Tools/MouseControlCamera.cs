@@ -91,11 +91,15 @@ namespace NonsensicalKit
             startRot = swivel.transform.localEulerAngles;
             startZoom = stick.localPosition;
 
-            Init();
-
             Subscribe<string>("switchCamera", OnSwitchCamera);
             Subscribe("cameraReset", ResetState);
 
+        }
+
+        protected virtual void Start()
+        {
+            crtEventSystem = EventSystem.current;
+            Init();
         }
 
         private void OnSwitchCamera(string str)
@@ -131,11 +135,6 @@ namespace NonsensicalKit
         public void Foucs(Transform tsf)
         {
             transform.position = tsf.position;
-        }
-
-        protected virtual void Start()
-        {
-            crtEventSystem = EventSystem.current;
         }
 
         protected virtual void Update()
