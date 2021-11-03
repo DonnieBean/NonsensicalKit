@@ -26,21 +26,24 @@ namespace NonsensicalKit.UI
         {
             base.Awake();
 
-            if (_firstPrefab)
+            if (_group)
             {
-                _prefab = _group.GetChild(0).gameObject;
-                _prefab.gameObject.SetActive(false);
-            }
-            else
-            {
-                if (!_prefab)
+                if (_firstPrefab)
                 {
-                    Debug.LogWarning("未设置预制体预制体");
+                    _prefab = _group.GetChild(0).gameObject;
+                    _prefab.gameObject.SetActive(false);
                 }
-            }
-            if (_customEnd)
-            {
-                endElement = _group.GetChild(_group.childCount - 1);
+                else
+                {
+                    if (!_prefab)
+                    {
+                        Debug.LogWarning("未设置预制体预制体");
+                    }
+                }
+                if (_customEnd)
+                {
+                    endElement = _group.GetChild(_group.childCount - 1);
+                }
             }
         }
 

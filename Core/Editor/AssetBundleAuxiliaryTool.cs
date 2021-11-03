@@ -73,7 +73,6 @@ namespace NonsensicalKit.Editor
                     j++;
                 }
 
-                Debug.Log(buildTarget.ToString());
                 BuildPipeline.BuildAssetBundles(buildPath, buildOption, buildTarget);
 
                 AssetDatabase.Refresh();

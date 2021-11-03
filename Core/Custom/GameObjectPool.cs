@@ -10,16 +10,16 @@ namespace NonsensicalKit
         private Queue<GameObject> queue;
         private Action<GameObject> resetAction;
         private Action<GameObject> initAction;
-        private Action<GameObject> onetimeInitAction;
+        private Action<GameObject> firstInitAction;
 
         public GameObjectPool( GameObject prefab, Action<GameObject>
-            ResetAction , Action<GameObject> InitAction = null, Action<GameObject> OnetimeInitAction = null)
+            ResetAction , Action<GameObject> InitAction = null, Action<GameObject> FirstInitAction = null)
         {
             this.prefab = prefab;
             queue = new Queue<GameObject>();
             resetAction = ResetAction;
             initAction = InitAction;
-            onetimeInitAction = OnetimeInitAction;
+            firstInitAction = FirstInitAction;
         }
 
         public GameObject New()
@@ -33,7 +33,7 @@ namespace NonsensicalKit
             else
             {
                 GameObject t = GameObject.Instantiate(prefab);
-                onetimeInitAction?.Invoke(t);
+                firstInitAction?.Invoke(t);
                 initAction?.Invoke(t);
 
                 return t;

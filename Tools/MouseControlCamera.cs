@@ -94,13 +94,13 @@ namespace NonsensicalKit
             Init();
 
             Subscribe<string>("switchCamera", OnSwitchCamera);
-            Subscribe("CameraReset", ResetState);
+            Subscribe("cameraReset", ResetState);
 
         }
 
         private void OnSwitchCamera(string str)
         {
-            isCrtCamera = str == swtichSingal;
+            isCrtCamera = string.IsNullOrEmpty(swtichSingal)?true: str == swtichSingal;
             if (switchWithReset)
             {
                 ResetState();

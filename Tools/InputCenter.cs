@@ -42,7 +42,7 @@ public class InputCenter : MonoSingleton<InputCenter>
     {
         base.Awake();
 
-        SceneManager.sceneLoaded += (a1, a2) => { eventSystem = EventSystem.current; };
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += (a1, a2) => { eventSystem = EventSystem.current; };
     }
 
     private void Start()

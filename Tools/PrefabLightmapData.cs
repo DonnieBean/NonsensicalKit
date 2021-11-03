@@ -38,7 +38,6 @@ namespace NonsensicalKit
         [SerializeField]
         LightInfo[] m_LightInfo;
 
-
         void Awake()
         {
             Init();
@@ -111,7 +110,7 @@ namespace NonsensicalKit
         void OnEnable()
         {
 
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
 
         }
 
@@ -124,7 +123,7 @@ namespace NonsensicalKit
         // called when the game is terminated
         void OnDisable()
         {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
 
@@ -158,8 +157,6 @@ namespace NonsensicalKit
                 lightsInfo[i].light.bakingOutput = bakingOutput;
 
             }
-
-
         }
 
 #if UNITY_EDITOR

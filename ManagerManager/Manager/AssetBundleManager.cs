@@ -93,19 +93,26 @@ namespace NonsensicalKit.Manager
         /// <param name="onLoading"></param>
         public void LoadAssetBundle(string bundleName, Action onComplete, Action<float> onLoading = null)
         {
+            Debug.Log("加载ab包：" + bundleName);
             if (assstBundleDic.ContainsKey(bundleName) == false)
             {
                 Debug.LogWarning($"错误的包名{bundleName}");
                 return;
             }
-            if (assstBundleDic[bundleName].AssetBundlePack == true)
+
+            if (assstBundleDic[bundleName].AssetBundlePack != null)
             {
                 onComplete?.Invoke();
                 return;
             }
+
             if (assstBundleDic[bundleName].Loading == false)
             {
                 NonsensicalUnityInstance.Instance.StartCoroutine(LoadAssetBundleCoroutine(bundleName, onComplete, onLoading));
+            }
+            else
+            {
+                assstBundleDic[bundleName].OnLoadComplete += onComplete;
             }
         }
 
@@ -238,7 +245,39 @@ namespace NonsensicalKit.Manager
 
         public void ReleaseAsset(string bundleName)
         {
+            //此处无法正常使用，需要将依赖一起处理
             assstBundleDic[bundleName].LoadCount--;
+        }
+
+        public void UnloadBundle(string bundleName,bool unloadAllObjects=false)
+        {
+            assstBundleDic[bundleName]?.AssetBundlePack?.Unload(unloadAllObjects);
+        }
+
+        public void ReleaseUnusedAssetBundle()
+        {
+            List<string> releaseNames = new List<string>();
+            foreach (var item in assstBundleDic)
+            {
+                if (item.Value.LoadCount <= 0)
+                {
+                    releaseNames.Add(item.Key);
+                }
+            }
+
+            foreach (var item in releaseNames)
+            {
+                assstBundleDic[item].AssetBundlePack?.Unload(true); assstBundleDic[item].AssetBundlePack = null;
+            }
+        }
+
+        public void ReleaseAllAssetBundle()
+        {
+            foreach (var item in assstBundleDic)
+            {
+                item.Value.AssetBundlePack?.Unload(true);
+                item.Value.AssetBundlePack = null;
+            }
         }
 
         private class AssetBundleInfo

@@ -95,7 +95,7 @@ namespace NonsensicalKit
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
             Subscribe<string>("switchCamera", OnSwitchCamera);
-            Subscribe("CameraReset", ResetState);
+            Subscribe("cameraReset", ResetState);
         }
 
         private void Start()

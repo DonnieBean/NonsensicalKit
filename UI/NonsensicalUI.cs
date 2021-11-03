@@ -32,11 +32,11 @@ namespace NonsensicalKit.UI
         {
             if (InitShow)
             {
-                OpenSelf();
+                OpenSelf(true);
             }
             else
             {
-                CloseSelf();
+                CloseSelf(true);
             }
         }
         protected override void OnDestroy()
@@ -55,7 +55,7 @@ namespace NonsensicalKit.UI
         }
         protected virtual void OpenSelf()
         {
-            OpenSelf(false);
+            OpenSelf(true);
         }
 
         protected virtual void OpenSelf(bool immediately)
@@ -75,7 +75,7 @@ namespace NonsensicalKit.UI
         }
         protected virtual void CloseSelf()
         {
-            CloseSelf(false);
+            CloseSelf(true);
         }
 
         protected virtual void CloseSelf(bool immediately)
@@ -96,7 +96,7 @@ namespace NonsensicalKit.UI
 
         protected void SwitchSelf(bool immediately = false)
         {
-            if (_canvasGroup.blocksRaycasts == true)
+            if (IsShow)
             {
                 CloseSelf(immediately);
             }
