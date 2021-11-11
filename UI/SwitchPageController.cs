@@ -25,8 +25,6 @@ namespace NonsensicalKit.UI
                     buttons[i].onClick.AddListener(() => { Switch(index); });
                 }
             }
-
-           
         }
 
         protected virtual void Switch(int index)

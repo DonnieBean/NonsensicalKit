@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using NonsensicalKit.Manager;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace NonsensicalKit.Editor
 {
     public class DebugJump
     {
-        public static string className = nameof(NonsensicalDebugger) + ".cs";
+        public static string className = nameof(LogManager) + ".cs";
 
         [UnityEditor.Callbacks.OnOpenAsset(0)]
         private static bool OnOpenAsset(int instanceID, int line)

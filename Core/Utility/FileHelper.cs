@@ -8,6 +8,9 @@ using Application = UnityEngine.Application;
 
 namespace NonsensicalKit.Utility
 {
+    /// <summary>
+    /// 文件操作工具类
+    /// </summary>
     public static class FileHelper
     {
         public static void WriteVector2(this BinaryWriter writer, Vector2 v2)
@@ -15,7 +18,7 @@ namespace NonsensicalKit.Utility
             writer.Write(v2.x);
             writer.Write(v2.y);
         }
-        public static void WriteVector3(this BinaryWriter writer,Vector3 v3)
+        public static void WriteVector3(this BinaryWriter writer, Vector3 v3)
         {
             writer.Write(v3.x);
             writer.Write(v3.y);
@@ -39,12 +42,12 @@ namespace NonsensicalKit.Utility
 
         public static Color ReadColor(this BinaryReader reader)
         {
-            return new Color(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(),reader.ReadSingle());
+            return new Color(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
         }
 
         public static void Create(string path)
         {
-            FileStream fs = new FileStream(path,FileMode.Create);
+            FileStream fs = new FileStream(path, FileMode.Create);
             fs.Close();
         }
 
@@ -338,8 +341,12 @@ namespace NonsensicalKit.Utility
         public static void AutoWriteTxt(string _text)
         {
             EnsureDir(Application.streamingAssetsPath);
-            string path = Path.Combine(Application.streamingAssetsPath,DateTimeHelper.GetDateTimeString()+".txt");
+            string path = Path.Combine(Application.streamingAssetsPath, StringHelper.GetDateTimeString() + ".txt");
             File.WriteAllText(path, _text);
+        }
+        public static bool FileAppendWrite(string _fullpath, string _text)
+        {
+            return FileAppendWrite(Path.GetDirectoryName(_fullpath), Path.GetFileName(_fullpath), _text);
         }
 
         public static bool FileAppendWrite(string _path, string _name, string _text)
@@ -363,7 +370,7 @@ namespace NonsensicalKit.Utility
             }
             catch (Exception)
             {
-                NonsensicalDebugger.Log("文件写入错误");
+                Manager.LogManager.Instance.Log("文件写入错误");
                 return false;
             }
         }
@@ -616,6 +623,4 @@ namespace NonsensicalKit.Utility
             }
         }
     }
-
-
 }

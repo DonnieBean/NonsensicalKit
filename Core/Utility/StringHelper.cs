@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -222,6 +223,39 @@ namespace NonsensicalKit.Utility
             }
 
             return false;
+        }  
+        /// <summary>
+           /// 获取当前日期的字符串
+           /// </summary>
+           /// <returns>当前日期的字符串</returns>
+        public static string GetDateString(string divider = "_")
+        {
+            return DateTime.Today.ToString($"yyyy{divider}MM{divider}dd");
+        }
+
+        /// <summary>
+        /// 获取当前日期时间的字符串
+        /// </summary>
+        /// <returns>当前日期的字符串</returns>
+        public static string GetDateTimeString(string divider = "_")
+        {
+            DateTime dt = DateTime.Now;
+            return DateTime.Now.ToString($"yyyy{divider}MM{divider}dd {dt.Hour}{divider}mm{divider}ss");
+        }
+
+        public static string ToHMS(int time)
+        {
+            int hour = time / 3600;
+            int minute = (time - hour * 3600) / 60;
+            int second = time % 60;
+            return string.Format("{0:D2}:{1:D2}:{2:D2}", hour, minute, second);
+        }
+
+        public static string ToMS(int time)
+        {
+            int minute = time / 60;
+            int second = time % 60;
+            return string.Format("{0:D2}:{1:D2}", minute, second);
         }
         #endregion
 

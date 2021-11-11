@@ -33,12 +33,12 @@ namespace NonsensicalKit.UI
 
         private void Update()
         {
-            if ((CompatibleInput.Instance.LeftMouseButton || CompatibleInput.Instance.RightMouseButton) && isHover == false)
+            if ((InputCenter.Instance.mouseLeftKeyHold || InputCenter.Instance.mouseRightKeyHold) && isHover == false)
             {
                 CloseSelf();
             }
         }
-         
+        
         private void OnOpen(IEnumerable<RightClickMenuItem> datas)
         {
             OpenSelf();
@@ -48,7 +48,7 @@ namespace NonsensicalKit.UI
         protected override void UpdateUI(IEnumerable<RightClickMenuItem> datas)
         {
             base.UpdateUI(datas);
-            topNode.position = CompatibleInput.Instance.MousePosition;
+            topNode.position = InputCenter.Instance.mouseScreenPos;
         }
     }
 }

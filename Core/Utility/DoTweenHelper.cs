@@ -2,6 +2,9 @@
 
 namespace NonsensicalKit.Utility
 {
+    /// <summary>
+    /// 仿DOTween，作为简单需求时的替代品
+    /// </summary>
     public static class DoTweenHelper
     {
         public static Tweenner DoFade(this CanvasGroup canvasGroup, float endValue, float duration)

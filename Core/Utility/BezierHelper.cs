@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 贝塞尔曲线工具类
+/// </summary>
 public class BezierHelper
 {
     /// <summary>

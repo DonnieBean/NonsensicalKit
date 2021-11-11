@@ -4,6 +4,9 @@ namespace NonsensicalKit
 {
     public delegate void FieldChangedHandler();
 
+    /// <summary>
+    /// ×Ö¶Î¾ÛºÏÆ÷
+    /// </summary>
     public class FieldAggregator<T>
     {
         public static FieldAggregator<T> Instance = new FieldAggregator<T>();
@@ -47,19 +50,33 @@ namespace NonsensicalKit
             }
         }
 
-        public void Set(uint name, T handler)
+        public void Set(uint name, T value)
         {
             if (!_fields.ContainsKey(name))
             {
-                _fields.Add(name, handler);
+                _fields.Add(name, value);
             }
             else
             {
-                _fields[name] = handler;
+                _fields[name] = value;
             }
             if (_fieldListeners.ContainsKey(name))
             {
                 _fieldListeners[name]?.Invoke();
+            }
+        }
+
+        public bool TryGet(uint name, out T value)
+        {
+            value = default(T);
+            if (_fields.ContainsKey(name) && _fields[name] != null)
+            {
+                value = _fields[name];
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -104,19 +121,33 @@ namespace NonsensicalKit
             }
         }
 
-        public void Set(string name, T handler)
+        public void Set(string name, T value)
         {
             if (!_strFields.ContainsKey(name))
             {
-                _strFields.Add(name, handler);
+                _strFields.Add(name, value);
             }
             else
             {
-                _strFields[name] = handler;
+                _strFields[name] = value;
             }
             if (_strFieldListeners.ContainsKey(name))
             {
                 _strFieldListeners[name]?.Invoke();
+            }
+        }
+
+        public bool TryGet(string name,out T value)
+        {
+            value = default(T);
+            if (_strFields.ContainsKey(name) && _strFields[name] != null)
+            {
+                value = _strFields[name];
+                return true ;
+            }
+            else
+            {
+                return false;
             }
         }
 

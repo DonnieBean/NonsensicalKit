@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace NonsensicalKit.Utility
 {
+    /// <summary>
+    /// GameObject工具类
+    /// </summary>
     public static class GameObjectHelper
     {
         /// <summary>

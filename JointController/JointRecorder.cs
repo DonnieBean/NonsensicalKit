@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using NonsensicalKit.Utility;
+using NonsensicalKit.Manager;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif

@@ -7,6 +7,9 @@ using UnityEngine.Networking;
 
 namespace NonsensicalKit.Utility
 {
+    /// <summary>
+    /// http请求工具类
+    /// </summary>
     public static class HttpHelper
     {
         public static IEnumerator LoadAssetbundle(string uri, uint version, uint crc, Action<UnityWebRequest> callback, IHandleWebError iHandleWebError = null)

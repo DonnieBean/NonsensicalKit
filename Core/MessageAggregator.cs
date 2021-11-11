@@ -7,6 +7,12 @@ namespace NonsensicalKit
     public delegate void MessageHandler<T>(T arg);
     public delegate void MessageHandler();
 
+    /// <summary>
+    /// 消息聚合器，最多支持三个参数的泛型
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
     public class MessageAggregator<T1, T2, T3>
     {
         public static MessageAggregator<T1, T2, T3> Instance = new MessageAggregator<T1, T2, T3>();

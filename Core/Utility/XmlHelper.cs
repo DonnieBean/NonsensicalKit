@@ -54,7 +54,7 @@ namespace NonsensicalKit.Utility
             }
             catch (Exception e)
             {
-                NonsensicalDebugger.Log(DateTime.Now.Date.ToShortTimeString() + ":" + e.Message);
+                Manager.LogManager.Instance.Log(DateTime.Now.Date.ToShortTimeString() + ":" + e.Message);
                 return false;
             }
         }
