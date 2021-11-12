@@ -4,6 +4,9 @@ using System.Reflection;
 
 namespace NonsensicalKit.Utility
 {
+    /// <summary>
+    /// 反射工具类
+    /// </summary>
     public class ReflectionHelper
     {
         /// <summary>

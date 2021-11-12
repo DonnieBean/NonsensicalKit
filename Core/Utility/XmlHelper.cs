@@ -6,6 +6,9 @@ using System.Xml.Serialization;
 
 namespace NonsensicalKit.Utility
 {
+    /// <summary>
+    /// XML工具类
+    /// </summary>
     public class XmlHelper
     {
         /// <summary>

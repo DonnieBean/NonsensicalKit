@@ -3,6 +3,9 @@ using UnityEngine;
 namespace NonsensicalKit.Utility
 {
 
+    /// <summary>
+    /// Tansformπ§æﬂ¿‡
+    /// </summary>
     public static class TransformHelper 
     {
 

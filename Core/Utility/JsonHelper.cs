@@ -12,6 +12,7 @@ namespace NonsensicalKit.Utility
 {
     public static class JsonHelper
     {
+        
 #if USE_NEWTONSOFTJSON
         public static MethodInfo deserializeMethod = typeof(JsonConvert).GetMethods().FirstOrDefault(
                         p => p.IsStatic == true && p.IsPublic == true && p.Name == "DeserializeObject" && p.ContainsGenericParameters == true);

@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace NonsensicalKit.Utility
 {
+    /// <summary>
+    /// 字符串工具类
+    /// </summary>
     public static class StringHelper
     {
         #region PublicMethod

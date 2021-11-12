@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace NonsensicalKit.Utility
 {
+    /// <summary>
+    /// 向量工具类
+    /// </summary>
     public static class VectorHelper
     {
         public static Vector3 Division(this Vector3 detailed, Vector3 divisor)

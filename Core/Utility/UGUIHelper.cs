@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 namespace NonsensicalKit.Utility
 {
+    /// <summary>
+    /// UGUI工具类
+    /// </summary>
     public static class UGUIHelper
     {
         public static void DelayTopping(Scrollbar scrollbar)

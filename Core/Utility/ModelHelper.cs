@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace NonsensicalKit.Utility
 {
+    /// <summary>
+    /// mesh获取工具类
+    /// </summary>
     public static class ModelHelper
     {
         public static Material GetDiffuseMaterial()

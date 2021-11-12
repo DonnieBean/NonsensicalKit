@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace NonsensicalKit.Utility
 {
+    /// <summary>
+    /// 随机数工具类
+    /// </summary>
     public class RandomHelper
     {
         /// <summary>

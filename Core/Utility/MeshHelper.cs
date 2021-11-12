@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace NonsensicalKit.Utility
 {
+    /// <summary>
+    /// mesh操作工具类
+    /// </summary>
     public static class MeshHelper
     {
         /// <summary>

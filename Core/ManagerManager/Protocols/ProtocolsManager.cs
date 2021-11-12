@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
+
 namespace NonsensicalKit.Manager
 {
     /// <summary>
@@ -96,9 +97,9 @@ namespace NonsensicalKit.Manager
                 return;
             }
 
-            Type ma = typeof(MessageAggregator<>).MakeGenericType(pt);
+            Type ma = typeof(MessageAggregator<>).MakeGenericType(pt); 
 
-            MethodInfo pubMethod = ma.GetMethod("Publish", new Type[] { typeof(string), pt });
+             MethodInfo pubMethod = ma.GetMethod("Publish", new Type[] { typeof(string), pt });
             object instance = ma.GetField("Instance", BindingFlags.Static | BindingFlags.Public).GetValue(null);
 
             pubMethod.Invoke(instance, new object[] { "IUseProtocols`1+OnReceivedMessage", deserializeData });

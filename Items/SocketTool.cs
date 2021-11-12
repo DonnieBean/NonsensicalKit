@@ -21,7 +21,7 @@ namespace NonsensicalKit
 
         public Action onConnectSuccess;
         public Action<string> onConnectFail;
-        public Action<string> onReceived;
+        public Action<string,string> onReceived;
 
         private Thread receiveThread;
         private Thread connectThread;
@@ -45,7 +45,10 @@ namespace NonsensicalKit
         {
             while (datas.Count>0)
             {
-                onReceived?.Invoke(datas.Dequeue());
+                string str = datas.Dequeue();
+                string key = str.Split(':')[0];
+                string value = str.Substring(key.Length+1);
+                onReceived?.Invoke(key, value);
             }
         }
 

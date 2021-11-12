@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 
 namespace NonsensicalKit.Utility
 {
@@ -12,9 +13,9 @@ namespace NonsensicalKit.Utility
         /// </summary>
         /// <param name="exp"></param>
         /// <returns></returns>
-        public static string GetVarName(System.Linq.Expressions.Expression<Func<string, string>> exp)
+        public static string GetVarName(Expression<Func<string, string>> exp)
         {
-            return ((System.Linq.Expressions.MemberExpression)exp.Body).Member.Name;
+            return ((MemberExpression)exp.Body).Member.Name;
         }
 
     }

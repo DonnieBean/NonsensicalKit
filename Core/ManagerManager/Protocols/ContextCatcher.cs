@@ -7,6 +7,7 @@ namespace NonsensicalKit.Manager
 {
     public abstract class ContextCatcher<T> : NonsensicalMono, IUseProtocols<T>
     {
+       
         private Dictionary<FieldInfo, Action<object>> fieldCatchs = new Dictionary<FieldInfo, Action<object>>();
 
         private Dictionary<PropertyInfo, Action<object>> propertyCatchs = new Dictionary<PropertyInfo, Action<object>>();

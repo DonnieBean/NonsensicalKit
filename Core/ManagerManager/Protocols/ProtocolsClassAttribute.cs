@@ -7,6 +7,7 @@ namespace NonsensicalKit.Manager
     /// </summary>
     public class ProtocolsClassAttribute : Attribute
     {
+        
         public string key;
         public ProtocolsClassAttribute(string key)
         {

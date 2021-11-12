@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace NonsensicalKit.Utility
 {
+    /// <summary>
+    /// 数字操作工具类
+    /// </summary>
     public static class NumHelper
     {
         /// <summary>

@@ -5,6 +5,10 @@ using System.Text;
 
 namespace NonsensicalKit.Utility
 {
+
+    /// <summary>
+    /// MD5工具类
+    /// </summary>
     class MD5Helper
     {
         /// <summary>

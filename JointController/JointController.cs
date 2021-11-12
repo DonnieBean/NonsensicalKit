@@ -1,4 +1,5 @@
 using NonsensicalKit;
+using NonsensicalKit.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -73,6 +74,11 @@ namespace NonsensicalKit.Joint
         /// </summary>
         public float Time { get; set; }
 
+        public override string ToString()
+        {
+            return $"{StringHelper.GetSetString(Values)},time:{Time}";
+        }
+
         public int Length
         {
             get
@@ -92,7 +98,8 @@ namespace NonsensicalKit.Joint
 
         public JointSetting[] joints;
 
-        private float listTimer;
+        
+        private float listTimer;    //贯穿链表运动的计时器，用于校准时间
         private float listTime;
 
         private bool isList;
@@ -204,7 +211,6 @@ namespace NonsensicalKit.Joint
 
         private IEnumerator ChangeStatesCoroutine(IEnumerable<ActionData> jds)
         {
-            
             foreach (var item in jds)
             {
                 yield return ChangeStateCoroutine(item);
@@ -269,7 +275,7 @@ namespace NonsensicalKit.Joint
                     break;
             }
         }
-
+        
         private IEnumerator DoRotate(Transform targetTsf, Vector3 targetLocalEuler, float time)
         {
             if (time <= 0)
@@ -298,16 +304,7 @@ namespace NonsensicalKit.Joint
                 }
                 else
                 {
-                    if (isList)
-                    {
-
-                        targetTsf.localRotation = Quaternion.Lerp(startQuaternion, targetQuaternion, timer  / time );
-                    }
-                    else
-                    {
-
-                        targetTsf.localRotation = Quaternion.Lerp(startQuaternion, targetQuaternion, timer / time);
-                    }
+                    targetTsf.localRotation = Quaternion.Lerp(startQuaternion, targetQuaternion, timer / time);
                 }
 
                 yield return null;
