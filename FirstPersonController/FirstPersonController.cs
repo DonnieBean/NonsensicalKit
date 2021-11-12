@@ -47,9 +47,6 @@ namespace NonsensicalKit
         public float TopClamp = 90.0f;
         [Tooltip("How far in degrees can you move the camera down")]
         public float BottomClamp = -90.0f;
-
-        [SerializeField] private string signal;
-
         // cinemachine
         private float _cinemachineTargetPitch;
 
