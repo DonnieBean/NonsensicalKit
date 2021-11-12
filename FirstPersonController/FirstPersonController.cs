@@ -1,4 +1,4 @@
-锘縰sing UnityEngine;
+using UnityEngine;
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
@@ -70,13 +70,12 @@ namespace NonsensicalKit
 
         private InputCenter _input;
 
-        private bool canControl;
-        [SerializeField] private bool switchReset;
+        protected bool canControl;
 
         private Vector3 startPos;
         private Quaternion startRot;
 
-        protected override  void Awake()
+        protected override void Awake()
         {
             base.Awake();
             _input = InputCenter.Instance;
@@ -86,7 +85,7 @@ namespace NonsensicalKit
 
             if (_input == null)
             {
-                Debug.LogError("鏈壘鍒拌緭鍏ョ鐞嗙被");
+                Debug.LogError("未找到输入管理类");
             }
 
             // get a reference to our main camera
@@ -94,8 +93,6 @@ namespace NonsensicalKit
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
-            Subscribe<string>("switchCamera", OnSwitchCamera);
-            Subscribe("cameraReset", ResetState);
         }
 
         private void Start()
@@ -109,9 +106,12 @@ namespace NonsensicalKit
 
         private void Update()
         {
-            JumpAndGravity();
-            GroundedCheck();
-            Move();
+            if (canControl)
+            {
+                JumpAndGravity();
+                GroundedCheck();
+                Move();
+            }
         }
 
         private void LateUpdate()
@@ -121,17 +121,9 @@ namespace NonsensicalKit
                 CameraRotation();
             }
         }
-        private void OnSwitchCamera(string str)
-        {
-            canControl = str == signal;
+    
 
-            if (switchReset)
-            {
-                ResetState();
-            }
-        }
-
-        private void ResetState()
+        protected void ResetState()
         {
             transform.localPosition = startPos;
             transform.localRotation = startRot;

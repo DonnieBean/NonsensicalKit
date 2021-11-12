@@ -1,5 +1,4 @@
 using NonsensicalKit;
-using NonsensicalKit.Manager;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -28,7 +27,7 @@ namespace NonsensicalKit
         public float moveSpeedMinZoom = 1;
         public float moveSpeedMaxZoom = 10;
         public float rotationSpeed = 30;
-        public float zoomSpeed = 0.001f;
+        public float zoomSpeed = 0.0001f;
 
         protected float TargetZoom
         {
@@ -44,6 +43,8 @@ namespace NonsensicalKit
 
         [SerializeField] protected string swtichSingal;
 
+        [SerializeField] protected  bool canMove=true;
+
         protected Vector3 tarPos;
         protected float zoom;
         protected float yAngle;
@@ -55,9 +56,6 @@ namespace NonsensicalKit
         protected InputCenter inputCenter;
 
         [SerializeField] protected bool checkUI;
-        [SerializeField] protected bool canMove = true;
-        [SerializeField] protected bool switchWithReset = false;
-
         protected bool isCrtCamera = true;
 
         protected bool mouseNotInUI
@@ -85,7 +83,7 @@ namespace NonsensicalKit
         private float trueX;
         private float trueY;
 
-        [SerializeField] private bool autoInit=true;
+        [SerializeField] private bool autoInit = true;
 
         protected override void Awake()
         {
@@ -95,7 +93,7 @@ namespace NonsensicalKit
             startZoom = stick.localPosition;
 
 
-            if (FieldAggregator<string>.Instance.TryGet("crtCamera",out var v))
+            if (FieldAggregator<string>.Instance.TryGet("crtCamera", out var v))
             {
                 OnSwitchCamera(v);
             }
@@ -115,16 +113,12 @@ namespace NonsensicalKit
         {
             crtEventSystem = EventSystem.current;
             inputCenter = InputCenter.Instance;
-            
+
         }
 
-        private void OnSwitchCamera(string str)
+        protected virtual void OnSwitchCamera(string str)
         {
-            isCrtCamera = string.IsNullOrEmpty(swtichSingal)?true: str == swtichSingal;
-            if (switchWithReset)
-            {
-                ResetState();
-            }
+            isCrtCamera = string.IsNullOrEmpty(swtichSingal) ? true : str == swtichSingal;
         }
 
         public void ResetState()
@@ -252,4 +246,6 @@ namespace NonsensicalKit
             tarPos += direction * distance;
         }
     }
+
 }
+

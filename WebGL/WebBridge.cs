@@ -10,6 +10,7 @@ public class WebBridge : MonoSingleton<WebBridge>
 {
     [DllImport("__Internal")]
     private static extern void sendMessageToJs(string key, string[] values);
+
     [DllImport("__Internal")]
     private static extern void sendMessageToJsTest(string key, string values);
 

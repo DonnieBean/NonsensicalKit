@@ -24,7 +24,7 @@ namespace NonsensicalKit
 
             Init();
 
-            Subscribe<int>(signal, ChangeMode);
+            Subscribe<int>(signal, Switch);
         }
 
         private void Init()
@@ -38,7 +38,7 @@ namespace NonsensicalKit
             }
         }
 
-        public void ChangeMode(int index)
+        public void Switch(int index)
         {
             if (crtIndex>=0&&crtIndex< targetArray.Length)
             {
@@ -62,11 +62,11 @@ namespace NonsensicalKit
         {
             if (crtIndex + 1 >= targetArray.Length)
             {
-                ChangeMode(0);
+                Switch(0);
             }
             else
             {
-                ChangeMode(crtIndex + 1);
+                Switch(crtIndex + 1);
             }
         }
     }
