@@ -100,6 +100,27 @@ namespace NonsensicalKit.Utility
             return Addition_And_Subtraction(ls);
         }
 
+        public static string GetIntMapString(int[,] ienumerable)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            int rowLine = ienumerable.GetLength(0);
+
+            int count = 0;
+            foreach (var item in ienumerable)
+            {
+                sb.Append(item.ToString());
+                sb.Append(","); count++;
+                if (count==rowLine)
+                {
+                    count = 0;
+                    sb.AppendLine();
+                }
+            }
+
+            return sb.ToString();
+        }
+
         /// <summary>
         /// 获取集合的可读字符串
         /// </summary>
