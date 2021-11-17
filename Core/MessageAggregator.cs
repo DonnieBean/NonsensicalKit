@@ -292,7 +292,7 @@ namespace NonsensicalKit
         {
             if (_strMessages.ContainsKey(name) && _strMessages[name] != null)
             {
-                _strMessages[name](args);
+                _strMessages[name](args); 
             }
         }
         public bool Check(string value)

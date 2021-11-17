@@ -10,13 +10,12 @@ namespace NonsensicalKit.Editor
     {
         private static string showText; //显示给用户的文本
 
-        [MenuItem("Tools/NonsensicalKit/自动添加自适应大小盒子碰撞器")]
-        static void AddComponentToCrtTarget()
+        [MenuItem("Tools/NonsensicalKit/自动添加自适应大小盒子碰撞器包括子物体")]
+        static void AddComponentToCrtTargetWithChilds()
         {
-            showText = "这是一条信息";
             if (Selection.gameObjects.Length == 0)
             {
-                showText = "未选中任何对象";
+                Debug.Log("未选中任何对象");
             }
             else
             {
@@ -25,10 +24,25 @@ namespace NonsensicalKit.Editor
                     AutoFixed(Selection.gameObjects[i].transform);
                 }
 
-                showText = "盒子碰撞器自适应完成";
+                Debug.Log("盒子碰撞器自适应完成");
             }
+        }
+        [MenuItem("Tools/NonsensicalKit/自动添加自适应大小盒子碰撞器")]
+        static void AddComponentToCrtTarget()
+        {
+            if (Selection.gameObjects.Length == 0)
+            {
+                Debug.Log("未选中任何对象");
+            }
+            else
+            {
+                for (int i = 0; i < Selection.gameObjects.Length; i++)
+                {
+                    FitToChildren(Selection.gameObjects[i]);
+                }
 
-            EditorWindow.GetWindow(typeof(AutoFixedBoxCollider));
+            }
+            Debug.Log("盒子碰撞器自适应完成");
         }
 
         void OnGUI()
@@ -130,6 +144,7 @@ namespace NonsensicalKit.Editor
 
             collider.size = new Vector3(bounds.size.x / go.transform.lossyScale.x, bounds.size.y / go.transform.lossyScale.y, bounds.size.z / go.transform.lossyScale.z);
 
+            EditorUtility.SetDirty(collider);
             go.transform.rotation = qn;
         }
     }

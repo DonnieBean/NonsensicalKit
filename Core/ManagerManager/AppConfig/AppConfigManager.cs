@@ -22,7 +22,7 @@ namespace NonsensicalKit.Manager
         /// <typeparam name="T">配置类的类型</typeparam>
         /// <param name="t">out值，获取不到时为默认值</param>
         /// <returns>是否获取成功</returns>
-        public bool TryGetConfig<T>(out T t) where T : class
+        public bool TryGetConfig<T>(out T t) where T : NonsensicalConfigDataBase
         {
             t = default(T);
             foreach (var configData in configDatas)
@@ -43,7 +43,7 @@ namespace NonsensicalKit.Manager
         /// <param name="ID">想要获取的ID</param>
         /// <param name="t">out值，获取不到时为默认值</param>
         /// <returns>是否获取成功</returns>
-        public bool TryGetConfig<T>(string ID, out T t) where T : class
+        public bool TryGetConfig<T>(string ID, out T t) where T : NonsensicalConfigDataBase
         {
             t = default(T);
             foreach (var configData in configDatas)
@@ -65,7 +65,7 @@ namespace NonsensicalKit.Manager
         /// <param name="filedName">字段的名称</param>
         /// <param name="t">out值，获取不到时为默认值</param>
         /// <returns>是否获取成功</returns>
-        public bool TryGetConfigValue<Config, T>(string filedName, out T t) where Config : class
+        public bool TryGetConfigValue<Config, T>(string filedName, out T t) where Config : NonsensicalConfigDataBase
         {
             t = default(T);
             if (TryGetConfig(out Config config))
@@ -131,7 +131,6 @@ namespace NonsensicalKit.Manager
                 {
                     if (unityWebRequest != null && unityWebRequest.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
                     {
-
                         MethodInfo deserializeMethod = JsonHelper.deserializeMethod.MakeGenericMethod(new Type[] { configDatas[j].GetType() });
                         object deserializeData = null;
                         try

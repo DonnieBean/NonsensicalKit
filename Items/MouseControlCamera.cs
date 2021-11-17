@@ -41,7 +41,6 @@ namespace NonsensicalKit
             }
         }
 
-        [SerializeField] protected string swtichSingal;
 
         [SerializeField] protected  bool canMove=true;
 
@@ -56,7 +55,8 @@ namespace NonsensicalKit
         protected InputCenter inputCenter;
 
         [SerializeField] protected bool checkUI;
-        protected bool isCrtCamera = true;
+
+        protected bool isOn=true;
 
         protected bool mouseNotInUI
         {
@@ -93,14 +93,7 @@ namespace NonsensicalKit
             startZoom = stick.localPosition;
 
 
-            if (FieldAggregator<string>.Instance.TryGet("crtCamera", out var v))
-            {
-                OnSwitchCamera(v);
-            }
-
-            Subscribe<string>("switchCamera", OnSwitchCamera);
-            Subscribe("cameraReset", ResetState);
-
+     
 
 
             if (autoInit)
@@ -116,10 +109,7 @@ namespace NonsensicalKit
 
         }
 
-        protected virtual void OnSwitchCamera(string str)
-        {
-            isCrtCamera = string.IsNullOrEmpty(swtichSingal) ? true : str == swtichSingal;
-        }
+
 
         public void ResetState()
         {
@@ -153,7 +143,7 @@ namespace NonsensicalKit
                 crtEventSystem = EventSystem.current;
             }
 
-            if (isCrtCamera && mouseNotInUI)
+            if (isOn && mouseNotInUI)
             {
                 var v = -inputCenter.zoom;
                 if (v > 0)

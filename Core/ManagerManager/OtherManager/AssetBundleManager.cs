@@ -15,6 +15,22 @@ namespace NonsensicalKit.Manager
     /// </summary>
     public class AssetBundleManager : NonsensicalManagerBase<AssetBundleManager>
     {
+        public bool isLoding
+        {
+            get
+            {
+                foreach (var item in assstBundleDic)
+                {
+                    if (item.Value.Loading)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+
         private string assetBundlePath;
 
         private Dictionary<string, AssetBundleInfo>   assstBundleDic = new Dictionary<string, AssetBundleInfo>();
@@ -101,7 +117,7 @@ namespace NonsensicalKit.Manager
         /// <param name="onLoading"></param>
         public void LoadAssetBundle(string bundleName, Action onComplete, Action<float> onLoading = null)
         {
-            Debug.Log("加载ab包：" + bundleName);
+            //Debug.Log("加载ab包：" + bundleName);
             if (assstBundleDic.ContainsKey(bundleName) == false)
             {
                 Debug.LogWarning($"错误的包名：{bundleName}");

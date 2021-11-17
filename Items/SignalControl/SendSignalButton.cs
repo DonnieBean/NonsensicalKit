@@ -19,6 +19,11 @@ namespace NonsensicalKit
             }
         }
 
+
+        public void SetSignal(string newSignal)
+        {
+            signal = newSignal;
+        }
         private void SendSignal()
         {
             Publish(signal);
