@@ -12,8 +12,11 @@ namespace NonsensicalKit.Manager
         private int _initCount;
         private int _lateInitCount;
 
+        public bool loadCompleted { get;private set; }
+
         protected override void Awake()
         {
+            base.Awake();
             Subscribe((uint)NonsensicalManagerEnum.InitSubscribe, InitSubscribe);
             Subscribe((uint)NonsensicalManagerEnum.InitComlete, InitComplete);
             Subscribe((uint)NonsensicalManagerEnum.LateInitComlete, LateInitComplete);
@@ -31,12 +34,27 @@ namespace NonsensicalKit.Manager
             StartCoroutine(Init());
         }
 
+
         private void InitSubscribe()
         {
             _initCount++;
             _lateInitCount++;
         }
 
+        private IEnumerator Init()
+        {
+            yield return null;
+
+            if (_initCount == 0)
+            {
+                loadCompleted = true;
+                MessageAggregator.Instance.Publish((uint)NonsensicalManagerEnum.AllInitComplete);
+            }
+            else
+            {
+                InitStart();
+            }
+        }
         private void InitStart()
         {
             Publish((uint)NonsensicalManagerEnum.InitStart);
@@ -63,23 +81,10 @@ namespace NonsensicalKit.Manager
 
             if (_lateInitCount == 0)
             {
+                loadCompleted = true;
                 MessageAggregator.Instance.Publish((uint)NonsensicalManagerEnum.AllInitComplete);
             }
         }
 
-        private IEnumerator Init()
-        {
-            yield return null;
-
-            if (_initCount == 0)
-            {
-
-                MessageAggregator.Instance.Publish((uint)NonsensicalManagerEnum.AllInitComplete);
-            }
-            else
-            {
-                InitStart();
-            }
-        }
     }
 }
