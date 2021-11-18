@@ -13,20 +13,70 @@ namespace NonsensicalKit
     /// </summary>
     public class SocketTool:MonoBehaviour
     {
-        private  int post;
+        public Action<string> onReceived;
+        
 
-        public Encoding encoding = Encoding.UTF8;
+        private ScoektClientInstace sci;
+        private Queue<string> datas = new Queue<string>();
 
-        private Socket socket;
+        public void Init(int port)
+        {
+            sci = new ScoektClientInstace();
+            sci.SocketConnectAsync(port);
+            sci.onConnectSuccess += () => { Debug.Log("连接成功"); };
+            sci.onConnectFail += (msg)=> { Debug.LogWarning(msg); };
+            sci.onReceived += (msg)=> { datas.Enqueue(msg); };
+        }
+        private void Update()
+        {
+            while (datas.Count>0)
+            {
+                string str = datas.Dequeue();
+                onReceived?.Invoke(str);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            Abort();
+        }
+        public void Send(string msg)
+        {
+
+            sci.Send(msg);
+        }
+
+        public void Abort()
+        {
+            sci?.About();
+        }
+    }
+    public class StateObject
+    {
+        // Size of receive buffer.  
+        public const int BufferSize = 1024;
+
+        // Receive buffer.  
+        public byte[] buffer = new byte[BufferSize];
+
+        // Received data string.
+        public StringBuilder sb = new StringBuilder();
+
+        // Client socket.
+        public Socket workSocket = null;
+    }
+
+    public class ScoektClientInstace
+    {
+        public readonly Encoding encoding = Encoding.UTF8;
 
         public Action onConnectSuccess;
         public Action<string> onConnectFail;
-        public Action<string,string> onReceived;
+        public Action<string> onReceived;
 
-        private Thread receiveThread;
-        private Thread connectThread;
+        private Socket socket;
 
-        public  bool state
+        public bool Connected
         {
             get
             {
@@ -34,71 +84,25 @@ namespace NonsensicalKit
             }
         }
 
-        public void Init(int post)
-        {
-            this.post = post;
-        }
 
-        Queue<string> datas=new Queue<string>();
-
-        private void Update()
-        {
-            while (datas.Count>0)
-            {
-                string str = datas.Dequeue();
-                string key = str.Split(':')[0];
-                string value = str.Substring(key.Length+1);
-                onReceived?.Invoke(key, value);
-            }
-        }
-
-        private void OnDestroy()
-        {
-            connectThread?.Abort();
-            receiveThread?.Abort();
-        }
-        public void Send(string msg)
-        {
-            if (socket!=null&&socket.Connected)
-            {
-
-                socket.Send(encoding.GetBytes(msg));
-            }
-        }
-
-        public void Caoa(string str)
-        {
-            datas.Enqueue(str);
-        }
-
-        public void Connect()
-        {
-
-            connectThread = new Thread(new ThreadStart(SocketConnect));
-            connectThread.Start(); 
-        }
-
-        public void SocketConnect()
+        public async void SocketConnectAsync(int post)
         {
             string host = Dns.GetHostName();
             IPHostEntry hostEntry = Dns.GetHostEntry(host);
             foreach (IPAddress address in hostEntry.AddressList)
             {
                 IPEndPoint ipe = new IPEndPoint(address, post);
-                Socket tempSocket =
-                    new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                Socket tempSocket =   new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
                 try
                 {
-                    tempSocket.Connect(ipe);
+                   await  tempSocket.ConnectAsync(ipe);
 
                     if (tempSocket.Connected)
                     {
                         onConnectSuccess?.Invoke();
                         socket = tempSocket;
-                        receiveThread = new Thread(new ThreadStart(ReceiveMsg));
-                        receiveThread.Start();
-
+                        ReceiveMsg();
                         break;
                     }
                     else
@@ -108,7 +112,7 @@ namespace NonsensicalKit
                 }
                 catch (Exception e)
                 {
-                    onConnectFail?.Invoke(address.ToString() + "\n错误原因: " + e.ToString());
+                    onConnectFail?.Invoke(address.ToString() + "连接失败\n错误原因: " + e.ToString());
                 }
 
             }
@@ -118,26 +122,61 @@ namespace NonsensicalKit
             }
         }
 
-        void ReceiveMsg()
+      private   void ReceiveMsg()
         {
-            while (true)
+            StateObject state = new StateObject();
+            state.workSocket = socket;
+            socket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                new AsyncCallback(ReceiveCallBack), state);
+           
+        }
+
+        private void ReceiveCallBack(IAsyncResult ar)
+        {
+            string content = string.Empty;
+
+            StateObject state = (StateObject)ar.AsyncState;
+            Socket handler = state.workSocket;
+
+            int bytesRead = handler.EndReceive(ar);
+            if (bytesRead > 0)
             {
-                byte[] buffer = new byte[socket.ReceiveBufferSize];
-                int length = socket.Receive(buffer);
-                string resMsg = encoding.GetString(buffer, 0, length);
-                if (string.IsNullOrEmpty(resMsg) == false)
+                state.sb.Append(Encoding.UTF8.GetString(
+                    state.buffer, 0, bytesRead));
+                content = state.sb.ToString();
+
+                if (content.IndexOf("<EOF>") > -1)
                 {
-                    Caoa(resMsg);
-                       //onReceived?.Invoke(resMsg);
+                    Console.WriteLine($"Read {content.Length} bytes from socket. \n Data : {content}");
+
+                    onReceived?.Invoke(content);
+
+                    state.sb.Clear();
+
                 }
+                    handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                    new AsyncCallback(ReceiveCallBack), state);
+                
+            }
+            else
+            {
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();
+                Debug.LogError("收到数据为空");
+            }
+        }
+        public void Send(string msg)
+        {
+            if (socket != null && socket.Connected)
+            {
+                socket.Send(encoding.GetBytes(msg));
             }
         }
 
-        public void Abort()
+        public void About()
         {
-            socket?.Close();
-            connectThread?.Abort();
-            receiveThread?.Abort();
+            socket.Shutdown(SocketShutdown.Both);
+            socket.Close();
         }
     }
 }

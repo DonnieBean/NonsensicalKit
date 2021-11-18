@@ -16,6 +16,7 @@ namespace NonsensicalKit.Joint
             if (GUILayout.Button("ResetZeroState"))
             {
                 jc.ResetZeroState();
+                EditorUtility.SetDirty(jc);
             }
         }
     }
