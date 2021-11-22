@@ -13,20 +13,24 @@ using UnityEngine.InputSystem;
 
 public class InputCenter : MonoSingleton<InputCenter>
 {
-    public bool spaceKeyEnter;
-    public float zoom;
-    public Vector2 look;
-    public Vector3 mousePos;
-    public Vector2 mouseScreenPos;
-    public Vector2 mouseMove;
-    public Vector2 move;
-    public bool mouseLeftKeyHold;
-    public bool mouseLeftKeyDown;
-    public bool mouseRightKeyHold;
-    public bool mouseRightKeyDown;
-    public bool mouseMiddleKeyHold;
-    public bool leftShiftKeyHold;
+    public bool spaceKeyEnter { get; set; }
+    public float zoom { get; set; }
+    public Vector2 look { get; set; }
+    public Vector3 mousePos { get; set; }
+    public Vector2 mouseScreenPos { get; set; }
+    public Vector2 mouseMove { get; set; }
+    public Vector2 move { get; set; }
+    public bool mouseLeftKeyHold { get; set; }
+    public bool mouseLeftKeyDown { get; set; }
+    public bool mouseRightKeyHold { get; set; }
+    public bool mouseRightKeyDown { get; set; }
+    public bool mouseMiddleKeyHold { get; set; }
+    public bool leftShiftKeyHold { get; set; }
 
+    private Vector2 lookTemp;
+    private Vector2 mouseScreenPosTemp;
+    private Vector2 mouseMoveTemp;
+    private Vector2 moveTemp;
     private EventSystem eventSystem;
 
     private bool mouseOnUI
@@ -63,20 +67,24 @@ public class InputCenter : MonoSingleton<InputCenter>
 #else
         zoom = Input.GetAxisRaw("Mouse ScrollWheel");
 
-        move.x = Input.GetAxisRaw("Horizontal");
-        move.y = Input.GetAxisRaw("Vertical");
+        moveTemp.x = Input.GetAxisRaw("Horizontal");
+        moveTemp.y = Input.GetAxisRaw("Vertical");
+        move = moveTemp;
 
-        look.x = Input.GetAxisRaw("Mouse X");
-        look.y = -Input.GetAxisRaw("Mouse Y");
-
-        mouseMove.x = -look.x;
-        mouseMove.y = look.y;
+        lookTemp.x = Input.GetAxisRaw("Mouse X");
+        lookTemp.y = -Input.GetAxisRaw("Mouse Y");
+        look = lookTemp;
+        mouseMoveTemp.x = -look.x;
+        mouseMoveTemp.y = look.y;
+        mouseMove = mouseMoveTemp;
         mousePos = Input.mousePosition;
-        mouseScreenPos.x = mousePos.x;
-        mouseScreenPos.y = Screen.height-mousePos.y;
+        mouseScreenPosTemp.x = mousePos.x;
+        mouseScreenPosTemp.y = Screen.height - mousePos.y;
+        mouseScreenPos = mouseScreenPosTemp;
+
         if (Input.GetMouseButtonDown(0) && !mouseOnUI)
         {
-            mouseLeftKeyHold = true; 
+            mouseLeftKeyHold = true;
             mouseLeftKeyDown = true;
         }
         else

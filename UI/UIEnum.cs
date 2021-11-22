@@ -16,6 +16,7 @@
         OpenConfirmPanel,
         OpenMessagePanel,
         OpenRightClickMenu,
+        CloseRightClickMenu,
     }
 
 }

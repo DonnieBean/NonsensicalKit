@@ -81,6 +81,7 @@ namespace NonsensicalKit
                     unsubMethod.Invoke(instance, new object[] { listener.Str, listener.Func });
                 }
             }
+
             DestroyAction?.Invoke();
         }
 

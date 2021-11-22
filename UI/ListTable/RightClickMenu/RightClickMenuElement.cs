@@ -22,6 +22,11 @@ namespace NonsensicalKit.UI
                 {
                     img_Icon.gameObject.SetActive(true);
                     img_Icon.sprite = v;
+                    img_Icon.preserveAspect = true;
+                }
+                else
+                {
+                    img_Icon.gameObject.SetActive(false);
                 }
             }
             else
@@ -30,7 +35,7 @@ namespace NonsensicalKit.UI
             }
             txt_Text.text = elementData.text;
             btn_Element.onClick.RemoveAllListeners();
-            btn_Element.onClick.AddListener(()=>elementData.clickAction());
+            btn_Element.onClick.AddListener(()=> {Publish((uint)UIEnum.CloseRightClickMenu); elementData.clickAction(); });;
         }
     }
 }

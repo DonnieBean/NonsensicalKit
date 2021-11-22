@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NonsensicalKit.Manager
+namespace NonsensicalKit
 {
     public class SpriteManager : MonoSingleton<SpriteManager>
     {
-        private Dictionary<string, SpriteInfo> crtSprites;
-
+        private Dictionary<string, SpriteInfo> crtSprites=new Dictionary<string, SpriteInfo>();
 
         public void SetSprite(string spriteName, Func<Sprite> spriteCreateMethod )
         {
@@ -38,6 +37,10 @@ namespace NonsensicalKit.Manager
 
         public void RecoverySprite(string spriteName)
         {
+            if (NonsensicalUnityInstance.applicationIsQuitting)
+            {
+                return;
+            }
             crtSprites[spriteName].Count--;
             if (crtSprites[spriteName].Count==0)
             {

@@ -29,11 +29,12 @@ namespace NonsensicalKit.UI
             base.Awake();
 
             Subscribe<List<RightClickMenuItem>>((uint)UIEnum.OpenRightClickMenu, OnOpen);
+            Subscribe((uint)UIEnum.CloseRightClickMenu, OnCloseMenu);
         }
 
         private void Update()
         {
-            if ((InputCenter.Instance.mouseLeftKeyHold || InputCenter.Instance.mouseRightKeyHold) && isHover == false)
+            if ((InputCenter.Instance.mouseLeftKeyDown || InputCenter.Instance.mouseRightKeyDown) && isHover == false)
             {
                 CloseSelf();
             }
@@ -41,14 +42,20 @@ namespace NonsensicalKit.UI
         
         private void OnOpen(IEnumerable<RightClickMenuItem> datas)
         {
+
             OpenSelf();
             UpdateUI(datas);
+        }
+
+        private void OnCloseMenu()
+        {
+            CloseSelf();
         }
 
         protected override void UpdateUI(IEnumerable<RightClickMenuItem> datas)
         {
             base.UpdateUI(datas);
-            topNode.position = InputCenter.Instance.mouseScreenPos;
+            topNode.position = InputCenter.Instance.mousePos;
         }
     }
 }

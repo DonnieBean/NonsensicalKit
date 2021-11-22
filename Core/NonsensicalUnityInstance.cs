@@ -27,7 +27,7 @@ namespace NonsensicalKit
             }
         }
 
-        public static bool applicationIsQuitting=false;
+        public static bool applicationIsQuitting = false;
 
         public Queue<string> messages;
 
@@ -46,7 +46,7 @@ namespace NonsensicalKit
         {
             while (messages.Count > 0)
             {
-                Debug.Log(messages.Dequeue()); 
+                Debug.Log(messages.Dequeue());
             }
 
             float deltaTime = Time.deltaTime;
@@ -70,7 +70,7 @@ namespace NonsensicalKit
 
         }
 
-        public void LogOnGUI(string text,float time=3)
+        public void LogOnGUI(string text, float time = 3)
         {
             GUIText = text;
             GUITimer = time;
@@ -79,7 +79,7 @@ namespace NonsensicalKit
         private void OnGUI()
         {
             GUITimer -= Time.deltaTime;
-            if (GUITimer>0)
+            if (GUITimer > 0)
             {
                 GUI.TextArea(new Rect(Screen.width * 0.5f - 75, Screen.height * 0.5f - 50, 150, 100), GUIText);
             }
@@ -95,6 +95,11 @@ namespace NonsensicalKit
             yield return new WaitForSeconds(_delayTime);
 
             _action?.Invoke();
+        }
+
+        public void AddComponent<T>() where T : MonoBehaviour
+        {
+            gameObject.AddComponent<T>();
         }
     }
 }
