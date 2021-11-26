@@ -15,6 +15,7 @@ namespace NonsensicalKit
                 return Instance;
             }
         }
+
         public static T Instance { get; private set; }
 
         protected override void Awake()

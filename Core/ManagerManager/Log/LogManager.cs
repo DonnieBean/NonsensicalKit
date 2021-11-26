@@ -143,6 +143,7 @@ namespace NonsensicalKit.Manager
             {
                 sb.AppendLine($"{memberName }(at {sourceFilePath} :{ sourceLineNumber})");
             }
+            sb.Remove(sb.Length-1,1);
             Log(new LogContext(LogLevel.DEBUG, sb.ToString()));
         }
         public void LogInfo(object obj,
@@ -168,6 +169,7 @@ namespace NonsensicalKit.Manager
             {
                 sb.AppendLine($"{memberName }(at {sourceFilePath} :{ sourceLineNumber})");
             }
+            sb.Remove(sb.Length - 1, 1);
             Log(new LogContext(LogLevel.INFO, sb.ToString()));
         }
         public void LogWarning(object obj,
@@ -193,6 +195,7 @@ namespace NonsensicalKit.Manager
             {
                 sb.AppendLine($"{memberName }(at {sourceFilePath} :{ sourceLineNumber})");
             }
+            sb.Remove(sb.Length - 1, 1);
             Log(new LogContext(LogLevel.WARNING, sb.ToString()));
         }
         public void LogError(object obj,
@@ -218,6 +221,7 @@ namespace NonsensicalKit.Manager
             {
                 sb.AppendLine($"{memberName }(at {sourceFilePath} :{ sourceLineNumber})");
             }
+            sb.Remove(sb.Length - 1, 1);
             Log(new LogContext(LogLevel.ERROR, sb.ToString()));
         }
         public void LogFatal(object obj,
@@ -243,6 +247,7 @@ namespace NonsensicalKit.Manager
             {
                 sb.AppendLine($"{memberName }(at {sourceFilePath} :{ sourceLineNumber})");
             }
+            sb.Remove(sb.Length - 1, 1);
             Log(new LogContext(LogLevel.FATAL, sb.ToString()));
         }
     }

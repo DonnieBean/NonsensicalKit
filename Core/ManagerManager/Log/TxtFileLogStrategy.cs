@@ -24,6 +24,7 @@ namespace NonsensicalKit.Manager
             {
                 fullLogFilePath = Path.Combine(Application.dataPath, "NonsensicalLog", $"Log{ DateTime.Now.ToString("yyyy_MM_dd_HH")}.txt");
             }
+            Debug.Log("日志文件路径："+fullLogFilePath);
         }
 
         public  void Log(LogContext info)

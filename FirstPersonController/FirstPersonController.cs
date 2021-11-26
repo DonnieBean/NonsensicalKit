@@ -67,7 +67,7 @@ namespace NonsensicalKit
 
         private InputCenter _input;
 
-        protected bool canControl;
+        protected bool canControl=true;
 
         private Vector3 startPos;
         private Quaternion startRot;
@@ -75,7 +75,7 @@ namespace NonsensicalKit
         protected override void Awake()
         {
             base.Awake();
-            _input = InputCenter.Instance;
+            _input = InputCenter.AutoInstance;
 
             startPos = transform.localPosition;
             startRot = transform.localRotation;
