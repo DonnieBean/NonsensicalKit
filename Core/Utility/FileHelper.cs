@@ -355,7 +355,7 @@ namespace NonsensicalKit.Utility
             {
                 Directory.CreateDirectory(_path);
             }
-            string pathStr = _path + _name;
+            string pathStr = Path.Combine( _path, _name);
             try
             {
                 using (FileStream fs = new FileStream(pathStr, FileMode.Append, FileAccess.Write, FileShare.Write))
@@ -364,6 +364,7 @@ namespace NonsensicalKit.Utility
                     {
                         sw.Write(_text);
                         sw.Flush();
+                        sw.Close();
                     }
                 }
                 return true;

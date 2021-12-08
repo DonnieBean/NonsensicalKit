@@ -25,7 +25,7 @@ namespace NonsensicalKit
             sci.SocketConnectAsync(port);
             sci.onConnectSuccess += () => { Debug.Log("连接成功"); };
             sci.onConnectFail += (msg)=> { Debug.LogWarning(msg); };
-            sci.onReceived += (msg)=> { datas.Enqueue(msg); };
+            sci.onReceived += (msg)=> { Debug.Log("收到消息"); datas.Enqueue(msg); };
         }
         private void Update()
         {
@@ -145,18 +145,11 @@ namespace NonsensicalKit
                     state.buffer, 0, bytesRead));
                 content = state.sb.ToString();
 
-                if (content.IndexOf("<EOF>") > -1)
-                {
-                    Console.WriteLine($"Read {content.Length} bytes from socket. \n Data : {content}");
+                onReceived?.Invoke(content);
 
-                    onReceived?.Invoke(content);
-
-                    state.sb.Clear();
-
-                }
-                    handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                state.sb.Clear();
+                handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReceiveCallBack), state);
-                
             }
             else
             {
@@ -175,8 +168,8 @@ namespace NonsensicalKit
 
         public void About()
         {
-            socket.Shutdown(SocketShutdown.Both);
-            socket.Close();
+            socket?.Shutdown(SocketShutdown.Both);
+            socket?.Close();
         }
     }
 }

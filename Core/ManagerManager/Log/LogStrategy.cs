@@ -11,5 +11,6 @@ namespace NonsensicalKit.Manager
     {
          abstract void Log(LogContext message);
          abstract void Init();
+         abstract void Recycle();
     }
 }

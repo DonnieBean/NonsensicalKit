@@ -54,6 +54,15 @@ namespace NonsensicalKit.Manager
             base.Awake();
             platformInfo = PlatformInfo.Instance;
         }
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            foreach (var item in _strategies)
+            {
+                item.Value.Recycle();
+            }
+        }
 
         protected override void InitStart()
         {
@@ -94,7 +103,6 @@ namespace NonsensicalKit.Manager
                 }
                 else
                 {
-
                     logLevel = LogLevel.INFO;
                     logPath = new LogPath[0];
                 }

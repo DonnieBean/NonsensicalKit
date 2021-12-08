@@ -67,7 +67,7 @@ namespace NonsensicalKit
 
         private InputCenter _input;
 
-        protected bool canControl;
+        protected bool canControl=true;
 
         private Vector3 startPos;
         private Quaternion startRot;

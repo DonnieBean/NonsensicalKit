@@ -37,5 +37,10 @@ namespace NonsensicalKit.Manager
                     break;
             }
         }
+
+        public void Recycle()
+        {
+            Debug.Log($"EndLog!DateTime:{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
+        }
     }
 }
