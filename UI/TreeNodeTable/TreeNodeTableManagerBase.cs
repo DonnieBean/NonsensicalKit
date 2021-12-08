@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NonsensicalKit.UI
 {
-    public class TreeNodeTableManagerBase<NodeElement, ElementData> : NonsensicalUI
+    public abstract class TreeNodeTableManagerBase<NodeElement, ElementData> : NonsensicalUI
         where NodeElement : TreeNodeTableElementBase<ElementData>
         where ElementData : class, ITreeNodeClass<ElementData>, new()
     {

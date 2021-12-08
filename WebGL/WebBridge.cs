@@ -9,7 +9,7 @@ using UnityEngine;
 public class WebBridge : MonoSingleton<WebBridge>
 {
     [DllImport("__Internal")]
-    private static extern void sendMessageToJs(string key, string[] values);
+    private static extern void sendMessageToJS(string key, string[] values);
 
     [DllImport("__Internal")]
     private static extern void sendMessageToJsTest(string key, string values);
@@ -19,7 +19,7 @@ public class WebBridge : MonoSingleton<WebBridge>
     protected override void Awake()
     {
         base.Awake();
-
+         
         Subscribe<string, string[]>("SendMessageToJS", SendMessageToJS);
     }
 
@@ -49,7 +49,7 @@ public class WebBridge : MonoSingleton<WebBridge>
     #region SendMethod
     public void SendMessageToJS(string key, string[] values)
     {
-        sendMessageToJs(key, values);
+        sendMessageToJS(key, values);
     }
     public void SendMessageToJS(string key, ArrayList values)
     {

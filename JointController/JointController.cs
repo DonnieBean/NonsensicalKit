@@ -58,7 +58,24 @@ namespace NonsensicalKit.Joint
         {
 
         }
-
+        public ActionData(long[] values, double time = 0)
+        {
+            Values = new float[values.Length];
+            for (int i = 0; i < values.Length; i++)
+            {
+                Values[i] = values[i];
+            }
+            Time = (float)time;
+        }
+        public ActionData(double[] values, double time = 0)
+        {
+            Values = new float[values.Length];
+            for (int i = 0; i < values.Length; i++)
+            {
+                Values[i] =(float) values[i];
+            }
+            Time =(float) time;
+        }
         public ActionData(float[] values, float time = 0)
         {
             Values = values;
@@ -203,7 +220,6 @@ namespace NonsensicalKit.Joint
                     {
                         item.zeroState = item.jointsNode.localEulerAngles;
                     }
-
                 }
             }
 #endif
@@ -226,7 +242,7 @@ namespace NonsensicalKit.Joint
 
                 time = listTime - listTimer;
             }
-            int min = joints.Length > jd.Length ? joints.Length : jd.Length;
+            int min = joints.Length < jd.Length ? joints.Length : jd.Length;
 
             for (int i = 0; i < min - 1; i++)
             {
