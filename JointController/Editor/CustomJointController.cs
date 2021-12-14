@@ -18,6 +18,11 @@ namespace NonsensicalKit.Joint
                 jc.ResetZeroState();
                 EditorUtility.SetDirty(jc);
             }
+            if (GUILayout.Button("ResetRobotState"))
+            {
+                jc.ResetRobotState();
+                EditorUtility.SetDirty(jc);
+            }
         }
     }
 }

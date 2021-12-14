@@ -72,9 +72,9 @@ namespace NonsensicalKit.Joint
             Values = new float[values.Length];
             for (int i = 0; i < values.Length; i++)
             {
-                Values[i] =(float) values[i];
+                Values[i] = (float)values[i];
             }
-            Time =(float) time;
+            Time = (float)time;
         }
         public ActionData(float[] values, float time = 0)
         {
@@ -115,7 +115,7 @@ namespace NonsensicalKit.Joint
 
         public JointSetting[] joints;
 
-        
+
         private float listTimer;    //贯穿链表运动的计时器，用于校准时间
         private float listTime;
 
@@ -225,6 +225,29 @@ namespace NonsensicalKit.Joint
 #endif
         }
 
+        /// <summary>
+        /// 用于编辑器环境下的姿态重置
+        /// </summary>
+        public void ResetRobotState()
+        {
+#if UNITY_EDITOR
+            foreach (var item in joints)
+            {
+                if (item.jointsNode != null)
+                {
+                    if (item.axisType == AxisType.position)
+                    {
+                        item.jointsNode.localPosition = item.zeroState;
+                    }
+                    else if (item.axisType == AxisType.rotation)
+                    {
+                        item.jointsNode.localEulerAngles = item.zeroState;
+                    }
+                }
+            }
+#endif
+        }
+
         private IEnumerator ChangeStatesCoroutine(IEnumerable<ActionData> jds)
         {
             foreach (var item in jds)
@@ -291,7 +314,7 @@ namespace NonsensicalKit.Joint
                     break;
             }
         }
-        
+
         private IEnumerator DoRotate(Transform targetTsf, Vector3 targetLocalEuler, float time)
         {
             if (time <= 0)

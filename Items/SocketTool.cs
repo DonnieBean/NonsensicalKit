@@ -11,11 +11,9 @@ namespace NonsensicalKit
     /// <summary>
     /// 连接本机socket服务端
     /// </summary>
-    public class SocketTool:MonoBehaviour
+    public class SocketTool : MonoBehaviour
     {
         public Action<string> onReceived;
-        
-
         private ScoektClientInstace sci;
         private Queue<string> datas = new Queue<string>();
 
@@ -24,12 +22,12 @@ namespace NonsensicalKit
             sci = new ScoektClientInstace();
             sci.SocketConnectAsync(port);
             sci.onConnectSuccess += () => { Debug.Log("连接成功"); };
-            sci.onConnectFail += (msg)=> { Debug.LogWarning(msg); };
-            sci.onReceived += (msg)=> { Debug.Log("收到消息"); datas.Enqueue(msg); };
+            sci.onConnectFail += (msg) => { Debug.LogWarning(msg); };
+            sci.onReceived += (msg) => { Debug.Log("收到消息"); datas.Enqueue(msg); };
         }
         private void Update()
         {
-            while (datas.Count>0)
+            while (datas.Count > 0)
             {
                 string str = datas.Dequeue();
                 onReceived?.Invoke(str);
@@ -84,7 +82,6 @@ namespace NonsensicalKit
             }
         }
 
-
         public async void SocketConnectAsync(int post)
         {
             string host = Dns.GetHostName();
@@ -92,11 +89,11 @@ namespace NonsensicalKit
             foreach (IPAddress address in hostEntry.AddressList)
             {
                 IPEndPoint ipe = new IPEndPoint(address, post);
-                Socket tempSocket =   new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                Socket tempSocket = new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
                 try
                 {
-                   await  tempSocket.ConnectAsync(ipe);
+                    await tempSocket.ConnectAsync(ipe);
 
                     if (tempSocket.Connected)
                     {
@@ -122,13 +119,13 @@ namespace NonsensicalKit
             }
         }
 
-      private   void ReceiveMsg()
+        private void ReceiveMsg()
         {
             StateObject state = new StateObject();
             state.workSocket = socket;
             socket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                 new AsyncCallback(ReceiveCallBack), state);
-           
+
         }
 
         private void ReceiveCallBack(IAsyncResult ar)
@@ -144,8 +141,11 @@ namespace NonsensicalKit
                 state.sb.Append(Encoding.UTF8.GetString(
                     state.buffer, 0, bytesRead));
                 content = state.sb.ToString();
-
-                onReceived?.Invoke(content);
+                string[] contents = content.Split('\0');
+                foreach (var item in contents)
+                {
+                    onReceived?.Invoke(item);
+                }
 
                 state.sb.Clear();
                 handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,

@@ -50,7 +50,9 @@ namespace NonsensicalKit.Manager
             try
             {
                 sw.Write(info.message);
+                sw.Write("\r\n");
                 sw.Flush();
+                fs.Flush();
             }
             catch (Exception)
             {
@@ -60,6 +62,8 @@ namespace NonsensicalKit.Manager
 
         public void Recycle()
         {
+            sw?.Flush();
+            fs?.Flush();
             sw?.Close();
             fs?.Close();
         }
