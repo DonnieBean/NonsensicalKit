@@ -20,15 +20,15 @@ namespace NonsensicalKit.Manager
         StreamWriter sw;
         public void Init()
         {
+            string usePath = Application.dataPath.Substring(0, Application.dataPath.LastIndexOfAny( new char[] { '/' ,'\\'}));
             if (AppConfigManager.Instance.TryGetConfig<NonsensicalManagerConfigData>(out var v))
             {
-                fullLogFilePath = Path.Combine(Application.dataPath , v.LogFilePath,$"Log{ DateTime.Now.ToString("yyyy_MM_dd_HH")}.txt");
+                fullLogFilePath = Path.Combine(usePath, v.LogFilePath,$"Log{ DateTime.Now.ToString("yyyy_MM_dd_HH")}.txt");
             }
             else
             {
-                fullLogFilePath = Path.Combine(Application.dataPath, "NonsensicalLog", $"Log{ DateTime.Now.ToString("yyyy_MM_dd_HH")}.txt");
+                fullLogFilePath = Path.Combine(usePath, "NonsensicalLog", $"Log{ DateTime.Now.ToString("yyyy_MM_dd_HH")}.txt");
             }
-            //Debug.Log("日志文件路径："+fullLogFilePath);
             path = Path.GetDirectoryName(fullLogFilePath);
             name = Path.GetFileName(fullLogFilePath);
             try
