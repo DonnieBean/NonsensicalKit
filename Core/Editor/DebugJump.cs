@@ -8,6 +8,7 @@ namespace NonsensicalKit.Editor
     public class DebugJump
     {
         public static string className = nameof(LogManager) + ".cs";
+        public static string class2Name = nameof(ConsoleLogStrategy) + ".cs";
 
         [UnityEditor.Callbacks.OnOpenAsset(0)]
         private static bool OnOpenAsset(int instanceID, int line)
@@ -20,7 +21,7 @@ namespace NonsensicalKit.Editor
                 {
                     string pathline = matches.Groups[1].Value;
 
-                    if (!pathline.Contains(className))
+                    if (!pathline.Contains(className)&&!pathline.Contains(class2Name))
                     {
                         int splitIndex = pathline.LastIndexOf(":");
                         string path = pathline.Substring(0, splitIndex);
