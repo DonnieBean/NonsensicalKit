@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace NonsensicalKit
@@ -10,6 +9,8 @@ namespace NonsensicalKit
     /// </summary>
     public class DebugConsole : MonoBehaviour
     {
+        public static DebugConsole Instance;
+
         #region Inspector Settings
 
         /// <summary>
@@ -66,11 +67,16 @@ namespace NonsensicalKit
         readonly Rect titleBarRect = new Rect(0, 0, 10000, 20);
         Rect windowRect = new Rect(margin, margin, Screen.width - (margin * 2), Screen.height - (margin * 2));
 
+        private void Awake()
+        {
+            Instance = this;
+        }
+
         void Update()
         {
             if (Input.GetKeyDown(toggleKey))
             {
-                visible = !visible;
+                SwitchVisible();
             }
 
             if (shakeToOpen && Input.acceleration.sqrMagnitude > shakeAcceleration)
@@ -98,6 +104,10 @@ namespace NonsensicalKit
             Application.logMessageReceived -= HandleLog;
         }
 
+        public void SwitchVisible()
+        {
+            visible = !visible;
+        }
 
         /// <summary>
         /// Displays a window that lists the recorded logs.

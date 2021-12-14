@@ -20,7 +20,11 @@ namespace NonsensicalKit.Editor
         {
             public static bool jumpFirstOnPlay;
 
+            //增加新全局宏时仅需修改下方四个数组
+
+
             public static bool[] useStates = new bool[3];
+
 
             public static readonly string[] Labels = new string[]
             {

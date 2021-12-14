@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -355,7 +355,7 @@ namespace NonsensicalKit.Utility
             {
                 Directory.CreateDirectory(_path);
             }
-            string pathStr = Path.Combine( _path, _name);
+            string pathStr = Path.Combine( _path , _name);
             try
             {
                 using (FileStream fs = new FileStream(pathStr, FileMode.Append, FileAccess.Write, FileShare.Write))

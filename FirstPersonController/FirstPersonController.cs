@@ -75,7 +75,7 @@ namespace NonsensicalKit
         protected override void Awake()
         {
             base.Awake();
-            _input = InputCenter.Instance;
+            _input = InputCenter.AutoInstance;
 
             startPos = transform.localPosition;
             startRot = transform.localRotation;

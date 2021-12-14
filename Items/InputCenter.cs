@@ -1,11 +1,6 @@
 using NonsensicalKit;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
-
-
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
