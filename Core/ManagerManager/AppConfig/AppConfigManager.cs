@@ -17,6 +17,30 @@ namespace NonsensicalKit.Manager
         public NonsensicalConfigDataBase[] configDatas;
 
         /// <summary>
+        /// 用于编辑器环境中的反向读取json
+        /// </summary>
+        public void LoadJson()
+        {
+            for (int i = 0; i < configDatas.Length; i++)
+            {
+                string path = GetFilePath(configDatas[i]);
+                string str = FileHelper.ReadAllText(path);
+                MethodInfo deserializeMethod = JsonHelper.deserializeMethod.MakeGenericMethod(new Type[] { configDatas[i].GetType() });
+                object deserializeData = null;
+                try
+                {
+                    deserializeData = deserializeMethod.Invoke(null, new object[] { str });
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("NonsensicalAppConfig文件反序列化出错\r\n" + e.ToString());
+                }
+
+                configDatas[i].CopyForm<NonsensicalConfigDataBase>((NonsensicalConfigDataBase)deserializeData) ;
+            }
+        }
+
+        /// <summary>
         /// 使用类型来获取配置信息，返回匹配的第一个
         /// </summary>
         /// <typeparam name="T">配置类的类型</typeparam>
@@ -126,7 +150,7 @@ namespace NonsensicalKit.Manager
             for (int i = 0; i < configDatas.Length; i++)
             {
                 int j = i;
-                Debug.Log(GetFilePath(configDatas[i]));
+                //Debug.Log(GetFilePath(configDatas[i]));
                 StartCoroutine(HttpHelper.Get(GetFilePath(configDatas[i]), null, (unityWebRequest) =>
                 {
                     if (unityWebRequest != null && unityWebRequest.result == UnityEngine.Networking.UnityWebRequest.Result.Success)

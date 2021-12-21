@@ -6,4 +6,13 @@ using UnityEngine;
 public class SceneNodeAsset : NonsensicalConfigDataBase
 {
     public List<SceneNodeData> SceneNodes;
+
+    public override void CopyForm<T>(T from)
+    {
+        SceneNodeAsset fromData = from as SceneNodeAsset;
+        if (fromData != null)
+        {
+            SceneNodes = fromData.SceneNodes;
+        }
+    }
 }
