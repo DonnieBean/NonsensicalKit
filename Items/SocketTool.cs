@@ -23,7 +23,9 @@ namespace NonsensicalKit
             sci.SocketConnectAsync(port);
             sci.onConnectSuccess += () => { Debug.Log("连接成功"); };
             sci.onConnectFail += (msg) => { Debug.LogWarning(msg); };
-            sci.onReceived += (msg) => { Debug.Log("收到消息"); datas.Enqueue(msg); };
+            sci.onReceived += (msg) => {
+                //Debug.Log("收到消息"); 
+                datas.Enqueue(msg); };
         }
         private void Update()
         {
@@ -141,7 +143,7 @@ namespace NonsensicalKit
                 state.sb.Append(Encoding.UTF8.GetString(
                     state.buffer, 0, bytesRead));
                 content = state.sb.ToString();
-                string[] contents = content.Split('\0');
+                string[] contents = content.Split(new char[] { '\0' },StringSplitOptions.RemoveEmptyEntries);
                 foreach (var item in contents)
                 {
                     onReceived?.Invoke(item);
