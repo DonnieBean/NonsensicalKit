@@ -55,7 +55,6 @@ namespace NonsensicalKit.Manager
                 assetBundlePath = Path.Combine(Application.streamingAssetsPath, "AssetBundles");
                 NonsensicalUnityInstance.Instance.StartCoroutine(InitAssetBundleManager(Path.Combine(assetBundlePath, "AssetBundles")));
             }
-
         }
 
         /// <summary>

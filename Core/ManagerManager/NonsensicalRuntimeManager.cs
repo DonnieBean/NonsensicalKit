@@ -34,7 +34,6 @@ namespace NonsensicalKit.Manager
             StartCoroutine(Init());
         }
 
-
         private void InitSubscribe()
         {
             _initCount++;
