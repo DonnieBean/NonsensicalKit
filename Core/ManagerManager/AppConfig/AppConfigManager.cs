@@ -190,5 +190,10 @@ namespace NonsensicalKit.Manager
             string configFilePath = Path.Combine(Application.streamingAssetsPath, "Configs", configData.GetType().ToString() + "_" + configData.ConfigID + ".json");
             return configFilePath;
         }
+
+        protected override void FinalInitStart()
+        {
+            FinalInitComplete();
+        }
     }
 }

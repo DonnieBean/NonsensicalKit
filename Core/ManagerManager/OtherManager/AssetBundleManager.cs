@@ -15,25 +15,25 @@ namespace NonsensicalKit.Manager
     /// </summary>
     public class AssetBundleManager : NonsensicalManagerBase<AssetBundleManager>
     {
-        public bool isLoding
+        public bool isLoading => LoadCount > 0;
+
+        private int LoadCount
         {
             get
             {
-                foreach (var item in assstBundleDic)
-                {
-                    if (item.Value.Loading)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
+                return loadCount;
+            }
+            set
+            {
+                loadCount = value;
+                OnLoadCountChanged();
             }
         }
+        private int loadCount;
 
         private string assetBundlePath;
 
-        private Dictionary<string, AssetBundleInfo>   assstBundleDic = new Dictionary<string, AssetBundleInfo>();
+        private Dictionary<string, AssetBundleInfo> assstBundleDic = new Dictionary<string, AssetBundleInfo>();
 
         private AssetBundleManifest assetBundleManifest;
 
@@ -44,17 +44,28 @@ namespace NonsensicalKit.Manager
 
         protected override void LateInitStart()
         {
-            if (AppConfigManager.Instance != null&& AppConfigManager.Instance.TryGetConfig(out NonsensicalManagerConfigData t))
+            LateInitComplete();
+        }
+
+        protected override void FinalInitStart()
+        {
+            if (AppConfigManager.Instance != null && AppConfigManager.Instance.TryGetConfig(out NonsensicalManagerConfigData t))
             {
                 assetBundlePath = Path.Combine(Application.streamingAssetsPath, t.AssetBundlesPath);
 
-                NonsensicalUnityInstance.Instance.StartCoroutine(InitAssetBundleManager(Path.Combine(assetBundlePath, "AssetBundles")));
+                StartCoroutine(InitAssetBundleManager(Path.Combine(assetBundlePath, "AssetBundles")));
             }
             else
             {
                 assetBundlePath = Path.Combine(Application.streamingAssetsPath, "AssetBundles");
-                NonsensicalUnityInstance.Instance.StartCoroutine(InitAssetBundleManager(Path.Combine(assetBundlePath, "AssetBundles")));
+                StartCoroutine(InitAssetBundleManager(Path.Combine(assetBundlePath, "AssetBundles")));
             }
+        }
+
+        private void OnLoadCountChanged()
+        {
+            Publish((int)NonsensicalManagerEnum.ABLoadCountChanged, isLoading);
+            Publish("ABLoadCountChanged", isLoading);
         }
 
         /// <summary>
@@ -63,20 +74,14 @@ namespace NonsensicalKit.Manager
         /// <param name="assetBundleManifestBundlePath"></param>
         private IEnumerator InitAssetBundleManager(string assetBundleManifestBundlePath)
         {
-            //if (File.Exists( assetBundleManifestBundlePath)==false)
-            //{
-            //    LateInitComplete();
-            //    yield break;
-            //}
-
             var assetBundleCreateRequest = UnityWebRequestAssetBundle.GetAssetBundle(assetBundleManifestBundlePath);
             yield return assetBundleCreateRequest.SendWebRequest();
             AssetBundle assetBundle = (assetBundleCreateRequest.downloadHandler as DownloadHandlerAssetBundle).assetBundle;
 
             if (assetBundle == null)
             {
-                Debug.LogWarning("未找到AssetBundles");
-                LateInitComplete();
+                LogManager.Instance.LogWarning("未找到AssetBundles");
+                FinalInitComplete();
                 yield break;
             }
 
@@ -105,7 +110,7 @@ namespace NonsensicalKit.Manager
                 assstBundleDic.Add(item, new AssetBundleInfo(item, assetBundleManifest.GetDirectDependencies(item)));
             }
 
-            LateInitComplete();
+            FinalInitComplete();
         }
 
         /// <summary>
@@ -131,7 +136,7 @@ namespace NonsensicalKit.Manager
 
             if (assstBundleDic[bundleName].Loading == false)
             {
-                NonsensicalUnityInstance.Instance.StartCoroutine(LoadAssetBundleCoroutine(bundleName, onComplete, onLoading));
+                StartCoroutine(LoadAssetBundleCoroutine(bundleName, onComplete, onLoading));
             }
             else
             {
@@ -148,6 +153,7 @@ namespace NonsensicalKit.Manager
         /// <returns></returns>
         private IEnumerator LoadAssetBundleCoroutine(string _bundleName, Action _onComplete, Action<float> _onLoading)
         {
+            LoadCount++;
             assstBundleDic[_bundleName].Loading = true;
             string[] dependencies = assstBundleDic[_bundleName].Dependencies;
             int completeCount = 0;
@@ -181,10 +187,11 @@ namespace NonsensicalKit.Manager
                 while (request.downloadProgress < 1);
             }
 
-            AssetBundle assetBundle = (request.downloadHandler as DownloadHandlerAssetBundle).assetBundle;  
+            AssetBundle assetBundle = (request.downloadHandler as DownloadHandlerAssetBundle).assetBundle;
 
             if (assetBundle != null)
             {
+                LoadCount--;
                 assstBundleDic[_bundleName].AssetBundlePack = assetBundle;
                 assstBundleDic[_bundleName].Loading = false;
                 assstBundleDic[_bundleName].OnLoadComplete?.Invoke();
@@ -215,14 +222,14 @@ namespace NonsensicalKit.Manager
             if (assstBundleDic[bundleName].AssetBundlePack != null)
             {
                 assstBundleDic[bundleName].LoadCount++;
-                NonsensicalUnityInstance.Instance.StartCoroutine(LoadResourceCoroutine<T>(resourcesName, assstBundleDic[bundleName].AssetBundlePack, onComplete, onLoad));
+                StartCoroutine(LoadResourceCoroutine<T>(resourcesName, assstBundleDic[bundleName].AssetBundlePack, onComplete, onLoad));
             }
             else
             {
                 assstBundleDic[bundleName].OnLoadComplete += () =>
                 {
                     assstBundleDic[bundleName].LoadCount++;
-                    NonsensicalUnityInstance.Instance.StartCoroutine(LoadResourceCoroutine<T>(resourcesName, assstBundleDic[bundleName].AssetBundlePack, onComplete, onLoad));
+                    StartCoroutine(LoadResourceCoroutine<T>(resourcesName, assstBundleDic[bundleName].AssetBundlePack, onComplete, onLoad));
                 };
                 LoadAssetBundle(bundleName, null);
             }
@@ -272,7 +279,7 @@ namespace NonsensicalKit.Manager
             assstBundleDic[bundleName].LoadCount--;
         }
 
-        public void UnloadBundle(string bundleName,bool unloadAllObjects=false)
+        public void UnloadBundle(string bundleName, bool unloadAllObjects = false)
         {
             assstBundleDic[bundleName]?.AssetBundlePack?.Unload(unloadAllObjects);
         }

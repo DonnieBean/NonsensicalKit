@@ -5,13 +5,17 @@
     /// </summary>
     public enum NonsensicalManagerEnum
     {
-        InitSubscribe = 23234,
+        ManagerSubscribe = 23234,
         InitStart,
         InitComlete,
-        LateInitStart ,
+        LateInitStart,
         LateInitComlete ,
+        FinalInitStart,
+        FinalInitComlete,
         AllInitComplete ,
 
         ReceviedProtocolsMessage,
+
+        ABLoadCountChanged,
     }
 }

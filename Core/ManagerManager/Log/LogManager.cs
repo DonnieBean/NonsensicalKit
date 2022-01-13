@@ -110,6 +110,10 @@ namespace NonsensicalKit.Manager
             Log(new LogContext(LogLevel.INFO, $"StartLog!DateTime:{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}\r\nDevice Model:{SystemInfo.deviceModel},Device Name:{ SystemInfo.deviceName},Operating System:{SystemInfo.operatingSystem}"));
             LateInitComplete();
         }
+        protected override void FinalInitStart()
+        {
+            FinalInitComplete();
+        }
 
         public  void Log(params object[] obj)
         {

@@ -64,6 +64,10 @@ namespace NonsensicalKit.Manager
         {
             LateInitComplete();
         }
+        protected override void FinalInitStart()
+        {
+            FinalInitComplete();
+        }
 
         private void OnReceivedProtocolsMessage(string key, string value)
         {

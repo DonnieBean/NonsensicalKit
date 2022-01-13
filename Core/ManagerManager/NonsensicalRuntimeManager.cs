@@ -11,15 +11,17 @@ namespace NonsensicalKit.Manager
     {
         private int _initCount;
         private int _lateInitCount;
+        private int _finalInitCount;
 
         public bool loadCompleted { get;private set; }
 
         protected override void Awake()
         {
             base.Awake();
-            Subscribe((uint)NonsensicalManagerEnum.InitSubscribe, InitSubscribe);
+            Subscribe((uint)NonsensicalManagerEnum.ManagerSubscribe, InitSubscribe);
             Subscribe((uint)NonsensicalManagerEnum.InitComlete, InitComplete);
             Subscribe((uint)NonsensicalManagerEnum.LateInitComlete, LateInitComplete);
+            Subscribe((uint)NonsensicalManagerEnum.FinalInitComlete, FinalInitComplete);
         }
 
         private void Start()
@@ -38,6 +40,7 @@ namespace NonsensicalKit.Manager
         {
             _initCount++;
             _lateInitCount++;
+            _finalInitCount++;
         }
 
         private IEnumerator Init()
@@ -79,6 +82,19 @@ namespace NonsensicalKit.Manager
             _lateInitCount--;
 
             if (_lateInitCount == 0)
+            {
+                FinalInitStart();
+            }
+        }
+        private void FinalInitStart()
+        {
+            Publish((uint)NonsensicalManagerEnum.FinalInitStart);
+        }
+        private void FinalInitComplete()
+        {
+            _finalInitCount--;
+
+            if (_finalInitCount == 0)
             {
                 loadCompleted = true;
                 MessageAggregator.Instance.Publish((uint)NonsensicalManagerEnum.AllInitComplete);

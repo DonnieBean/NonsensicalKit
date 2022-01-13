@@ -16,11 +16,12 @@ namespace NonsensicalKit.Manager
 
             Subscribe((uint)NonsensicalManagerEnum.InitStart, InitStart);
             Subscribe((uint)NonsensicalManagerEnum.LateInitStart, LateInitStart);
+            Subscribe((uint)NonsensicalManagerEnum.FinalInitStart, FinalInitStart);
         }
 
         protected virtual void Start()
         {
-            Publish((uint)NonsensicalManagerEnum.InitSubscribe);
+            Publish((uint)NonsensicalManagerEnum.ManagerSubscribe);
         }
 
         protected void InitComplete()
@@ -32,9 +33,14 @@ namespace NonsensicalKit.Manager
         {
             Publish((uint)NonsensicalManagerEnum.LateInitComlete);
         }
+        protected void FinalInitComplete()
+        {
+            Publish((uint)NonsensicalManagerEnum.FinalInitComlete);
+        }
 
 
         protected abstract void InitStart();
         protected abstract void LateInitStart();
+        protected abstract void FinalInitStart();
     }
 }
