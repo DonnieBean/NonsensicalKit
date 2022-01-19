@@ -81,7 +81,19 @@ namespace NonsensicalKit.Manager
                 }
                 else
                 {
-                    Publish((uint)NonsensicalManagerEnum.InitStart, index + 1);
+                    while (true)
+                    {
+                        index++;
+                        if (initCount.ContainsKey(index))
+                        {
+                            break;
+                        }
+                        if (index > maxBatch)
+                        {
+                            LogManager.Instance.LogFatal("管理类批次出现错误");
+                        }
+                    }
+                    Publish((uint)NonsensicalManagerEnum.InitStart, index );
                 }
             }
         }
