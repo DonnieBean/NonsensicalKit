@@ -16,7 +16,7 @@ namespace NonsensicalKit
         /// </summary>
         //protected NonsensicalMono()
         //{
-        //    InitInterfaceHandler();
+        //    InitCustomEventHandler();
         //}
 
         private List<ListenerInfo> listenerInfos = new List<ListenerInfo>();
@@ -387,11 +387,10 @@ namespace NonsensicalKit
         }
     }
 
-
     public interface ICustomEventHandler
     {
         /*
-         继承接口应当只有
+         继承此接口应当只有
         [无返回值且有零到三个传参]
         的方法
          */

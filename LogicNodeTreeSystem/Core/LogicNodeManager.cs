@@ -6,7 +6,7 @@ public class LogicNodeManager : NonsensicalManagerBase<LogicNodeManager>
 {
     public LogicNode crtSelectNode { get; private set; } //当前选择的节点
 
-    private List<LogicNode> topNodes;    //顶节点链表
+    private LogicNode root;    //根节点
     private Dictionary<string, LogicNode> dic;   //所有节点的字典，用于快速查找
 
     private LogManager log;
@@ -17,6 +17,8 @@ public class LogicNodeManager : NonsensicalManagerBase<LogicNodeManager>
     {
         base.Awake();
         log = LogManager.Instance;
+
+        InitSubscribe(2, OnInitStart);
     }
 
     #region Public Mothod
@@ -30,7 +32,7 @@ public class LogicNodeManager : NonsensicalManagerBase<LogicNodeManager>
         else
         {
 
-            log.LogDebug("未找到节点："+nodeName);
+            log.LogDebug("未找到节点：" + nodeName);
             return null;
         }
     }
@@ -92,7 +94,7 @@ public class LogicNodeManager : NonsensicalManagerBase<LogicNodeManager>
         }
         else
         {
-            LogManager.Instance.LogWarning("错误的父节点名称");
+            LogManager.Instance.LogWarning("错误的父节点名称:" + parentNodeName);
         }
     }
 
@@ -116,7 +118,7 @@ public class LogicNodeManager : NonsensicalManagerBase<LogicNodeManager>
         }
         else
         {
-            LogManager.Instance.LogWarning("错误的节点名称");
+            LogManager.Instance.LogWarning("错误的节点名称:" + nodeName);
         }
     }
 
@@ -260,65 +262,51 @@ public class LogicNodeManager : NonsensicalManagerBase<LogicNodeManager>
     }
     #endregion
 
-    #region Protected Method
-    protected override void InitStart()
-    {
-        InitComplete();
-    }
 
-    protected override void LateInitStart()
-    {
-        LateInitComplete();
-    }
+    #region Private Method
 
-    protected override void FinalInitStart()
+    private void OnInitStart()
     {
         if (AppConfigManager.Instance.TryGetConfig<LogicNodeTreeAsset>(out var v))
         {
-            BuildLogicNodeTree(v.SceneNodes);
+            BuildLogicNodeTree(v.root);
             BuildDictionary();
         }
         else
         {
             LogManager.Instance.LogError("未获取到场景节点数据");
         }
-        FinalInitComplete();
-    }
-    #endregion
 
-    #region Private Method
+    }
+
     /// <summary>
     /// 构建节点树
     /// </summary>
     /// <param name="datas"></param>
-    private void BuildLogicNodeTree(LogicNodeData[] datas)
+    private void BuildLogicNodeTree(LogicNodeData root)
     {
-        topNodes = new List<LogicNode>();
         Queue<LogicNode> sns = new Queue<LogicNode>();
         Queue<LogicNodeData> snds = new Queue<LogicNodeData>();
 
-        foreach (var item in datas)
-        {
-            var v = new LogicNode(item.NodeName, item.AliasName, null, new LogicNode[item.ChildNode.Length]);
-            topNodes.Add(v);
-            sns.Enqueue(v);
-            snds.Enqueue(item);
-        }
+        this.root = new LogicNode(root.nodeName, root.aliasName, null, new LogicNode[root.children.Count]);
+
+        sns.Enqueue(this.root);
+        snds.Enqueue(root);
 
         while (sns.Count > 0)
         {
             LogicNode crtNode = sns.Dequeue();
             LogicNodeData crtNodeData = snds.Dequeue();
 
-            for (int i = 0; i < crtNodeData.ChildNode.Length; i++)
+            for (int i = 0; i < crtNodeData.children.Count; i++)
             {
-                int length = crtNodeData.ChildNode[i].ChildNode.Length;
-                var newNode = new LogicNode(crtNodeData.ChildNode[i].NodeName, crtNodeData.ChildNode[i].AliasName, crtNode, new LogicNode[length]);
+                int length = crtNodeData.children[i].children.Count;
+                var newNode = new LogicNode(crtNodeData.children[i].nodeName, crtNodeData.children[i].aliasName, crtNode, new LogicNode[length]);
                 crtNode.ChildNode[i] = newNode;
                 if (length > 0)
                 {
                     sns.Enqueue(newNode);
-                    snds.Enqueue(crtNodeData.ChildNode[i]);
+                    snds.Enqueue(crtNodeData.children[i]);
                 }
             }
         }
@@ -332,10 +320,7 @@ public class LogicNodeManager : NonsensicalManagerBase<LogicNodeManager>
         dic = new Dictionary<string, LogicNode>();
 
         Queue<LogicNode> nodes = new Queue<LogicNode>();
-        foreach (var item in topNodes)
-        {
-            nodes.Enqueue(item);
-        }
+        nodes.Enqueue(root);
 
         while (nodes.Count > 0)
         {

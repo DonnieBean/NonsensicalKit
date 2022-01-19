@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -6,22 +7,31 @@ namespace NonsensicalKit.Manager
 {
     /// <summary>
     /// 运行时的管理类管理类，对管理类统一管理初始化
+    /// 执行顺序为 Init=>LateInit=>FinalInit
     /// </summary>
     public class NonsensicalRuntimeManager : MonoSingleton<NonsensicalRuntimeManager>
     {
-        private int _initCount;
-        private int _lateInitCount;
-        private int _finalInitCount;
+        /// <summary>
+        /// 是否全部管理类已初始化完成
+        /// </summary>
+        public bool allInitCompleted { get; private set; }
 
-        public bool loadCompleted { get;private set; }
+        /// <summary>
+        /// 记录每个批次需要初始化的管理类个数
+        /// </summary>
+        private Dictionary<int, int> initCount=new Dictionary<int, int>();
+
+        /// <summary>
+        /// 最大批次
+        /// </summary>
+        private int maxBatch;
 
         protected override void Awake()
         {
             base.Awake();
-            Subscribe((uint)NonsensicalManagerEnum.ManagerSubscribe, InitSubscribe);
-            Subscribe((uint)NonsensicalManagerEnum.InitComlete, InitComplete);
-            Subscribe((uint)NonsensicalManagerEnum.LateInitComlete, LateInitComplete);
-            Subscribe((uint)NonsensicalManagerEnum.FinalInitComlete, FinalInitComplete);
+
+            Subscribe<int>((uint)NonsensicalManagerEnum.InitSubscribe, InitSubscribe);
+            Subscribe<int>((uint)NonsensicalManagerEnum.InitComleted, InitComplete);
         }
 
         private void Start()
@@ -33,73 +43,47 @@ namespace NonsensicalKit.Manager
                 File.Delete(logLock);
                 gameObject.AddComponent<DebugConsole>();
             }
-            StartCoroutine(Init());
+            StartCoroutine(InitStart(0));
         }
 
-        private void InitSubscribe()
+        private void InitSubscribe(int index)
         {
-            _initCount++;
-            _lateInitCount++;
-            _finalInitCount++;
+            if (index > maxBatch)
+            {
+                maxBatch = index;
+            }
+
+            if (initCount.ContainsKey(index) == false)
+            {
+                initCount.Add(index, 0);
+            }
+
+            initCount[index]++;
         }
 
-        private IEnumerator Init()
+        private IEnumerator InitStart(int crtBatch)
         {
+            //管理类会在Start时开始注册，Start后等待一帧保证注册全部完成
             yield return null;
 
-            if (_initCount == 0)
-            {
-                loadCompleted = true;
-                MessageAggregator.Instance.Publish((uint)NonsensicalManagerEnum.AllInitComplete);
-            }
-            else
-            {
-                InitStart();
-            }
-        }
-        private void InitStart()
-        {
-            Publish((uint)NonsensicalManagerEnum.InitStart);
+            Publish((uint)NonsensicalManagerEnum.InitStart, crtBatch);
         }
 
-        private void InitComplete()
+        private void InitComplete(int index)
         {
-            _initCount--;
-
-            if (_initCount == 0)
+            initCount[index]--;
+            if (initCount[index] == 0)
             {
-                LateInitStart();
+                if (index == maxBatch)
+                {
+                    allInitCompleted = true;
+                    MessageAggregator.Instance.Publish((uint)NonsensicalManagerEnum.AllInitComplete);
+                }
+                else
+                {
+                    Publish((uint)NonsensicalManagerEnum.InitStart, index + 1);
+                }
             }
         }
-
-        private void LateInitStart()
-        {
-            Publish((uint)NonsensicalManagerEnum.LateInitStart);
-        }
-
-        private void LateInitComplete()
-        {
-            _lateInitCount--;
-
-            if (_lateInitCount == 0)
-            {
-                FinalInitStart();
-            }
-        }
-        private void FinalInitStart()
-        {
-            Publish((uint)NonsensicalManagerEnum.FinalInitStart);
-        }
-        private void FinalInitComplete()
-        {
-            _finalInitCount--;
-
-            if (_finalInitCount == 0)
-            {
-                loadCompleted = true;
-                MessageAggregator.Instance.Publish((uint)NonsensicalManagerEnum.AllInitComplete);
-            }
-        }
-
     }
 }

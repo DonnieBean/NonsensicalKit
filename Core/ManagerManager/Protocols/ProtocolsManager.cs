@@ -25,6 +25,8 @@ namespace NonsensicalKit.Manager
 
             Subscribe<string, string>((uint)NonsensicalManagerEnum.ReceviedProtocolsMessage, OnReceivedProtocolsMessage);
             Subscribe<string, string>("ReceviedProtocolsMessage", OnReceivedProtocolsMessage);
+
+            InitSubscribe(0, OnInitStart);
         }
 
         private void Update()
@@ -38,7 +40,7 @@ namespace NonsensicalKit.Manager
             }
         }
 
-        protected override void InitStart()
+        private void  OnInitStart()
         {
             Type[] types = Assembly.GetExecutingAssembly().GetTypes();
 
@@ -56,18 +58,8 @@ namespace NonsensicalKit.Manager
                     keyClassPair.Add(v.key, item);
                 }
             }
-
-            InitComplete();
         }
 
-        protected override void LateInitStart()
-        {
-            LateInitComplete();
-        }
-        protected override void FinalInitStart()
-        {
-            FinalInitComplete();
-        }
 
         private void OnReceivedProtocolsMessage(string key, string value)
         {

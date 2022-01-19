@@ -11,13 +11,23 @@ namespace NonsensicalKit.Manager
 {
     /// <summary>
     /// 配置管理类
+    /// 编辑器中初始化时会将configDatas中所有的类序列化保存成json文件，发布后运行时读取json文件而不是直接使用configDatas中的数据，这样发布后就可以通过修改json文件来修改配置
+    /// 
+    /// 目前会导致一个报警，因为会new序列化对象类，可以把数据用一个数据类包起来，通过抽象方法获取Object，再通过getType获取数据类类型，序列化和反序列化使用数据类来消除报警，但修改会导致当前项目存储的信息失效，所以暂时不处理
+    /// new对象只是为了获取其中的数据，并不会进行操作，所以不会有逻辑上的问题（但可能有内存上的问题）
     /// </summary>
     public class AppConfigManager : NonsensicalManagerBase<AppConfigManager>
     {
         public NonsensicalConfigDataBase[] configDatas;
 
+        protected override void Awake()
+        {
+            base.Awake();
+            InitSubscribe(0, OnInitStart());
+        }
+
         /// <summary>
-        /// 用于编辑器环境中的反向读取json
+        /// 用于编辑器环境中的反向读取json文件
         /// </summary>
         public void LoadJson()
         {
@@ -33,7 +43,7 @@ namespace NonsensicalKit.Manager
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError("NonsensicalAppConfig文件反序列化出错\r\n" + e.ToString());
+                    Debug.LogError("NonsensicalAppConfig文件反序列化出错"+ path + "\r\n"+ e.ToString());
                 }
 
                 configDatas[i].CopyForm<NonsensicalConfigDataBase>((NonsensicalConfigDataBase)deserializeData) ;
@@ -110,38 +120,37 @@ namespace NonsensicalKit.Manager
             return false;
         }
 
-        protected override void InitStart()
+        protected IEnumerator  OnInitStart()
         {
-            if (!PlatformInfo.Instance.isEditor)
-            {
-                StartCoroutine(LoadAppConfig());
-            }
-            else
-            {
-                Dictionary<Type, HashSet<string>> IDTable = new Dictionary<Type, HashSet<string>>();
-
-                foreach (var configData in configDatas)
+                if (!PlatformInfo.Instance.isEditor)
                 {
-                    Type t = configData.GetType();
-                    if (IDTable.ContainsKey(t) == false)
-                    {
-                        IDTable.Add(t, new HashSet<string>());
-                    }
+                   yield return  StartCoroutine(LoadAppConfig());
+                }
+                else
+                {
+                    Dictionary<Type, HashSet<string>> IDTable = new Dictionary<Type, HashSet<string>>();
 
-                    if (!IDTable[t].Contains(configData.ConfigID))
+                    foreach (var configData in configDatas)
                     {
-                        FileHelper.WriteTxt(GetFilePath(configData), JsonHelper.SerializeObject(configData));
-                        IDTable[t].Add(configData.ConfigID);
-                    }
-                    else
-                    {
-                        Debug.LogError("相同类型配置的ID重复:" + configData.ConfigID);
-                        break;
+                        Type t = configData.GetType();
+                        if (IDTable.ContainsKey(t) == false)
+                        {
+                            IDTable.Add(t, new HashSet<string>());
+                        }
+
+                        if (!IDTable[t].Contains(configData.ConfigID))
+                        {
+                            FileHelper.WriteTxt(GetFilePath(configData), JsonHelper.SerializeObject(configData));
+                            IDTable[t].Add(configData.ConfigID);
+                        }
+                        else
+                        {
+                            Debug.LogError("相同类型配置的ID重复:" + configData.ConfigID);
+                            break;
+                        }
                     }
                 }
-
-                InitComplete();
-            }
+            
         }
 
         private IEnumerator LoadAppConfig()
@@ -150,7 +159,6 @@ namespace NonsensicalKit.Manager
             for (int i = 0; i < configDatas.Length; i++)
             {
                 int j = i;
-                //Debug.Log(GetFilePath(configDatas[i]));
                 StartCoroutine(HttpHelper.Get(GetFilePath(configDatas[i]), null, (unityWebRequest) =>
                 {
                     if (unityWebRequest != null && unityWebRequest.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
@@ -177,13 +185,8 @@ namespace NonsensicalKit.Manager
             {
                 yield return null;
             }
-            InitComplete();
         }
 
-        protected override void LateInitStart()
-        {
-            LateInitComplete();
-        }
 
         private string GetFilePath(NonsensicalConfigDataBase configData)
         {
@@ -191,9 +194,5 @@ namespace NonsensicalKit.Manager
             return configFilePath;
         }
 
-        protected override void FinalInitStart()
-        {
-            FinalInitComplete();
-        }
     }
 }

@@ -35,7 +35,10 @@ public class LogicNodeControlActive : NonsensicalMono
 
     private void OnEnable()
     {
-        OnSwitchNode(LogicNodeManager.Instance.crtSelectNode);
+        if (LogicNodeManager.Instance.crtSelectNode!=null)
+        {
+            OnSwitchNode(LogicNodeManager.Instance.crtSelectNode);
+        }
     }
 
     private void OnSwitchNode(LogicNode node)

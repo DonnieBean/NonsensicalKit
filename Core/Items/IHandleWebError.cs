@@ -2,6 +2,9 @@ using UnityEngine.Networking;
 
 namespace NonsensicalKit
 {
+    /// <summary>
+    /// UnityWebRequest错误处理接口
+    /// </summary>
     public interface IHandleWebError
     {
         public void OnProtocolError(UnityWebRequest unityWebRequest);

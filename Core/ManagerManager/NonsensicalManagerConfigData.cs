@@ -5,7 +5,7 @@ namespace NonsensicalKit.Manager
     /// <summary>
     /// 管理类相关配置
     /// </summary>
-    [CreateAssetMenu(fileName = "NonsensicalConfigData", menuName = "ScriptableObjects/NonsensicalConfigData")]
+    [CreateAssetMenu(fileName = "NonsensicalManagerConfigData", menuName = "ScriptableObjects/NonsensicalManagerConfigData")]
     public class NonsensicalManagerConfigData : NonsensicalConfigDataBase
     {
         public string AssetBundlesPath = "AssetBundles";

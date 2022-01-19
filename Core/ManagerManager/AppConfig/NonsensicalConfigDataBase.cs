@@ -13,4 +13,3 @@ namespace NonsensicalKit.Manager
         public abstract void CopyForm<T>(T from  ) where T: NonsensicalConfigDataBase;
     }
 }
-

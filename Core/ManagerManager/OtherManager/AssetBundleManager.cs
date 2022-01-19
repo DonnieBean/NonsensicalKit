@@ -37,28 +37,25 @@ namespace NonsensicalKit.Manager
 
         private AssetBundleManifest assetBundleManifest;
 
-        protected override void InitStart()
+        protected override void Awake()
         {
-            InitComplete();
+            base.Awake();
+
+            InitSubscribe(2, OnInitStart());
         }
 
-        protected override void LateInitStart()
-        {
-            LateInitComplete();
-        }
-
-        protected override void FinalInitStart()
+        protected IEnumerator  OnInitStart()
         {
             if (AppConfigManager.Instance != null && AppConfigManager.Instance.TryGetConfig(out NonsensicalManagerConfigData t))
             {
                 assetBundlePath = Path.Combine(Application.streamingAssetsPath, t.AssetBundlesPath);
 
-                StartCoroutine(InitAssetBundleManager(Path.Combine(assetBundlePath, "AssetBundles")));
+              yield return  StartCoroutine(InitAssetBundleManager(Path.Combine(assetBundlePath, "AssetBundles")));
             }
             else
             {
                 assetBundlePath = Path.Combine(Application.streamingAssetsPath, "AssetBundles");
-                StartCoroutine(InitAssetBundleManager(Path.Combine(assetBundlePath, "AssetBundles")));
+                yield return StartCoroutine(InitAssetBundleManager(Path.Combine(assetBundlePath, "AssetBundles")));
             }
         }
 
@@ -81,7 +78,6 @@ namespace NonsensicalKit.Manager
             if (assetBundle == null)
             {
                 LogManager.Instance.LogWarning("未找到AssetBundles");
-                FinalInitComplete();
                 yield break;
             }
 
@@ -109,8 +105,6 @@ namespace NonsensicalKit.Manager
 
                 assstBundleDic.Add(item, new AssetBundleInfo(item, assetBundleManifest.GetDirectDependencies(item)));
             }
-
-            FinalInitComplete();
         }
 
         /// <summary>

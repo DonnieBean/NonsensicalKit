@@ -23,8 +23,9 @@ namespace NonsensicalKit
             }
         }
 
-        public bool isEditor;
-        public RuntimePlatform platform;
+        public bool isEditor { get; private set; }
+
+        public RuntimePlatform platform { get; private set; }
 
         private PlatformInfo()
         {

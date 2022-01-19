@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ×Ô¶¯Ìí¼Ó¼àÌý
+/// </summary>
 [RequireComponent(typeof(LogicNodeMono))]
 public abstract class LogicNodeSwitchBase : NonsensicalMono
 {
@@ -16,9 +19,10 @@ public abstract class LogicNodeSwitchBase : NonsensicalMono
         base.Awake();
 
         manager = LogicNodeManager.Instance;
-        nodeMono = GetComponent<LogicNodeMono>();
-
-        nodeMono.OnSwitch.AddListener(OnSwitch);
+        if (TryGetComponent<LogicNodeMono>(out nodeMono))
+        {
+            nodeMono.OnSwitch.AddListener(OnSwitch);
+        }
     }
 
     protected abstract void OnSwitch(LogicNodeState lns);
