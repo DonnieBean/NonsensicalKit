@@ -19,7 +19,7 @@ namespace NonsensicalKit.Manager
         /// <summary>
         /// 记录每个批次需要初始化的管理类个数
         /// </summary>
-        private Dictionary<int, int> initCount=new Dictionary<int, int>();
+        private Dictionary<int, int> initCount = new Dictionary<int, int>();
 
         /// <summary>
         /// 最大批次
