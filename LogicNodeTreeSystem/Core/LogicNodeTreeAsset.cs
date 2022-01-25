@@ -115,3 +115,9 @@ public struct SerializableNode
     public string AliasName;    //±ğÃû
     public int childCount;
 }
+
+public abstract class TreeData<T>
+{
+    public bool isFoldout = true;
+    public abstract List<T> GetChildren();
+}

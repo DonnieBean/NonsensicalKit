@@ -54,7 +54,7 @@ namespace NonsensicalKit
     public class StateObject
     {
         // Size of receive buffer.  
-        public const int BufferSize = 1024;
+        public const int BufferSize = 2048;
 
         // Receive buffer.  
         public byte[] buffer = new byte[BufferSize];
@@ -143,13 +143,17 @@ namespace NonsensicalKit
                 state.sb.Append(Encoding.UTF8.GetString(
                     state.buffer, 0, bytesRead));
                 content = state.sb.ToString();
+                
                 string[] contents = content.Split(new char[] { '\0' },StringSplitOptions.RemoveEmptyEntries);
-                foreach (var item in contents)
+                int i;
+                for ( i = 0; i < contents.Length-1; i++)
                 {
-                    onReceived?.Invoke(item);
+                    onReceived?.Invoke(contents[i]);
                 }
 
                 state.sb.Clear();
+                state.sb.Append(contents[i]);
+                state.sb.Append("\0");
                 handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReceiveCallBack), state);
             }

@@ -364,10 +364,10 @@ namespace NonsensicalKit.Joint
 
             while (true)
             {
-                do
+                while (IsPause) 
                 {
                     yield return null;
-                } while (IsPause);
+                } 
 
                 timer += Time.deltaTime;
 
@@ -380,6 +380,7 @@ namespace NonsensicalKit.Joint
                 {
                     targetTsf.localPosition = Vector3.Lerp(startLocalPosition, targetLocalPosition, timer / time);
                 }
+                yield return null;
             }
         }
     }

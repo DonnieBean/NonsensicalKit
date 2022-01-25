@@ -19,7 +19,7 @@ namespace NonsensicalKit.Manager
         /// <summary>
         /// 记录每个批次需要初始化的管理类个数
         /// </summary>
-        private Dictionary<int, int> initCount=new Dictionary<int, int>();
+        private Dictionary<int, int> initCount = new Dictionary<int, int>();
 
         /// <summary>
         /// 最大批次
@@ -81,7 +81,19 @@ namespace NonsensicalKit.Manager
                 }
                 else
                 {
-                    Publish((uint)NonsensicalManagerEnum.InitStart, index + 1);
+                    while (true)
+                    {
+                        index++;
+                        if (initCount.ContainsKey(index))
+                        {
+                            break;
+                        }
+                        if (index>maxBatch)
+                        {
+                            LogManager.Instance.LogFatal("管理类批次出现错误");
+                        }
+                    }
+                    Publish((uint)NonsensicalManagerEnum.InitStart, index);
                 }
             }
         }
