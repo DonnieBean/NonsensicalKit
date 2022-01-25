@@ -122,7 +122,7 @@ namespace NonsensicalKit.Manager
 
         protected IEnumerator  OnInitStart()
         {
-                if (!PlatformInfo.Instance.isEditor)
+            if (!PlatformInfo.Instance.isEditor)
                 {
                    yield return  StartCoroutine(LoadAppConfig());
                 }

@@ -1,13 +1,14 @@
 using NonsensicalKit.Manager;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class LogicNodeManager : NonsensicalManagerBase<LogicNodeManager>
 {
     public LogicNode crtSelectNode { get; private set; } //当前选择的节点
 
     private LogicNode root;    //根节点
-    private Dictionary<string, LogicNode> dic;   //所有节点的字典，用于快速查找
+    private Dictionary<string, LogicNode> dic=new Dictionary<string, LogicNode>();   //所有节点的字典，用于快速查找
 
     private LogManager log;
 
@@ -269,6 +270,7 @@ public class LogicNodeManager : NonsensicalManagerBase<LogicNodeManager>
     {
         if (AppConfigManager.Instance.TryGetConfig<LogicNodeTreeAsset>(out var v))
         {
+            v.UpdateValue();
             BuildLogicNodeTree(v.root);
             BuildDictionary();
         }

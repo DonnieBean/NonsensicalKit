@@ -9,12 +9,11 @@ using UnityEngine;
 namespace NonsensicalKit.Manager
 {
     /// <summary>
-    /// 每条消息都有一个等级（不可以为ALL或者OFF）,设定Log等级后，仅会Log大于等于设定等级的消息
+    /// 每条消息都有一个等级（不可以为OFF）,设定Log等级后，仅会Log大于等于设定等级的消息
     /// </summary>
     public enum LogLevel
     {
-        ALL = 1,    //显示所有消息
-        DEBUG,      //用于调试的Debug消息
+        DEBUG=1,    //显示所有消息,包括用于调试的Debug消息
         INFO,       //用于展示当前正处于什么状态或者正在做什么长时间的事情的消息
         WARNING,    //不一定是错误，但是应当进行注意时的消息
         ERROR,      //发生了错误，但是不影响继续运行时的消息
@@ -94,7 +93,7 @@ namespace NonsensicalKit.Manager
             {
                 if (platformInfo.isEditor)
                 {
-                    logLevel = LogLevel.ALL;
+                    logLevel = LogLevel.DEBUG;
                     logPath = new LogPath[] { LogPath.Console };
                 }
                 else
@@ -113,6 +112,7 @@ namespace NonsensicalKit.Manager
                 Debug.Log(StringHelper.GetSetString(obj));
             }
         }
+
         private void Log(LogContext logInfo)
         {
             if (logInfo.logLevel >= logLevel)
@@ -123,6 +123,7 @@ namespace NonsensicalKit.Manager
                 }
             }
         }
+
         public void LogDebug(object obj,
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string sourceFilePath = "",
@@ -149,6 +150,7 @@ namespace NonsensicalKit.Manager
             sb.Remove(sb.Length-1,1);
             Log(new LogContext(LogLevel.DEBUG, sb.ToString()));
         }
+
         public void LogInfo(object obj,
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string sourceFilePath = "",
@@ -175,6 +177,7 @@ namespace NonsensicalKit.Manager
             sb.Remove(sb.Length - 1, 1);
             Log(new LogContext(LogLevel.INFO, sb.ToString()));
         }
+
         public void LogWarning(object obj,
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string sourceFilePath = "",
@@ -201,6 +204,7 @@ namespace NonsensicalKit.Manager
             sb.Remove(sb.Length - 1, 1);
             Log(new LogContext(LogLevel.WARNING, sb.ToString()));
         }
+
         public void LogError(object obj,
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string sourceFilePath = "",
@@ -227,6 +231,7 @@ namespace NonsensicalKit.Manager
             sb.Remove(sb.Length - 1, 1);
             Log(new LogContext(LogLevel.ERROR, sb.ToString()));
         }
+
         public void LogFatal(object obj,
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string sourceFilePath = "",

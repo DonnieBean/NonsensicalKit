@@ -8,7 +8,7 @@ namespace NonsensicalKit
     [System.Serializable]
     public class TargetArray
     {
-        public GameObject[] Array;
+        public CanvasGroup[] Array;
     }
 
     public class Switcher : NonsensicalMono
@@ -33,7 +33,18 @@ namespace NonsensicalKit
             {
                 foreach (var item in targetArray[i].Array)
                 {
-                    item.SetActive(i == crtIndex);
+                    if (i == crtIndex)
+                    {
+                        item.alpha = 1;
+                        item.interactable = true;
+                        item.blocksRaycasts = true;
+                    }
+                    else
+                    {
+                        item.alpha = 0;
+                        item.interactable = false;
+                        item.blocksRaycasts = false;
+                    }
                 }
             }
         }
@@ -44,14 +55,18 @@ namespace NonsensicalKit
             {
                 foreach (var item in targetArray[crtIndex].Array)
                 {
-                    item.SetActive(false);
+                    item.alpha = 0;
+                    item.interactable = false;
+                    item.blocksRaycasts = false;
                 }
             }
             if (index >= 0&& index < targetArray.Length)
             {
                 foreach (var item in targetArray[index].Array)
                 {
-                    item.SetActive(true);
+                    item.alpha = 1;
+                    item.interactable = true;
+                    item.blocksRaycasts = true;
                 }
             }
                 

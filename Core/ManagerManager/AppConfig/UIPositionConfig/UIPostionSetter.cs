@@ -28,7 +28,7 @@ public class UIPostionSetter : NonsensicalMono
     private void Start()
     {
 
-        if (NonsensicalRuntimeManager.Instance.allInitCompleted)
+        if (NonsensicalRuntimeManager.Instance.allInitComplete)
         {
             OnInitCompleted();
         }

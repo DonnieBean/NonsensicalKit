@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace NonsensicalKit.Manager
 {
@@ -58,14 +59,14 @@ namespace NonsensicalKit.Manager
         private void Init(int index, Action func)
         {
             func.Invoke();
-
+            Debug.Log("Manager Load Complete:"+ GetType() );
             Publish((uint)NonsensicalManagerEnum.InitComleted, index);
         }
 
         private IEnumerator Init(int index, IEnumerator coroutine)
         {
             yield return StartCoroutine(coroutine);
-
+            Debug.Log("Manager Load Complete:" + GetType());
             Publish((uint)NonsensicalManagerEnum.InitComleted, index);
         }
     }

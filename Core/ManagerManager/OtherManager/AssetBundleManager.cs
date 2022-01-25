@@ -50,7 +50,7 @@ namespace NonsensicalKit.Manager
             {
                 assetBundlePath = Path.Combine(Application.streamingAssetsPath, t.AssetBundlesPath);
 
-              yield return  StartCoroutine(InitAssetBundleManager(Path.Combine(assetBundlePath, "AssetBundles")));
+                yield return  StartCoroutine(InitAssetBundleManager(Path.Combine(assetBundlePath, "AssetBundles")));
             }
             else
             {
@@ -296,6 +296,13 @@ namespace NonsensicalKit.Manager
         }
 
         public void ReleaseAllAssetBundle()
+        {
+            foreach (var item in assstBundleDic)
+            {
+                item.Value.AssetBundlePack?.Unload(false);
+            }
+        }
+        public void ReleaseAllAssetBundleWithLoadedObject()
         {
             foreach (var item in assstBundleDic)
             {

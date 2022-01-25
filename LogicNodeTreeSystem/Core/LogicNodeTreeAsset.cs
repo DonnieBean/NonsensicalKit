@@ -22,6 +22,10 @@ public class LogicNodeTreeAsset : NonsensicalConfigDataBase, ISerializationCallb
 
             OnAfterDeserialize();
         }
+        else
+        {
+            Debug.Log("节点信息获取失败");
+        }
     }
 
     public void OnBeforeSerialize()
@@ -47,6 +51,11 @@ public class LogicNodeTreeAsset : NonsensicalConfigDataBase, ISerializationCallb
         serializedNodes.Add(serializedNode);
         foreach (var child in n.children)
             AddNodeToSerializedNodes(child);
+    }
+
+    public void UpdateValue()
+    {
+        OnAfterDeserialize();
     }
 
     public void OnAfterDeserialize()

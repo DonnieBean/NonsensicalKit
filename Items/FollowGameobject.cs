@@ -29,6 +29,8 @@ namespace NonsensicalKit
 
         private RectTransform rectTransformSelf;
 
+        private Vector3 lastTargetPostion;
+        private Vector3 lastCameraPostion;
 
         private void Awake()
         {
@@ -42,34 +44,41 @@ namespace NonsensicalKit
                 mainCamera = Camera.main;
             }
         }
-
+        Vector3 pos;
+        Vector3 targetPosition;
+        Vector3 cameraPosition;
         private void Update()
         {
             if ( target != null)
             {
-                Vector3 pos = Vector3.zero;
-
-                if (scaleByDistance && normalDistance != 0)
+                targetPosition = target.transform.position;
+                cameraPosition = mainCamera.transform.position;
+                if (targetPosition!=lastTargetPostion||cameraPosition!=lastCameraPostion)
                 {
-                    float dis = Vector3.Distance(target.transform.position, mainCamera.transform.position);
-                    if (dis > 1f)
+                    if (scaleByDistance && normalDistance != 0)
                     {
-                        transform.localScale = Vector3.one * (normalDistance / dis) * scale;
+                        float dis = Vector3.Distance(target.transform.position, mainCamera.transform.position);
+                        if (dis > 1f)
+                        {
+                            transform.localScale = Vector3.one * (normalDistance / dis) * scale;
+                        }
                     }
-                }
-                else
-                {
-                    transform.localScale = Vector3.one * scale;
-                }
+                    else
+                    {
+                        transform.localScale = Vector3.one * scale;
+                    }
 
-                pos = mainCamera.WorldToScreenPoint(target.transform.position);
-                back = pos.z < 0;
+                    pos = mainCamera.WorldToScreenPoint(target.transform.position);
+                    back = pos.z < 0;
 
-                pos.x += xOffset;
-                pos.y += yOffset;
-                if (RectTransformUtility.ScreenPointToWorldPointInRectangle(rectTransformSelf, pos, RenderCamera, out Vector3 worldPoint))
-                {
-                    transform.position = worldPoint;
+                    pos.x += xOffset;
+                    pos.y += yOffset;
+                    if (RectTransformUtility.ScreenPointToWorldPointInRectangle(rectTransformSelf, pos, RenderCamera, out Vector3 worldPoint))
+                    {
+                        transform.position = worldPoint;
+                    }
+                    lastTargetPostion = targetPosition;
+                    lastCameraPostion = cameraPosition;
                 }
             }
         }

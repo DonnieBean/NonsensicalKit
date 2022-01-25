@@ -14,7 +14,8 @@ namespace NonsensicalKit
 
         private Dictionary<string, RaycastHitsInfo> hitsInfo;
         private Dictionary<string, RaycastHitInfo> hitInfo;
-
+        private RaycastHitsInfo raycastHitsInfo = new RaycastHitsInfo();
+        RaycastHitInfo raycastHitInfo = new RaycastHitInfo();
         private void Awake()
         {
             instance = this;
@@ -60,37 +61,35 @@ namespace NonsensicalKit
 
         private RaycastHitsInfo CheckAll(string mask)
         {
-            RaycastHitsInfo raycastInfo = new RaycastHitsInfo();
-            raycastInfo.FrameCount = Time.frameCount;
+            raycastHitsInfo.FrameCount = Time.frameCount;
             Ray ray = raycastCamera.ScreenPointToRay(Input.mousePosition);
 
             if (mask == "NULL")
             {
-                raycastInfo.RaycastHits = Physics.RaycastAll(ray, 100);
+                raycastHitsInfo.RaycastHits = Physics.RaycastAll(ray, 100);
             }
             else
             {
-                raycastInfo.RaycastHits = Physics.RaycastAll(ray, 100, LayerMask.GetMask(mask));
+                raycastHitsInfo.RaycastHits = Physics.RaycastAll(ray, 100, LayerMask.GetMask(mask));
             }
-            return raycastInfo;
+            return raycastHitsInfo;
         }
 
         private RaycastHitInfo CheckFirst(string mask)
         {
-            RaycastHitInfo raycastInfo = new RaycastHitInfo();
-            raycastInfo.FrameCount = Time.frameCount;
+            raycastHitInfo.FrameCount = Time.frameCount;
 
             Ray ray = raycastCamera.ScreenPointToRay(Input.mousePosition);
 
             if (mask == "NULL")
             {
-                Physics.Raycast(ray, out raycastInfo.RaycastHit, 100);
+                Physics.Raycast(ray, out raycastHitInfo.RaycastHit, 100);
             }
             else
             {
-                Physics.Raycast(ray, out raycastInfo.RaycastHit, 100, LayerMask.GetMask(mask));
+                Physics.Raycast(ray, out raycastHitInfo.RaycastHit, 100, LayerMask.GetMask(mask));
             }
-            return raycastInfo;
+            return raycastHitInfo;
         }
     }
 
@@ -99,6 +98,7 @@ namespace NonsensicalKit
         public int FrameCount;
         public RaycastHit[] RaycastHits;
     }
+
     public class RaycastHitInfo
     {
         public int FrameCount;

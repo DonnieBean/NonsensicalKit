@@ -30,7 +30,6 @@ namespace NonsensicalKit.Manager
                 case LogLevel.FATAL:
                     Debug.LogError(info.message);
                     break;
-                case LogLevel.ALL:
                 case LogLevel.OFF:
                 default:
                     //错误的级别

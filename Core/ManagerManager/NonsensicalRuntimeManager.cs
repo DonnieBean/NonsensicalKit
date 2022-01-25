@@ -14,7 +14,7 @@ namespace NonsensicalKit.Manager
         /// <summary>
         /// 是否全部管理类已初始化完成
         /// </summary>
-        public bool allInitCompleted { get; private set; }
+        public bool allInitComplete { get; private set; }
 
         /// <summary>
         /// 记录每个批次需要初始化的管理类个数
@@ -76,7 +76,7 @@ namespace NonsensicalKit.Manager
             {
                 if (index == maxBatch)
                 {
-                    allInitCompleted = true;
+                    allInitComplete = true;
                     MessageAggregator.Instance.Publish((uint)NonsensicalManagerEnum.AllInitComplete);
                 }
                 else

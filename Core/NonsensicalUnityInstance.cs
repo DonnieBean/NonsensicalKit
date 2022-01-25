@@ -49,7 +49,6 @@ namespace NonsensicalKit
                 Debug.Log(messages.Dequeue());
             }
 
-            float deltaTime = Time.deltaTime;
             for (int i = 0; i < tweenners.Count; i++)
             {
                 if (tweenners[i].NeedAbort)
@@ -57,7 +56,7 @@ namespace NonsensicalKit
                     tweenners.RemoveAt(i);
                     i--;
                 }
-                else if (tweenners[i].DoIt(deltaTime) == true)
+                else if (tweenners[i].DoIt(Time.deltaTime) == true)
                 {
                     tweenners.RemoveAt(i);
                     i--;

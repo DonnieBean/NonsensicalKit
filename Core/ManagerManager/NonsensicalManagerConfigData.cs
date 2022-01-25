@@ -10,7 +10,7 @@ namespace NonsensicalKit.Manager
     {
         public string AssetBundlesPath = "AssetBundles";
 
-        public LogLevel EditorLogLevel = LogLevel.ALL;
+        public LogLevel EditorLogLevel = LogLevel.DEBUG;
         public LogLevel BuildLogLevel = LogLevel.OFF;
         public LogPath[] EditorLogPaths = new LogPath[] { LogPath.Console };
         public LogPath[] BuildLogPaths = new LogPath[0];
