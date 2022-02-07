@@ -20,8 +20,9 @@ public class MouseTouchNodeTarget : NonsensicalMono
     [SerializeField] protected int searchDeep = 1;        //第几级父节点之内被选中时才能交互
     [SerializeField] protected string nodeName;         //点击后跳转的节点名
 #if USE_HIGHLIGHTINGSYSTEM
-   private Highlighter lighter;
+    private Highlighter lighter;
 #endif
+
 
     private Collider[] colliders;
 
@@ -38,7 +39,9 @@ public class MouseTouchNodeTarget : NonsensicalMono
         esic = EventSystemInfoCenter.Instance;
         colliders = GetComponents<Collider>();
         logicNode = LogicNodeManager.Instance.GetNode(nodeName);
+#if USE_HIGHLIGHTINGSYSTEM
         lighter = GetComponent<Highlighter>();
+#endif
         Subscribe<LogicNode>((uint)LogicNodeEnum.SwitchNode, OnSwitchNode);
     }
 

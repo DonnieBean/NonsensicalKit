@@ -25,6 +25,7 @@ namespace NonsensicalKit.Manager
         /// 最大批次
         /// </summary>
         private int maxBatch;
+        private int minBatch;
 
         protected override void Awake()
         {
@@ -43,11 +44,16 @@ namespace NonsensicalKit.Manager
                 File.Delete(logLock);
                 gameObject.AddComponent<DebugConsole>();
             }
-            StartCoroutine(InitStart(0));
+            StartCoroutine(InitStart());
         }
 
         private void InitSubscribe(int index)
         {
+            if (index < minBatch)
+            {
+                minBatch = index;
+            }
+
             if (index > maxBatch)
             {
                 maxBatch = index;
@@ -61,12 +67,20 @@ namespace NonsensicalKit.Manager
             initCount[index]++;
         }
 
-        private IEnumerator InitStart(int crtBatch)
+        private IEnumerator InitStart()
         {
             //管理类会在Start时开始注册，Start后等待一帧保证注册全部完成
             yield return null;
 
-            Publish((uint)NonsensicalManagerEnum.InitStart, crtBatch);
+            if (initCount.Count==0)
+            {
+                allInitComplete = true;
+                MessageAggregator.Instance.Publish((uint)NonsensicalManagerEnum.AllInitComplete);
+            }
+            else
+            {
+                Publish((uint)NonsensicalManagerEnum.InitStart, minBatch);
+            }
         }
 
         private void InitComplete(int index)
