@@ -8,6 +8,25 @@ namespace NonsensicalKit.Manager
     [CreateAssetMenu(fileName = "NonsensicalManagerConfigData", menuName = "ScriptableObjects/NonsensicalManagerConfigData")]
     public class NonsensicalManagerConfigData : NonsensicalConfigDataBase
     {
+        public ManagerConfigData managerConfigData;
+
+        public override ConfigDataBase GetData()
+        {
+            return managerConfigData;
+        }
+
+        public override void SetData(ConfigDataBase cd)
+        {
+            if (CheckType<ManagerConfigData>(cd))
+            {
+                managerConfigData = cd as ManagerConfigData;
+            }
+        }
+    }
+
+    [System.Serializable]
+    public class ManagerConfigData:ConfigDataBase
+    {
         public string AssetBundlesPath = "AssetBundles";
 
         public LogLevel EditorLogLevel = LogLevel.DEBUG;
@@ -19,24 +38,7 @@ namespace NonsensicalKit.Manager
         public bool BuildLogClassInfo = false;
 
         public string LogFilePath = "NonsensicalLog";
-
-        public override void CopyForm<T>(T from)
-        {
-            NonsensicalManagerConfigData fromData = from as NonsensicalManagerConfigData;
-            if (fromData != null)
-            {
-                AssetBundlesPath = fromData.AssetBundlesPath;
-                EditorLogLevel = fromData.EditorLogLevel;
-                BuildLogLevel = fromData.BuildLogLevel;
-                EditorLogPaths = fromData.EditorLogPaths;
-                BuildLogPaths = fromData.BuildLogPaths;
-                EditorLogDateTime = fromData.EditorLogDateTime;
-                BuildLogDateTime = fromData.BuildLogDateTime;
-                BuildLogClassInfo = fromData.BuildLogClassInfo;
-                LogFilePath = fromData.LogFilePath;
-
-            }
-        }
     }
+    
 }
 

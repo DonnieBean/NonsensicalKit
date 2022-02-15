@@ -7,19 +7,28 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "UIPostionConfigData", menuName = "ScriptableObjects/UIPostionConfigData")]
 public class UIPostionConfigData : NonsensicalConfigDataBase
 {
-    public string[] ids;
-    public ButtonsParameter[] buttonsParameter;
-    public override void CopyForm<T>(T from)
+    public UIPositionData configData;
+    public override ConfigDataBase GetData()
     {
-        if (from.ConfigID!=ConfigID)
+        return configData;
+    }
+
+    public override void SetData(ConfigDataBase cd)
+    {
+        if (CheckType<UIPositionData>(cd))
         {
-            return;
+            configData = cd as UIPositionData;
         }
-        UIPostionConfigData datas = from as UIPostionConfigData;
-        this.ids = datas.ids;
-        this.buttonsParameter = datas.buttonsParameter;
     }
 }
+
+[System.Serializable]
+public class UIPositionData:ConfigDataBase
+{
+    public string[] ids;
+    public ButtonsParameter[] buttonsParameter;
+}
+
 
 public enum HorizonType
 {

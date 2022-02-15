@@ -20,14 +20,10 @@ public class UIPostionSetter : NonsensicalMono
 
         width = rt_self.rect.width;
         height = rt_self.rect.height;
-
-
-
     }
 
     private void Start()
     {
-
         if (NonsensicalRuntimeManager.Instance.allInitComplete)
         {
             OnInitCompleted();
@@ -40,7 +36,7 @@ public class UIPostionSetter : NonsensicalMono
 
     private void OnInitCompleted()
     {
-        if (AppConfigManager.Instance.TryGetConfig<UIPostionConfigData>(out var v))
+        if (AppConfigManager.Instance.TryGetConfig<UIPositionData>(out var v))
         {
             for (int i = 0; i < v.ids.Length; i++)
             {
@@ -55,7 +51,6 @@ public class UIPostionSetter : NonsensicalMono
 
     private void ChangePos(ButtonsParameter bp)
     {
-
         switch (bp.horizonType)
         {
             case HorizonType.Left:

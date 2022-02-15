@@ -8,26 +8,49 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "LogicNodeTree", menuName = "ScriptableObjects/LogicNodeTreeConfigData")]
 public class LogicNodeTreeAsset : NonsensicalConfigDataBase, ISerializationCallbackReceiver
 {
-    [System.NonSerialized]
-    public LogicNodeData root;
 
-    public List<SerializableNode> serializedNodes = new List<SerializableNode>();
+    public LogicNodeTreeConfigData configData;
 
-    public override void CopyForm<T>(T from)
+    public void OnBeforeSerialize()
     {
-        LogicNodeTreeAsset fromData = from as LogicNodeTreeAsset;
-        if (fromData != null)
+        if (configData!=null)
         {
-            serializedNodes = fromData.serializedNodes;
+            configData.OnBeforeSerialize();
+        }
 
-            OnAfterDeserialize();
-        }
-        else
-        {
-            Debug.Log("节点信息获取失败");
-        }
+    }
+    public void OnAfterDeserialize()
+    {
+        configData.OnAfterDeserialize();
     }
 
+
+    public override ConfigDataBase GetData()
+    {
+        return configData;
+    }
+    public override void OnSetDataEnd()
+    {
+        base.OnSetDataEnd();
+        configData.OnAfterDeserialize();
+    }
+
+    public override void SetData(ConfigDataBase cd)
+    {
+        if (CheckType<LogicNodeTreeConfigData>(cd))
+        {
+            configData = cd as LogicNodeTreeConfigData;
+        }
+    }
+}
+
+
+[System.Serializable]
+public class LogicNodeTreeConfigData : ConfigDataBase
+{
+    [System.NonSerialized]
+    public LogicNodeData root;
+    public List<SerializableNode> serializedNodes = new List<SerializableNode>();
     public void OnBeforeSerialize()
     {
         if (root == null)
@@ -53,11 +76,6 @@ public class LogicNodeTreeAsset : NonsensicalConfigDataBase, ISerializationCallb
             AddNodeToSerializedNodes(child);
     }
 
-    public void UpdateValue()
-    {
-        OnAfterDeserialize();
-    }
-
     public void OnAfterDeserialize()
     {
         if (serializedNodes.Count > 0)
@@ -70,7 +88,6 @@ public class LogicNodeTreeAsset : NonsensicalConfigDataBase, ISerializationCallb
             root = new LogicNodeData("root", "自动根节点");
         }
     }
-
     int ReadNodeFromSerializedNodes(int index, out LogicNodeData node)
     {
         var serializedNode = serializedNodes[index];

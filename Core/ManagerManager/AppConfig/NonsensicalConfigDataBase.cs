@@ -8,8 +8,22 @@ namespace NonsensicalKit.Manager
     /// </summary>
     public abstract class NonsensicalConfigDataBase : ScriptableObject
     {
-        public string ConfigID = "ID" + Guid.NewGuid().ToString().Substring(0, 4);
+        public abstract ConfigDataBase GetData();
+        public abstract void SetData(ConfigDataBase cd);
+        public virtual void OnSetDataEnd()
+        {
 
-        public abstract void CopyForm<T>(T from  ) where T: NonsensicalConfigDataBase;
+        }
+
+        protected bool CheckType<T>(ConfigDataBase cdb) where T : ConfigDataBase
+        {
+            return cdb.GetType() == typeof(T);
+        }
+    }
+
+    [Serializable]
+    public abstract class ConfigDataBase
+    {
+        public string ConfigID = "ID" + Guid.NewGuid().ToString().Substring(0, 4);
     }
 }

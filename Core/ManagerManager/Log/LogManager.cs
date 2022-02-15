@@ -71,7 +71,7 @@ namespace NonsensicalKit.Manager
                 item.Value.Init();
             }
 
-            if (AppConfigManager.Instance.TryGetConfig<NonsensicalManagerConfigData>(out var v))
+            if (AppConfigManager.Instance.TryGetConfig<ManagerConfigData>(out var v))
             {
                 if (platformInfo.isEditor)
                 {

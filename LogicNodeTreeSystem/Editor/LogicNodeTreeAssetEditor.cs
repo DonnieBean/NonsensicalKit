@@ -14,37 +14,58 @@ public class LogicNodeTreeAssetEditor : Editor
     void OnEnable()
     {
         asset = (LogicNodeTreeAsset)target;
-        nodeTreeEdit = new NodeTreeEdit<LogicNodeData>(asset.root);
+        if (asset==null)
+        {
+            return;
+        }
+        if (asset.GetData()==null)
+        {
+            return;
+        }
+        var v = (asset.GetData() as LogicNodeTreeConfigData).root;
+        if (v!=null)
+        {
+            nodeTreeEdit = new NodeTreeEdit<LogicNodeData>((asset.GetData() as LogicNodeTreeConfigData).root);
 
-        nodeTreeEdit.GetHeadString += GetHeaderString;
-        nodeTreeEdit.OnDrawElement += DrawElement;
-        nodeTreeEdit.OnAddElement += ChildAdd;
-        nodeTreeEdit.OnRemoveElement = ChildRemove;
-        nodeTreeEdit.OnRemoveSelf = RemoveSelf;
-        nodeTreeEdit.elementHeight = 42;
+            nodeTreeEdit.GetHeadString += GetHeaderString;
+            nodeTreeEdit.OnDrawElement += DrawElement;
+            nodeTreeEdit.OnAddElement += ChildAdd;
+            nodeTreeEdit.OnRemoveElement = ChildRemove;
+            nodeTreeEdit.OnRemoveSelf = RemoveSelf;
+            nodeTreeEdit.elementHeight = 42;
 
-        idProperty = serializedObject.FindProperty("ConfigID");
+            idProperty = serializedObject.FindProperty("configData.ConfigID");
+        }
+     
     }
 
     public override void OnInspectorGUI()
     {
-        if (asset.root == null)
+        if ((asset.GetData() as LogicNodeTreeConfigData).root == null)
         {
             return;
         }
 
         serializedObject.Update();
-        EditorGUILayout.PropertyField(idProperty);
+        if (idProperty!=null)
+        {
+            EditorGUILayout.PropertyField(idProperty);
+        }
 
         serializedObject.ApplyModifiedProperties();
 
-        Rect rect = EditorGUI.IndentedRect(GUILayoutUtility.GetRect(0f, nodeTreeEdit.GetTotalHeight()));
-       
-        if (nodeTreeEdit.DrawNodeTree(rect))
+        if (nodeTreeEdit!=null)
         {
-            //重要！！！！！！这函数卡了我一天
-            EditorUtility.SetDirty(asset);
+            Rect rect = EditorGUI.IndentedRect(GUILayoutUtility.GetRect(0f, nodeTreeEdit.GetTotalHeight())); 
+            
+            if (nodeTreeEdit.DrawNodeTree(rect))
+            {
+                //重要！！！！！！这函数卡了我一天
+                EditorUtility.SetDirty(asset);
+            }
         }
+       
+    
     }
 
     private void ChildAdd(LogicNodeData node)

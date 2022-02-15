@@ -12,17 +12,16 @@ namespace NonsensicalKit.Manager
     /// <summary>
     /// 配置管理类
     /// 编辑器中初始化时会将configDatas中所有的类序列化保存成json文件，发布后运行时读取json文件而不是直接使用configDatas中的数据，这样发布后就可以通过修改json文件来修改配置
-    /// 
-    /// 目前会导致一个报警，因为会new序列化对象类，可以把数据用一个数据类包起来，通过抽象方法获取Object，再通过getType获取数据类类型，序列化和反序列化使用数据类来消除报警，但修改会导致当前项目存储的信息失效，所以暂时不处理
-    /// new对象只是为了获取其中的数据，并不会进行操作，所以不会有逻辑上的问题（但可能有内存上的问题）
     /// </summary>
     public class AppConfigManager : NonsensicalManagerBase<AppConfigManager>
     {
         public NonsensicalConfigDataBase[] configDatas;
+        public ConfigDataBase[] datas;
 
         protected override void Awake()
         {
             base.Awake();
+            datas = new ConfigDataBase[configDatas.Length];
             InitSubscribe(0, OnInitStart());
         }
 
@@ -33,9 +32,10 @@ namespace NonsensicalKit.Manager
         {
             for (int i = 0; i < configDatas.Length; i++)
             {
-                string path = GetFilePath(configDatas[i]);
+                var data = configDatas[i].GetData();
+                string path = GetFilePath(data);
                 string str = FileHelper.ReadAllText(path);
-                MethodInfo deserializeMethod = JsonHelper.deserializeMethod.MakeGenericMethod(new Type[] { configDatas[i].GetType() });
+                MethodInfo deserializeMethod = JsonHelper.deserializeMethod.MakeGenericMethod(new Type[] { data.GetType() });
                 object deserializeData = null;
                 try
                 {
@@ -43,10 +43,11 @@ namespace NonsensicalKit.Manager
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError("NonsensicalAppConfig文件反序列化出错"+ path + "\r\n"+ e.ToString());
+                    Debug.LogError("NonsensicalAppConfig文件反序列化出错" + path + "\r\n" + e.ToString());
                 }
 
-                configDatas[i].CopyForm<NonsensicalConfigDataBase>((NonsensicalConfigDataBase)deserializeData) ;
+                configDatas[i].SetData((ConfigDataBase)deserializeData); 
+                configDatas[i].OnSetDataEnd();
             }
         }
 
@@ -56,10 +57,10 @@ namespace NonsensicalKit.Manager
         /// <typeparam name="T">配置类的类型</typeparam>
         /// <param name="t">out值，获取不到时为默认值</param>
         /// <returns>是否获取成功</returns>
-        public bool TryGetConfig<T>(out T t) where T : NonsensicalConfigDataBase
+        public bool TryGetConfig<T>(out T t) where T : ConfigDataBase
         {
             t = default(T);
-            foreach (var configData in configDatas)
+            foreach (var configData in datas)
             {
                 if (configData.GetType() == typeof(T))
                 {
@@ -77,10 +78,10 @@ namespace NonsensicalKit.Manager
         /// <param name="ID">想要获取的ID</param>
         /// <param name="t">out值，获取不到时为默认值</param>
         /// <returns>是否获取成功</returns>
-        public bool TryGetConfig<T>(string ID, out T t) where T : NonsensicalConfigDataBase
+        public bool TryGetConfig<T>(string ID, out T t) where T : ConfigDataBase
         {
             t = default(T);
-            foreach (var configData in configDatas)
+            foreach (var configData in datas)
             {
                 if (configData.ConfigID == ID && configData.GetType() == typeof(T))
                 {
@@ -99,7 +100,7 @@ namespace NonsensicalKit.Manager
         /// <param name="filedName">字段的名称</param>
         /// <param name="t">out值，获取不到时为默认值</param>
         /// <returns>是否获取成功</returns>
-        public bool TryGetConfigValue<Config, T>(string filedName, out T t) where Config : NonsensicalConfigDataBase
+        public bool TryGetConfigValue<Config, T>(string filedName, out T t) where Config : ConfigDataBase
         {
             t = default(T);
             if (TryGetConfig(out Config config))
@@ -120,37 +121,41 @@ namespace NonsensicalKit.Manager
             return false;
         }
 
-        protected IEnumerator  OnInitStart()
+        protected IEnumerator OnInitStart()
         {
             if (!PlatformInfo.Instance.isEditor)
-                {
-                   yield return  StartCoroutine(LoadAppConfig());
-                }
-                else
-                {
-                    Dictionary<Type, HashSet<string>> IDTable = new Dictionary<Type, HashSet<string>>();
+            {
+                yield return StartCoroutine(LoadAppConfig());
+            }
+            else
+            {
+                Dictionary<Type, HashSet<string>> IDTable = new Dictionary<Type, HashSet<string>>();
 
-                    foreach (var configData in configDatas)
+                for (int i = 0; i < configDatas.Length; i++)
+                {
+                    var data = configDatas[i].GetData();
+                    datas[i] = data;
+                    Type t = data.GetType();
+                    if (IDTable.ContainsKey(t) == false)
                     {
-                        Type t = configData.GetType();
-                        if (IDTable.ContainsKey(t) == false)
-                        {
-                            IDTable.Add(t, new HashSet<string>());
-                        }
+                        IDTable.Add(t, new HashSet<string>());
+                    }
 
-                        if (!IDTable[t].Contains(configData.ConfigID))
-                        {
-                            FileHelper.WriteTxt(GetFilePath(configData), JsonHelper.SerializeObject(configData));
-                            IDTable[t].Add(configData.ConfigID);
-                        }
-                        else
-                        {
-                            Debug.LogError("相同类型配置的ID重复:" + configData.ConfigID);
-                            break;
-                        }
+                    string crtID = data.ConfigID;
+                    if (!IDTable[t].Contains(crtID))
+                    {
+                        FileHelper.WriteTxt(GetFilePath(data), JsonHelper.SerializeObject(data));
+                        IDTable[t].Add(crtID);
+                    }
+                    else
+                    {
+                        Debug.LogError("相同类型配置的ID重复:" + crtID);
+                        break;
                     }
                 }
-            
+               
+            }
+
         }
 
         private IEnumerator LoadAppConfig()
@@ -159,11 +164,13 @@ namespace NonsensicalKit.Manager
             for (int i = 0; i < configDatas.Length; i++)
             {
                 int j = i;
-                StartCoroutine(HttpHelper.Get(GetFilePath(configDatas[i]), null, (unityWebRequest) =>
+
+                ConfigDataBase crtData = configDatas[j].GetData();
+                StartCoroutine(HttpHelper.Get(GetFilePath(crtData), null, (unityWebRequest) =>
                 {
                     if (unityWebRequest != null && unityWebRequest.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
                     {
-                        MethodInfo deserializeMethod = JsonHelper.deserializeMethod.MakeGenericMethod(new Type[] { configDatas[j].GetType() });
+                        MethodInfo deserializeMethod = JsonHelper.deserializeMethod.MakeGenericMethod(new Type[] { crtData.GetType() });
                         object deserializeData = null;
                         try
                         {
@@ -174,9 +181,12 @@ namespace NonsensicalKit.Manager
                             Debug.LogError("NonsensicalAppConfig文件反序列化出错\r\n" + e.ToString());
                         }
 
-                        configDatas[j] = (NonsensicalConfigDataBase)deserializeData;
+                        configDatas[j] .SetData( (ConfigDataBase)deserializeData);
+                        configDatas[j].OnSetDataEnd();
                     }
                     count--;
+
+                    datas[i] = configDatas[j].GetData();
 
                 }, null));
             }
@@ -187,12 +197,10 @@ namespace NonsensicalKit.Manager
             }
         }
 
-
-        private string GetFilePath(NonsensicalConfigDataBase configData)
+        private string GetFilePath(ConfigDataBase configData)
         {
             string configFilePath = Path.Combine(Application.streamingAssetsPath, "Configs", configData.GetType().ToString() + "_" + configData.ConfigID + ".json");
             return configFilePath;
         }
-
     }
 }

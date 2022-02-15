@@ -46,7 +46,7 @@ namespace NonsensicalKit.Manager
 
         protected IEnumerator  OnInitStart()
         {
-            if (AppConfigManager.Instance != null && AppConfigManager.Instance.TryGetConfig(out NonsensicalManagerConfigData t))
+            if (AppConfigManager.Instance != null && AppConfigManager.Instance.TryGetConfig(out ManagerConfigData t))
             {
                 assetBundlePath = Path.Combine(Application.streamingAssetsPath, t.AssetBundlesPath);
 

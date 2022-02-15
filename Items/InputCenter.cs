@@ -58,7 +58,6 @@ public class InputCenter : MonoSingleton<InputCenter>
     private void Update()
     {
 #if ENABLE_INPUT_SYSTEM
-
 #else
         zoom = Input.GetAxisRaw("Mouse ScrollWheel");
 

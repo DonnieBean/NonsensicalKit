@@ -268,9 +268,9 @@ public class LogicNodeManager : NonsensicalManagerBase<LogicNodeManager>
 
     private void OnInitStart()
     {
-        if (AppConfigManager.Instance.TryGetConfig<LogicNodeTreeAsset>(out var v))
+        if (AppConfigManager.Instance.TryGetConfig<LogicNodeTreeConfigData>(out var v))
         {
-            v.UpdateValue();
+            v.OnAfterDeserialize();
             BuildLogicNodeTree(v.root);
             BuildDictionary();
         }

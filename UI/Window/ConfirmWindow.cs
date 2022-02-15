@@ -19,6 +19,14 @@ namespace NonsensicalKit.UI
             this.leftButtonClick = leftButtonClick;
             this.rightButtonClick = rightButtonClick;
         }
+        public ConfirmInfo(string message, Action leftButtonClick)
+        {
+            this.message = message;
+            this.leftButtonText = "确认";
+            this.rightButtonText = "取消";
+            this.leftButtonClick = leftButtonClick;
+            this.rightButtonClick = null;
+        }
     }
 
     public class ConfirmWindow : NonsensicalUI
@@ -26,6 +34,8 @@ namespace NonsensicalKit.UI
         public Text txt_Message;
         public Text txt_LeftButton;
         public Text txt_RightButton;
+        public Button btn_LeftButton;
+        public Button btn_RightButton;
 
         private ConfirmInfo crtConfirmInfo;
 
@@ -33,6 +43,8 @@ namespace NonsensicalKit.UI
         {
             base.Awake();
             Subscribe<ConfirmInfo>((uint)UIEnum.OpenConfirmPanel, OpenConfirmWindow);
+            btn_LeftButton.onClick.AddListener(LeftButtonClick);
+            btn_RightButton.onClick.AddListener(RightButtonClick);
         }
         private void OpenConfirmWindow(ConfirmInfo confirmInfo)
         {
@@ -44,13 +56,13 @@ namespace NonsensicalKit.UI
             OpenSelf(false);
         }
 
-        public void LeftButtonClick()
+        private void LeftButtonClick()
         {
             CloseSelf();
             crtConfirmInfo.leftButtonClick?.Invoke();
         }
 
-        public void RightButtonClick()
+        private void RightButtonClick()
         {
             CloseSelf();
             crtConfirmInfo.rightButtonClick?.Invoke();
