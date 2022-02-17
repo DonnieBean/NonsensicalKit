@@ -23,14 +23,14 @@ namespace NonsensicalKit.Manager
             Instance = this as T;
 
 
-            Subscribe<int>((uint)NonsensicalManagerEnum.InitStart, OnInitStart);
+            Subscribe<int>((int)NonsensicalManagerEnum.InitStart, OnInitStart);
         }
 
         protected void InitSubscribe(int index, Action action)
         {
             if (actions.ContainsKey(index) == false)
             {
-                Publish((uint)NonsensicalManagerEnum.InitSubscribe, index);
+                Publish((int)NonsensicalManagerEnum.InitSubscribe, index);
                 actions.Add(index, action);
             }
         }
@@ -39,7 +39,7 @@ namespace NonsensicalKit.Manager
         {
             if (coroutines.ContainsKey(index) == false)
             {
-                Publish((uint)NonsensicalManagerEnum.InitSubscribe, index);
+                Publish((int)NonsensicalManagerEnum.InitSubscribe, index);
                 coroutines.Add(index, coroutine);
             }
         }
@@ -60,14 +60,14 @@ namespace NonsensicalKit.Manager
         {
             func.Invoke();
             Debug.Log("Manager Load Complete:"+ GetType() );
-            Publish((uint)NonsensicalManagerEnum.InitComleted, index);
+            Publish((int)NonsensicalManagerEnum.InitComleted, index);
         }
 
         private IEnumerator Init(int index, IEnumerator coroutine)
         {
             yield return StartCoroutine(coroutine);
             Debug.Log("Manager Load Complete:" + GetType());
-            Publish((uint)NonsensicalManagerEnum.InitComleted, index);
+            Publish((int)NonsensicalManagerEnum.InitComleted, index);
         }
     }
 }

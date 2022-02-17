@@ -28,8 +28,8 @@ namespace NonsensicalKit.UI
         {
             base.Awake();
 
-            Subscribe<List<RightClickMenuItem>>((uint)UIEnum.OpenRightClickMenu, OnOpen);
-            Subscribe((uint)UIEnum.CloseRightClickMenu, OnCloseMenu);
+            Subscribe<List<RightClickMenuItem>>((int)UIEnum.OpenRightClickMenu, OnOpen);
+            Subscribe((int)UIEnum.CloseRightClickMenu, OnCloseMenu);
         }
 
         private void Update()

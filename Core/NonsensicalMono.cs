@@ -32,7 +32,7 @@ namespace NonsensicalKit
         {
             foreach (var listener in listenerInfos)
             {
-                bool isUint = listener.UseUint;
+                bool isint = listener.Useint;
                 Type[] types = listener.Types;
                 Type messageAggregator;
                 object instance;
@@ -70,9 +70,9 @@ namespace NonsensicalKit
                     default:
                         continue;
                 }
-                if (isUint)
+                if (isint)
                 {
-                    MethodInfo unsubMethod = messageAggregator.GetMethod("Unsubscribe", new Type[] { typeof(uint), messageHandler });
+                    MethodInfo unsubMethod = messageAggregator.GetMethod("Unsubscribe", new Type[] { typeof(int), messageHandler });
                     unsubMethod.Invoke(instance, new object[] { listener.Index, listener.Func });
                 }
                 else
@@ -87,28 +87,28 @@ namespace NonsensicalKit
 
 
         #region Subscribe
-        protected void Subscribe<T1, T2, T3>(uint index, MessageHandler<T1, T2, T3> func)
+        protected void Subscribe<T1, T2, T3>(int index, MessageHandler<T1, T2, T3> func)
         {
             MessageAggregator<T1, T2, T3>.Instance.Subscribe(index, func);
 
             ListenerInfo temp = new ListenerInfo(index, func, typeof(T1), typeof(T2), typeof(T3));
             listenerInfos.Add(temp);
         }
-        protected void Subscribe<T1, T2>(uint index, MessageHandler<T1, T2> func)
+        protected void Subscribe<T1, T2>(int index, MessageHandler<T1, T2> func)
         {
             MessageAggregator<T1, T2>.Instance.Subscribe(index, func);
 
             ListenerInfo temp = new ListenerInfo(index, func, typeof(T1), typeof(T2));
             listenerInfos.Add(temp);
         }
-        protected void Subscribe<T>(uint index, MessageHandler<T> func)
+        protected void Subscribe<T>(int index, MessageHandler<T> func)
         {
             MessageAggregator<T>.Instance.Subscribe(index, func);
 
             ListenerInfo temp = new ListenerInfo(index, func, typeof(T));
             listenerInfos.Add(temp);
         }
-        protected void Subscribe(uint index, MessageHandler func)
+        protected void Subscribe(int index, MessageHandler func)
         {
             MessageAggregator.Instance.Subscribe(index, func);
 
@@ -146,52 +146,52 @@ namespace NonsensicalKit
         #endregion
 
         #region Unsubscribe
-        protected void Unsubscribe<T1, T2, T3>(uint index, MessageHandler<T1, T2, T3> func)
+        protected void Unsubscribe<T1, T2, T3>(int index, MessageHandler<T1, T2, T3> func)
         {
             MessageAggregator<T1, T2, T3>.Instance.Unsubscribe(index, func);
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (listenerInfos[i].UseUint && index == listenerInfos[i].Index && func == (listenerInfos[i].Func as MessageHandler<T1, T2, T3>))
+                if (listenerInfos[i].Useint && index == listenerInfos[i].Index && func == (listenerInfos[i].Func as MessageHandler<T1, T2, T3>))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
                 }
             }
         }
-        protected void Unsubscribe<T1, T2>(uint index, MessageHandler<T1, T2> func)
+        protected void Unsubscribe<T1, T2>(int index, MessageHandler<T1, T2> func)
         {
             MessageAggregator<T1, T2>.Instance.Unsubscribe(index, func);
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (listenerInfos[i].UseUint && index == listenerInfos[i].Index && func == (listenerInfos[i].Func as MessageHandler<T1, T2>))
+                if (listenerInfos[i].Useint && index == listenerInfos[i].Index && func == (listenerInfos[i].Func as MessageHandler<T1, T2>))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
                 }
             }
         }
-        protected void Unsubscribe<T>(uint index, MessageHandler<T> func)
+        protected void Unsubscribe<T>(int index, MessageHandler<T> func)
         {
             MessageAggregator<T>.Instance.Unsubscribe(index, func);
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (listenerInfos[i].UseUint && index == listenerInfos[i].Index && func == (listenerInfos[i].Func as MessageHandler<T>))
+                if (listenerInfos[i].Useint && index == listenerInfos[i].Index && func == (listenerInfos[i].Func as MessageHandler<T>))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
                 }
             }
         }
-        protected void Unsubscribe(uint index, MessageHandler func)
+        protected void Unsubscribe(int index, MessageHandler func)
         {
             MessageAggregator.Instance.Unsubscribe(index, func);
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (listenerInfos[i].UseUint && index == listenerInfos[i].Index && func == (listenerInfos[i].Func as MessageHandler))
+                if (listenerInfos[i].Useint && index == listenerInfos[i].Index && func == (listenerInfos[i].Func as MessageHandler))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
@@ -204,7 +204,7 @@ namespace NonsensicalKit
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (!listenerInfos[i].UseUint && str == listenerInfos[i].Str && func == (listenerInfos[i].Func as MessageHandler<T1, T2, T3>))
+                if (!listenerInfos[i].Useint && str == listenerInfos[i].Str && func == (listenerInfos[i].Func as MessageHandler<T1, T2, T3>))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
@@ -217,7 +217,7 @@ namespace NonsensicalKit
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (!listenerInfos[i].UseUint && str == listenerInfos[i].Str && func == (listenerInfos[i].Func as MessageHandler<T1, T2>))
+                if (!listenerInfos[i].Useint && str == listenerInfos[i].Str && func == (listenerInfos[i].Func as MessageHandler<T1, T2>))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
@@ -230,7 +230,7 @@ namespace NonsensicalKit
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (!listenerInfos[i].UseUint && str == listenerInfos[i].Str && func == (listenerInfos[i].Func as MessageHandler<T>))
+                if (!listenerInfos[i].Useint && str == listenerInfos[i].Str && func == (listenerInfos[i].Func as MessageHandler<T>))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
@@ -243,7 +243,7 @@ namespace NonsensicalKit
 
             for (int i = 0; i < listenerInfos.Count; i++)
             {
-                if (!listenerInfos[i].UseUint && str == listenerInfos[i].Str && func == (listenerInfos[i].Func as MessageHandler))
+                if (!listenerInfos[i].Useint && str == listenerInfos[i].Str && func == (listenerInfos[i].Func as MessageHandler))
                 {
                     listenerInfos.RemoveAt(i);
                     return;
@@ -253,19 +253,19 @@ namespace NonsensicalKit
         #endregion
 
         #region Publish
-        protected void Publish<T1, T2, T3>(uint index, T1 data1, T2 data2, T3 data3)
+        protected void Publish<T1, T2, T3>(int index, T1 data1, T2 data2, T3 data3)
         {
             MessageAggregator<T1, T2, T3>.Instance.Publish(index, data1, data2, data3);
         }
-        protected void Publish<T1, T2>(uint index, T1 data1, T2 data2)
+        protected void Publish<T1, T2>(int index, T1 data1, T2 data2)
         {
             MessageAggregator<T1, T2>.Instance.Publish(index, data1, data2);
         }
-        protected void Publish<T>(uint index, T data)
+        protected void Publish<T>(int index, T data)
         {
             MessageAggregator<T>.Instance.Publish(index, data);
         }
-        protected void Publish(uint index)
+        protected void Publish(int index)
         {
             MessageAggregator.Instance.Publish(index);
         }
@@ -361,15 +361,15 @@ namespace NonsensicalKit
 
         private struct ListenerInfo
         {
-            public bool UseUint;
+            public bool Useint;
             public Type[] Types;
-            public uint Index;
+            public int Index;
             public string Str;
             public object Func;
 
-            public ListenerInfo(uint index, object func, params Type[] types)
+            public ListenerInfo(int index, object func, params Type[] types)
             {
-                UseUint = true;
+                Useint = true;
                 Types = types;
                 Index = index;
                 Func = func;
@@ -378,7 +378,7 @@ namespace NonsensicalKit
 
             public ListenerInfo(string str, object func, params Type[] types)
             {
-                UseUint = false;
+                Useint = false;
                 Types = types;
                 Str = str;
                 Func = func;

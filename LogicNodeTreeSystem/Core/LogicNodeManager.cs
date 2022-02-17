@@ -349,7 +349,7 @@ public class LogicNodeManager : NonsensicalManagerBase<LogicNodeManager>
         {
             LogManager.Instance.LogDebug("切换到节点:" + node.NodeName);
             crtSelectNode = node;
-            Publish((uint)LogicNodeEnum.SwitchNode, crtSelectNode);
+            Publish((int)LogicNodeEnum.SwitchNode, crtSelectNode);
             if (OnSwitchEnd != null)
             {
                 //使用临时变量存储并清除原始数据后再执行，防止出现循环调用

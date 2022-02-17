@@ -35,7 +35,7 @@ public class RightClickMenuSample : NonsensicalMono
     {
         if (ic.mouseRightKeyDown)
         {
-            Publish((uint)UIEnum.OpenRightClickMenu,lcmis);
+            Publish((int)UIEnum.OpenRightClickMenu,lcmis);
         }
     }
 }

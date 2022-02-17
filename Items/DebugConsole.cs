@@ -17,7 +17,7 @@ namespace NonsensicalKit
         /// The hotkey to show and hide the console window.
         /// </summary>
         public KeyCode toggleKey = KeyCode.BackQuote;
-
+        
         /// <summary>
         /// Whether to open the window by shaking the device (mobile-only).
         /// </summary>
@@ -67,6 +67,7 @@ namespace NonsensicalKit
         readonly Rect titleBarRect = new Rect(0, 0, 10000, 20);
         Rect windowRect = new Rect(margin, margin, Screen.width - (margin * 2), Screen.height - (margin * 2));
 
+
         private void Awake()
         {
             Instance = this;
@@ -78,10 +79,9 @@ namespace NonsensicalKit
             {
                 SwitchVisible();
             }
-
-            if (shakeToOpen && Input.acceleration.sqrMagnitude > shakeAcceleration)
+            if (shakeToOpen &&  Input.acceleration.sqrMagnitude > shakeAcceleration)
             {
-                visible = true;
+                SwitchVisible();
             }
         }
 

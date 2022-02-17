@@ -23,8 +23,9 @@ namespace NonsensicalKit.UI
         protected override void Awake()
         {
             base.Awake();
-            Subscribe<MessageInfo>((uint)UIEnum.OpenMessagePanel, OpenMessageWindow);
+            Subscribe<MessageInfo>((int)UIEnum.OpenMessagePanel, OpenMessageWindow);
         }
+
         private void OpenMessageWindow(MessageInfo messageInfo)
         {
             crtMessageInfo = messageInfo;

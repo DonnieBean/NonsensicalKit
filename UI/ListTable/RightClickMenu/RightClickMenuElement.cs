@@ -35,7 +35,7 @@ namespace NonsensicalKit.UI
             }
             txt_Text.text = elementData.text;
             btn_Element.onClick.RemoveAllListeners();
-            btn_Element.onClick.AddListener(()=> {Publish((uint)UIEnum.CloseRightClickMenu); elementData.clickAction(); });;
+            btn_Element.onClick.AddListener(()=> {Publish((int)UIEnum.CloseRightClickMenu); elementData.clickAction(); });;
         }
     }
 }

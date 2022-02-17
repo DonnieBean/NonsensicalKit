@@ -186,7 +186,7 @@ namespace NonsensicalKit.Manager
                     }
                     count--;
 
-                    datas[i] = configDatas[j].GetData();
+                    datas[j] = configDatas[j].GetData();
 
                 }, null));
             }

@@ -34,7 +34,7 @@ public class LogicNodeMono : NonsensicalMono
         manager = LogicNodeManager.Instance;
         nodeState = new LogicNodeState();
 
-        Subscribe<LogicNode>((uint)LogicNodeEnum.SwitchNode, OnSwitchNode);
+        Subscribe<LogicNode>((int)LogicNodeEnum.SwitchNode, OnSwitchNode);
     }
     
     private void Start()

@@ -31,8 +31,8 @@ namespace NonsensicalKit.Manager
         {
             base.Awake();
 
-            Subscribe<int>((uint)NonsensicalManagerEnum.InitSubscribe, InitSubscribe);
-            Subscribe<int>((uint)NonsensicalManagerEnum.InitComleted, InitComplete);
+            Subscribe<int>((int)NonsensicalManagerEnum.InitSubscribe, InitSubscribe);
+            Subscribe<int>((int)NonsensicalManagerEnum.InitComleted, InitComplete);
         }
 
         private void Start()
@@ -75,11 +75,11 @@ namespace NonsensicalKit.Manager
             if (initCount.Count==0)
             {
                 allInitComplete = true;
-                MessageAggregator.Instance.Publish((uint)NonsensicalManagerEnum.AllInitComplete);
+                MessageAggregator.Instance.Publish((int)NonsensicalManagerEnum.AllInitComplete);
             }
             else
             {
-                Publish((uint)NonsensicalManagerEnum.InitStart, minBatch);
+                Publish((int)NonsensicalManagerEnum.InitStart, minBatch);
             }
         }
 
@@ -91,7 +91,7 @@ namespace NonsensicalKit.Manager
                 if (index == maxBatch)
                 {
                     allInitComplete = true;
-                    MessageAggregator.Instance.Publish((uint)NonsensicalManagerEnum.AllInitComplete);
+                    MessageAggregator.Instance.Publish((int)NonsensicalManagerEnum.AllInitComplete);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace NonsensicalKit.Manager
                             LogManager.Instance.LogFatal("管理类批次出现错误");
                         }
                     }
-                    Publish((uint)NonsensicalManagerEnum.InitStart, index );
+                    Publish((int)NonsensicalManagerEnum.InitStart, index );
                 }
             }
         }

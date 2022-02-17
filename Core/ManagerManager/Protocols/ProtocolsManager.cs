@@ -23,7 +23,7 @@ namespace NonsensicalKit.Manager
         {
             base.Awake();
 
-            Subscribe<string, string>((uint)NonsensicalManagerEnum.ReceviedProtocolsMessage, OnReceivedProtocolsMessage);
+            Subscribe<string, string>((int)NonsensicalManagerEnum.ReceviedProtocolsMessage, OnReceivedProtocolsMessage);
             Subscribe<string, string>("ReceviedProtocolsMessage", OnReceivedProtocolsMessage);
 
             InitSubscribe(0, OnInitStart);
@@ -59,7 +59,6 @@ namespace NonsensicalKit.Manager
                 }
             }
         }
-
 
         private void OnReceivedProtocolsMessage(string key, string value)
         {

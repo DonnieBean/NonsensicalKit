@@ -42,7 +42,7 @@ namespace NonsensicalKit.UI
         protected override void Awake()
         {
             base.Awake();
-            Subscribe<ConfirmInfo>((uint)UIEnum.OpenConfirmPanel, OpenConfirmWindow);
+            Subscribe<ConfirmInfo>((int)UIEnum.OpenConfirmPanel, OpenConfirmWindow);
             btn_LeftButton.onClick.AddListener(LeftButtonClick);
             btn_RightButton.onClick.AddListener(RightButtonClick);
         }

@@ -42,7 +42,7 @@ public class MouseTouchNodeTarget : NonsensicalMono
 #if USE_HIGHLIGHTINGSYSTEM
         lighter = GetComponent<Highlighter>();
 #endif
-        Subscribe<LogicNode>((uint)LogicNodeEnum.SwitchNode, OnSwitchNode);
+        Subscribe<LogicNode>((int)LogicNodeEnum.SwitchNode, OnSwitchNode);
     }
 
     private void Start()

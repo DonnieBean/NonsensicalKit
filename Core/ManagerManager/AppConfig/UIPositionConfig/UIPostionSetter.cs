@@ -30,7 +30,7 @@ public class UIPostionSetter : NonsensicalMono
         }
         else
         {
-            Subscribe((uint)NonsensicalManagerEnum.AllInitComplete, OnInitCompleted);
+            Subscribe((int)NonsensicalManagerEnum.AllInitComplete, OnInitCompleted);
         }
     }
 

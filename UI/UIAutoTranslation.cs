@@ -38,10 +38,6 @@ public class UIAutoTranslation : NonsensicalMono
         }
     }
 
-    private void Update()
-    {
-        OnTranslation(10);
-    }
 
     Vector2 tempPos = Vector2.zero;
     private void OnTranslation(float value)
