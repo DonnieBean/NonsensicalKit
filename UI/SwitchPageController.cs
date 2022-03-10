@@ -7,7 +7,7 @@ namespace NonsensicalKit.UI
     {
         public Button[] buttons;
 
-        public NonsensicalUI[] targets;
+        public GameObject[] targets;
 
         protected override void Awake()
         {
@@ -24,6 +24,7 @@ namespace NonsensicalKit.UI
                     int index = i;
                     buttons[i].onClick.AddListener(() => { Switch(index); });
                 }
+                Switch(0);
             }
         }
 
@@ -31,13 +32,13 @@ namespace NonsensicalKit.UI
         {
             for (int i = 0; i < targets.Length; i++)
             {
-                if (index==i)
+                if (index == i)
                 {
-                    Open(targets[i]);
+                    targets[i].gameObject.SetActive(true);
                 }
                 else
                 {
-                    Close(targets[i]);
+                    targets[i].gameObject.SetActive(false);
                 }
             }
         }
