@@ -382,6 +382,44 @@ namespace NonsensicalKit.Utility
         {
             AddCube(center.ToVector3(), size.ToVector3());
         }
+        public void AddCube( Vector3 size)
+        {
+            Vector3[] point = new Vector3[8];
+     
+            float sizeX = size.x * 0.5f;
+            float sizeY = size.y * 0.5f;
+            float sizeZ = size.z * 0.5f;
+            point[0] = new Vector3( sizeX,  sizeY, sizeZ);
+            point[1] = new Vector3( sizeX,  sizeY, sizeZ);
+            point[2] = new Vector3( sizeX,  sizeY, sizeZ);
+            point[3] = new Vector3( sizeX,  sizeY, sizeZ);
+            point[4] = new Vector3( sizeX,  sizeY, sizeZ);
+            point[5] = new Vector3( sizeX,  sizeY, sizeZ);
+            point[6] = new Vector3( sizeX,  sizeY, sizeZ);
+            point[7] = new Vector3( sizeX,  sizeY, sizeZ);
+
+            //init
+            Vector2 middle = Vector2.one * 0.5f;
+
+            //front
+            AddQuad(Vector3.back, middle, point[0], point[1], point[2], point[3]);
+
+            //back
+            AddQuad(Vector3.forward, middle, point[7], point[6], point[5], point[4]);
+
+            //left
+            AddQuad(Vector3.left, middle, point[4], point[5], point[1], point[0]);
+
+            //right
+            AddQuad(Vector3.right, middle, point[3], point[2], point[6], point[7]);
+
+            //down
+            AddQuad(Vector3.down, middle, point[0], point[3], point[7], point[4]);
+
+            //up
+            AddQuad(Vector3.up, middle, point[1], point[5], point[6], point[2]);
+        }
+
         public void AddCube(Vector3 center, Vector3 size)
         {
             Vector3[] point = new Vector3[8];
@@ -549,7 +587,6 @@ namespace NonsensicalKit.Utility
             {
                 pointArray[i] = center + radius * dir1 * Mathf.Sin(partAngle * i) + radius * dir2 * Mathf.Cos(partAngle * i);
             }
-
             for (int i = 0; i < pointArray.Length; i++)
             {
                 int next = i + 1;
@@ -596,6 +633,7 @@ namespace NonsensicalKit.Utility
                 AddQuad(new Vector3[] { pointArray1[i], pointArray2[i], pointArray2[next], pointArray1[next] }, -dir, new Vector2(0.5f, 0.5f));
             }
         }
+
 
         public void AddRing3D(Vector3 ringSide1, float ringSide1Radius, Vector3 ringSide2, float ringSide2Radius, Vector3 dir, int smoothness)
         {

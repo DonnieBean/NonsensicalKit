@@ -10,7 +10,7 @@ namespace NonsensicalKit
 
         private  void Awake()
         {
-            gameObject.AddComponent<MeshFilter>().mesh = ModelHelper.GetUnevenPlane(Vector3.zero, size,count);
+            gameObject.AddComponent<MeshFilter>().mesh = ModelHelper.CreateUnevenPlane(Vector3.zero, size,count);
             gameObject.AddComponent<MeshRenderer>().material = ModelHelper.GetDiffuseMaterial();
 
         }

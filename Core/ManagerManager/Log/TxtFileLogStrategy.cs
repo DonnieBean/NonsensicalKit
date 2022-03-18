@@ -21,7 +21,7 @@ namespace NonsensicalKit.Manager
         public void Init()
         {
             string usePath = Application.dataPath.Substring(0, Application.dataPath.LastIndexOfAny( new char[] { '/' ,'\\'}));
-            if (AppConfigManager.Instance.TryGetConfig<ManagerConfigData>(out var v))
+            if (AppConfigManager.Instance!=null&&AppConfigManager.Instance.TryGetConfig<ManagerConfigData>(out var v))
             {
                 fullLogFilePath = Path.Combine(usePath, v.LogFilePath,$"Log{ DateTime.Now.ToString("yyyy_MM_dd_HH")}.txt");
             }

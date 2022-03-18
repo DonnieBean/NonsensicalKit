@@ -94,6 +94,18 @@ namespace NonsensicalKit.UI
             OnClose();
         }
 
+        public void ChangeSelf(bool value)
+        {
+            if (value)
+            {
+                OpenSelf();
+            }
+            else
+            {
+                CloseSelf();
+            }
+        }
+
         protected void SwitchSelf(bool immediately = false)
         {
             if (IsShow)
