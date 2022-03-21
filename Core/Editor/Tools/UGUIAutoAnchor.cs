@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UGUIAutoAnchor : EditorWindow
 {
@@ -27,10 +28,25 @@ public class UGUIAutoAnchor : EditorWindow
     
         foreach (var item in rts)
         {
-            var partentRect = item.parent.GetComponent<RectTransform>().rect;
+            
+            if (item.GetComponent<ContentSizeFitter>()!=null|| item.parent==null||item.parent.GetComponent<LayoutGroup>()!=null)
+            {
+                continue;
+            }
+            var partentRT = item.parent.GetComponent<RectTransform>();
+            if (partentRT==null)
+            {
+                continue;
+            }
+            var partentRect = partentRT.rect;
 
             var v = item.anchorMin * partentRect.size + item.offsetMin;
             var v2 = item.anchorMax * partentRect.size + item.offsetMax;
+
+            if (partentRect.size.x==0|| partentRect.size.y == 0)
+            {
+                continue;     
+            }
 
             Undo.RecordObject(item, item.name);
 
