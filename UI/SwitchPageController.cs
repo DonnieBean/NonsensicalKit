@@ -5,9 +5,13 @@ namespace NonsensicalKit.UI
 {
     public class SwitchPageController : NonsensicalUI
     {
-        public Button[] buttons;
+        [SerializeField] private Button[] buttons;
 
-        public NonsensicalUI[] targets;
+        [SerializeField] private GameObject[] targets;
+
+        [SerializeField] private int initSelect = 0;
+
+        private GameObject[] selectedImages;
 
         protected override void Awake()
         {
@@ -24,20 +28,32 @@ namespace NonsensicalKit.UI
                     int index = i;
                     buttons[i].onClick.AddListener(() => { Switch(index); });
                 }
+                selectedImages = new GameObject[targets.Length];
+
+                for (int i = 0; i < selectedImages.Length; i++)
+                {
+                    selectedImages[i] = buttons[i].transform.Find("img_selected").gameObject;
+                }
+
+                Switch(initSelect);
             }
+
+           
         }
 
         protected virtual void Switch(int index)
         {
             for (int i = 0; i < targets.Length; i++)
             {
-                if (index==i)
+                if (index == i)
                 {
-                    Open(targets[i]);
+                    targets[i].SetActive(true);
+                    selectedImages[i].SetActive(true);
                 }
                 else
                 {
-                    Close(targets[i]);
+                    targets[i].SetActive(false);
+                    selectedImages[i].SetActive(false);
                 }
             }
         }

@@ -14,7 +14,7 @@ namespace NonsensicalKit
             primitive.SetActive( false);
             Material diffuse = primitive.GetComponent<MeshRenderer>().sharedMaterial;
             DestroyImmediate(primitive);
-            gameObject.AddComponent<MeshFilter>().mesh = ModelHelper.GetCube(autoBoxSize.x, autoBoxSize.y, autoBoxSize.z);
+            gameObject.AddComponent<MeshFilter>().mesh = ModelHelper.CreateCube(autoBoxSize.x, autoBoxSize.y, autoBoxSize.z);
             gameObject.AddComponent<MeshRenderer>().material = diffuse;
 
         }

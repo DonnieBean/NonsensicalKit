@@ -33,6 +33,9 @@ namespace NonsensicalKit.Manager
 
             Subscribe<int>((int)NonsensicalManagerEnum.InitSubscribe, InitSubscribe);
             Subscribe<int>((int)NonsensicalManagerEnum.InitComleted, InitComplete);
+
+            minBatch = int.MaxValue;
+            maxBatch = int.MinValue;
         }
 
         private void Start()

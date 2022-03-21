@@ -155,7 +155,7 @@ namespace NonsensicalKit
                     {
                         Vector3 cubeSize = Vector3.one * 0.5f;
 
-                        Graphics.DrawMeshNow(ModelHelper.GetCube(Vector3.zero, cubeSize), StartCapDraw(position, crtRotation, size));
+                        Graphics.DrawMeshNow(ModelHelper.CreateCube(Vector3.zero, cubeSize), StartCapDraw(position, crtRotation, size));
 
                     }
                     break;

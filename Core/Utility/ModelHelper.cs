@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NonsensicalKit.Manager;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace NonsensicalKit.Utility
@@ -237,7 +238,6 @@ namespace NonsensicalKit.Utility
                     {
                         maxDir1Limit = dir1Value;
                     }
-
                 }
                 else
                 {
@@ -268,7 +268,6 @@ namespace NonsensicalKit.Utility
                     {
                         minDir2Limit = dir2Value;
                     }
-
                 }
                 else
                 {
@@ -361,21 +360,9 @@ namespace NonsensicalKit.Utility
             {
                 meshBuffer.AddQuad(new Vector3[] { point4[2], point4[1], point4[0], point4[3] }, normalVector3, Vector2.one * 0.5f);
             }
-
-
-            //Vector3 offset2 = new Vector3((granulation.length0*0.5f + 0.5f), (granulation.length1 * 0.5f + 0.5f), (granulation.length2 * 0.5f + 0.5f)) * step;
-            //Vector3 origin2 = granulation.origin + offset2;
-            //if (dir == 2 || dir == 3 || dir == 6)
-            //{
-            //    meshBuffer.AddQuad_2(point4, origin2, Vector2.one * 0.5f);
-            //}
-            //else
-            //{
-            //    meshBuffer.AddQuad_2(new Vector3[] { point4[2], point4[1], point4[0], point4[3] }, origin2, Vector2.one * 0.5f);
-            //}
         }
 
-        public static Mesh GetCustomCubeSimple(Array3<bool> state, float singleSize)
+        public static Mesh CreateCustomCubeSimple(Array3<bool> state, float singleSize)
         {
             MeshBuffer meshbuffer = new MeshBuffer();
             int width = state.length0;
@@ -391,7 +378,7 @@ namespace NonsensicalKit.Utility
                     {
                         if (state[w, h, t] == true && temp[w, h, t] == false)
                         {
-                            GetPartCube(meshbuffer, state, temp, w, h, t, singleSize);
+                            AddPartCube(meshbuffer, state, temp, w, h, t, singleSize);
                         }
                     }
 
@@ -401,7 +388,7 @@ namespace NonsensicalKit.Utility
             return meshbuffer.ToMesh();
         }
 
-        private static void GetPartCube(MeshBuffer meshbuffer, Array3<bool> state, Array3<bool> temp, int w, int h, int t, float singleSize)
+        private static void AddPartCube(MeshBuffer meshbuffer, Array3<bool> state, Array3<bool> temp, int w, int h, int t, float singleSize)
         {
             int width = state.length0;
             int height = state.length1;
@@ -548,7 +535,7 @@ namespace NonsensicalKit.Utility
         /// <param name="singleSize"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public static Mesh GetUnevenPlane(Vector3 offset, float singleSize, int count)
+        public static Mesh CreateUnevenPlane(Vector3 offset, float singleSize, int count)
         {
             MeshBuffer meshbuffer = new MeshBuffer();
             float half = count * 0.5f;
@@ -594,101 +581,51 @@ namespace NonsensicalKit.Utility
             return origin;
         }
 
-        public static Mesh GetCube(Vector3 size)
+
+        public static Mesh CreateCube(Vector3 size)
         {
-            return GetCube(size.x, size.y, size.z);
+            MeshBuffer meshbuffer = new MeshBuffer();
+            meshbuffer.AddCube(size);
+            return meshbuffer.ToMesh();
         }
-        public static Mesh GetCube(Vector3 offset, Vector3 size)
+
+        public static Mesh CreateCube(Vector3 offset, Vector3 size)
         {
-            return GetCube(offset.x, offset.y, offset.z, size.x, size.y, size.z);
+            MeshBuffer meshbuffer = new MeshBuffer();
+            meshbuffer.AddCube(offset, size);
+            return meshbuffer.ToMesh();
         }
-        public static Mesh GetCube(float width, float height, float depth)
+
+        public static Mesh CreateCube(float width, float height, float depth)
+        {
+            return CreateCube(new Vector3(width,height,depth)) ;
+        }
+
+        public static Mesh CreateCube(float offsetX, float offsetY, float offsetZ, float width, float height, float depth)
+        {
+            return CreateCube(new Vector3(offsetX, offsetY, offsetZ),new Vector3(width, height, depth));
+        }
+
+        public static Mesh CreateCylinder(float radius, float height, int smoothness = 32)
         {
             MeshBuffer meshbuffer = new MeshBuffer();
 
-            Vector3[] point = new Vector3[8];
-            point[0] = new Vector3(-width * 0.5f, -height * 0.5f, -depth * 0.5f);
-            point[1] = new Vector3(-width * 0.5f, height * 0.5f, -depth * 0.5f);
-            point[2] = new Vector3(width * 0.5f, height * 0.5f, -depth * 0.5f);
-            point[3] = new Vector3(width * 0.5f, -height * 0.5f, -depth * 0.5f);
-            point[4] = new Vector3(-width * 0.5f, -height * 0.5f, depth * 0.5f);
-            point[5] = new Vector3(-width * 0.5f, height * 0.5f, depth * 0.5f);
-            point[6] = new Vector3(width * 0.5f, height * 0.5f, depth * 0.5f);
-            point[7] = new Vector3(width * 0.5f, -height * 0.5f, depth * 0.5f);
-
-            //init
-            Vector2 middle = Vector2.one * 0.5f;
-
-            //front
-            meshbuffer.AddQuad(new Vector3[] { point[0], point[1], point[2], point[3] }, new Vector3(0, 0, -1), middle);
-
-            //back
-            meshbuffer.AddQuad(new Vector3[] { point[7], point[6], point[5], point[4] }, new Vector3(0, 0, 1), middle);
-
-            //left
-            meshbuffer.AddQuad(new Vector3[] { point[4], point[5], point[1], point[0] }, new Vector3(-1, 0, 0), middle);
-
-            //right
-            meshbuffer.AddQuad(new Vector3[] { point[3], point[2], point[6], point[7] }, new Vector3(1, 0, 0), middle);
-
-            //down
-            meshbuffer.AddQuad(new Vector3[] { point[0], point[3], point[7], point[4] }, new Vector3(0, -1, 0), middle);
-
-            //up
-            meshbuffer.AddQuad(new Vector3[] { point[1], point[5], point[6], point[2] }, new Vector3(0, 1, 0), middle);
-
+            meshbuffer.AddRound(Vector3.zero, radius, Vector3.up, smoothness);
+            meshbuffer.AddRing3D(Vector3.zero, radius, new Vector3(0, height, 0), radius, Vector3.up, smoothness);
+            meshbuffer.AddRound(new Vector3(0, height, 0), radius, -Vector3.up, smoothness);
 
             return meshbuffer.ToMesh();
         }
-        public static Mesh GetCube(float offsetX, float offsetY, float offsetZ, float width, float height, float depth)
-        {
-            MeshBuffer meshbuffer = new MeshBuffer();
-            Vector3 offset = new Vector3(offsetX, offsetY, offsetZ);
-            Vector3[] point = new Vector3[8];
-            point[0] = offset + new Vector3(-width * 0.5f, -height * 0.5f, -depth * 0.5f);
-            point[1] = offset + new Vector3(-width * 0.5f, height * 0.5f, -depth * 0.5f);
-            point[2] = offset + new Vector3(width * 0.5f, height * 0.5f, -depth * 0.5f);
-            point[3] = offset + new Vector3(width * 0.5f, -height * 0.5f, -depth * 0.5f);
-            point[4] = offset + new Vector3(-width * 0.5f, -height * 0.5f, depth * 0.5f);
-            point[5] = offset + new Vector3(-width * 0.5f, height * 0.5f, depth * 0.5f);
-            point[6] = offset + new Vector3(width * 0.5f, height * 0.5f, depth * 0.5f);
-            point[7] = offset + new Vector3(width * 0.5f, -height * 0.5f, depth * 0.5f);
 
-            //init
-            Vector2 middle = Vector2.one * 0.5f;
-
-            //front
-            meshbuffer.AddQuad(new Vector3[] { point[0], point[1], point[2], point[3] }, new Vector3(0, 0, -1), middle);
-
-            //back
-            meshbuffer.AddQuad(new Vector3[] { point[7], point[6], point[5], point[4] }, new Vector3(0, 0, 1), middle);
-
-            //left
-            meshbuffer.AddQuad(new Vector3[] { point[4], point[5], point[1], point[0] }, new Vector3(-1, 0, 0), middle);
-
-            //right
-            meshbuffer.AddQuad(new Vector3[] { point[3], point[2], point[6], point[7] }, new Vector3(1, 0, 0), middle);
-
-            //down
-            meshbuffer.AddQuad(new Vector3[] { point[0], point[3], point[7], point[4] }, new Vector3(0, -1, 0), middle);
-
-            //up
-            meshbuffer.AddQuad(new Vector3[] { point[1], point[5], point[6], point[2] }, new Vector3(0, 1, 0), middle);
-
-
-            return meshbuffer.ToMesh();
-        }
-        public static Mesh GetCylinder(float radius, float height)
+        public static Mesh CreateLine(Vector3 start, Vector3 end, float radius, int smoothness = 32)
         {
             MeshBuffer meshbuffer = new MeshBuffer();
 
-            meshbuffer.AddRing(Vector3.zero, 0, radius, Vector3.up, 32);
-            meshbuffer.AddRing3D(Vector3.zero, radius, new Vector3(0, height, 0), radius, Vector3.up, 32);
-            meshbuffer.AddRing(new Vector3(0, height, 0), 0, radius, -Vector3.up, 32);
+            meshbuffer.AddRound(start, radius, end - start, smoothness);
+            meshbuffer.AddRing3D(start, radius, end, radius, end - start, smoothness);
+            meshbuffer.AddRound(end, radius, start - end, smoothness);
 
             return meshbuffer.ToMesh();
         }
     }
-
 }
-

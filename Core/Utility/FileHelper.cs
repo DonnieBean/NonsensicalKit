@@ -125,10 +125,76 @@ namespace NonsensicalKit.Utility
             }
             catch (Exception e)
             {
-                Console.WriteLine("获取文件夹目录出错:" + e.Message);
+              Debug.Log("获取文件夹目录出错:" + e.Message);
             }
 
             return directoryPath;
+        }
+        public static string FileSelectorWithMultiFilter( params string[][] filter)
+        {
+            var openFileName = new Win32API.OpenFileName();
+            openFileName.structSize = Marshal.SizeOf(openFileName);
+            if (filter == null || filter.Length == 0)
+            {
+                openFileName.filter = "所有文件(*.*)\0*.*\0";
+            }
+            else
+            {
+                StringBuilder sb = new StringBuilder();
+                StringBuilder typeStr1 = new StringBuilder();
+                StringBuilder typeStr2 = new StringBuilder();
+                for (int i = 0; i < filter.Length; i++)
+                {
+                    if (filter.Length<2)
+                    {
+                        sb.Append( "所有文件(*.*)\0*.*\0");
+                    }
+
+                    sb.Append(filter[i][0]);
+                    typeStr1.Clear();
+                    typeStr2.Clear();
+
+                    typeStr1.Append("*.");
+                    typeStr1.Append(filter[i][1]);
+                    typeStr2.Append("*.");
+                    typeStr2.Append(filter[i][1]);
+
+                    for (int j = 2; j < filter[i].Length; j++)
+                    {
+                        typeStr1.Append( ",*." );
+                        typeStr1.Append( filter[i][j]);
+                        typeStr2.Append( ";*." );
+                        typeStr2.Append( filter[i][j]);
+                    }
+
+                    sb.Append("(");
+                    sb.Append(typeStr1.ToString());
+                    sb.Append(")\0");
+                    sb.Append(typeStr2.ToString());
+                    sb.Append("\0");
+                }
+                openFileName.filter = sb.ToString();
+            }
+            openFileName.fileTitle = new string(new char[64]);
+            openFileName.maxFileTitle = openFileName.fileTitle.Length;
+            openFileName.initialDir = Application.streamingAssetsPath.Replace('/', '\\');//默认路径
+            openFileName.title = "选择文件";
+            openFileName.flags = 0x00000004 | 0x00080000 | 0x00001000 | 0x00000800 | 0x00000008;
+
+            // Create buffer for file names
+            string fileNames = new String(new char[2048]);
+            openFileName.file = Marshal.StringToBSTR(fileNames);
+            openFileName.maxFile = fileNames.Length;
+
+
+            if (Win32API.Comdlg32.GetOpenFileName(openFileName))
+            {
+                return Marshal.PtrToStringAuto(openFileName.file);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static string FileSelector(string typeName, params string[] filter)
@@ -169,11 +235,7 @@ namespace NonsensicalKit.Utility
 
             if (Win32API.Comdlg32.GetOpenFileName(openFileName))
             {
-                List<string> selectedFilesList = new List<string>();
-
-                long pointer = (long)openFileName.file;
-                string file = Marshal.PtrToStringAuto(openFileName.file);
-                return file;
+                return Marshal.PtrToStringAuto(openFileName.file); 
             }
             else
             {
@@ -254,6 +316,52 @@ namespace NonsensicalKit.Utility
             if (fileFullNames.Count > 0)
             {
                 return fileFullNames;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public static string FileSaveSelector(string typeName, params string[] filter)
+        {
+
+            var openFileName = new Win32API.OpenFileName();
+            openFileName.structSize = Marshal.SizeOf(openFileName);
+            if (filter == null || filter.Length == 0)
+            {
+                openFileName.filter = "所有文件(*.*)\0*.*\0";
+            }
+            else
+            {
+                string typeStr1 = string.Empty;
+                string typeStr2 = string.Empty;
+
+                typeStr1 = "*." + filter[0];
+                typeStr2 = "*." + filter[0];
+
+                for (int i = 1; i < filter.Length; i++)
+                {
+                    typeStr1 += "," + "*." + filter[i];
+                    typeStr2 += ";" + "*." + filter[i];
+                }
+
+                openFileName.filter = $"{typeName}({typeStr1})\0{typeStr2}\0";
+            }
+            openFileName.fileTitle = new string(new char[64]);
+            openFileName.maxFileTitle = openFileName.fileTitle.Length;
+            openFileName.initialDir = Application.streamingAssetsPath.Replace('/', '\\');//默认路径
+            openFileName.title = "保存项目";
+            openFileName.defExt = "dat";
+            openFileName.flags = 0x00080000 | 0x00001000 | 0x00000800 | 0x00000200 | 0x00000008;
+
+            // Create buffer for file names
+            string fileNames = new String(new char[2048]);
+            openFileName.file = Marshal.StringToBSTR(fileNames);
+            openFileName.maxFile = fileNames.Length;
+
+            if (Win32API.Comdlg32.GetSaveFileName(openFileName))
+            {
+                return Marshal.PtrToStringAuto(openFileName.file);
             }
             else
             {
@@ -546,6 +654,7 @@ namespace NonsensicalKit.Utility
                 public int reservedInt = 0;
                 public int flagsEx = 0;
             }
+
             public class Shell32
             {
                 public delegate int BFFCALLBACK(IntPtr hwnd, uint uMsg, IntPtr lParam, IntPtr lpData);
@@ -578,6 +687,8 @@ namespace NonsensicalKit.Utility
 
             public class Comdlg32
             {
+                [DllImport("Comdlg32.dll", SetLastError = true, ThrowOnUnmappableChar = true, CharSet = CharSet.Auto)]
+                public static extern bool GetSaveFileName([In, Out] OpenFileName ofd);
                 //链接指定系统函数       打开文件对话框
                 [DllImport("Comdlg32.dll", SetLastError = true, ThrowOnUnmappableChar = true, CharSet = CharSet.Auto)]
                 public static extern bool GetOpenFileName([In, Out] OpenFileName ofn);

@@ -168,14 +168,18 @@ namespace NonsensicalKit
         {
             if (socket != null && socket.Connected)
             {
+                msg += "\0";
                 socket.Send(encoding.GetBytes(msg));
             }
         }
 
         public void About()
         {
-            socket?.Shutdown(SocketShutdown.Both);
-            socket?.Close();
+            if (socket!=null&&socket.Connected)
+            {
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();
+            }
         }
     }
 }

@@ -4,12 +4,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text;
 using UnityEngine;
 
 public class WebBridge : MonoSingleton<WebBridge>
 {
     [DllImport("__Internal")]
-    private static extern void sendMessageToJS(string key, string[] values);
+    private static extern void sendMessageToJS(string key, string values);
 
     [DllImport("__Internal")]
     private static extern void sendMessageToJsTest(string key, string values);
@@ -49,7 +50,13 @@ public class WebBridge : MonoSingleton<WebBridge>
     #region SendMethod
     public void SendMessageToJS(string key, string[] values)
     {
-        sendMessageToJS(key, values);
+        StringBuilder sb = new StringBuilder();
+        foreach (var item in values)
+        {
+            sb.Append(item);
+            sb.Append("|");
+        }
+        sendMessageToJS(key, sb.ToString()) ;
     }
     public void SendMessageToJS(string key, ArrayList values)
     {
@@ -68,10 +75,12 @@ public class WebBridge : MonoSingleton<WebBridge>
     {
         SendMessageToJS("socketIO", new string[] { "connectSocketIO" , url });
     }
+
     public void SocketIOAddListener(string eventName)
     {
         SendMessageToJS("socketIO", new string[] { "addListener", eventName });
     }
+
     public void SocketIOSendMessage(string eventName, string msg)
     {
         SendMessageToJS("socketIO", new string[] { "sendMessage", eventName,msg });
