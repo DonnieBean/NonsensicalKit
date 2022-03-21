@@ -8,7 +8,7 @@ namespace NonsensicalKit
     {
         public GameObject target;
 
-        public float scale;
+        public float scale=1;
 
         public Camera mainCamera;
 
