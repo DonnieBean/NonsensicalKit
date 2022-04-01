@@ -627,5 +627,25 @@ namespace NonsensicalKit.Utility
 
             return meshbuffer.ToMesh();
         }
+
+        /// <summary>
+        /// 考虑旋转的创建线
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="rotation">所属物体的rotation</param>
+        /// <param name="radius"></param>
+        /// <param name="smoothness"></param>
+        /// <returns></returns>
+        public static Mesh CreateLine(Vector3 start, Vector3 end,Quaternion rotation, float radius, int smoothness = 32)
+        {
+            MeshBuffer meshbuffer = new MeshBuffer();
+
+            meshbuffer.AddRound(rotation * start, radius, rotation*( end - start), smoothness);
+            meshbuffer.AddRing3D(rotation * start, radius, rotation * end, radius, rotation * (end - start), smoothness);
+            meshbuffer.AddRound(rotation * end, radius, rotation * (start - end), smoothness);
+
+            return meshbuffer.ToMesh();
+        }
     }
 }

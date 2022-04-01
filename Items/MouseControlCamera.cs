@@ -92,10 +92,6 @@ namespace NonsensicalKit
             startRot = swivel.transform.localEulerAngles;
             startZoom = stick.localPosition;
 
-
-     
-
-
             if (autoInit)
             {
                 Init();

@@ -9,15 +9,15 @@ public class SendSignalTouchButton : NonsensicalMono, IPointerDownHandler, IPoin
 {
     [SerializeField] private string signal;
 
-  private  bool isHold;
-    public  void OnPointerDown(PointerEventData eventData)
+    private bool isHold;
+    public void OnPointerDown(PointerEventData eventData)
     {
         isHold = true;
 
-        Publish(signal,true);
+        Publish(signal, true);
     }
 
-    public  void OnPointerUp(PointerEventData eventData)
+    public void OnPointerUp(PointerEventData eventData)
     {
         if (isHold)
         {
@@ -26,7 +26,7 @@ public class SendSignalTouchButton : NonsensicalMono, IPointerDownHandler, IPoin
         }
     }
 
-    public  void OnPointerExit(PointerEventData eventData)
+    public void OnPointerExit(PointerEventData eventData)
     {
         if (isHold)
         {
