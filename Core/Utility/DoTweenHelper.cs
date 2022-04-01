@@ -7,45 +7,45 @@ namespace NonsensicalKit.Utility
     /// </summary>
     public static class DoTweenHelper
     {
-        public static Tweenner DoFade(this CanvasGroup canvasGroup, float endValue, float duration)
+        public static Tweenner DoFade(this CanvasGroup canvasGroup, float endValue, float value)
         {
-            CanvasGroupTweener newTweener = new CanvasGroupTweener(canvasGroup, endValue, duration);
+            CanvasGroupTweener newTweener = new CanvasGroupTweener(canvasGroup, endValue, value);
 
             NonsensicalUnityInstance.Instance.tweenners.Add(newTweener);
 
             return newTweener;
         }
 
-        public static Tweenner DoMove(this Transform _transform, Vector3 endValue, float duration)
+        public static Tweenner DoMove(this Transform _transform, Vector3 endValue, float value)
         {
-            TransformMoveTweener newTweener = new TransformMoveTweener(_transform, endValue, duration);
+            TransformMoveTweener newTweener = new TransformMoveTweener(_transform, endValue, value);
 
             NonsensicalUnityInstance.Instance.tweenners.Add(newTweener);
 
             return newTweener;
         }
 
-        public static Tweenner DoRotate(this Transform _transform, Vector3 endValue, float duration)
+        public static Tweenner DoRotate(this Transform _transform, Vector3 endValue, float value)
         {
-            TransformRotateTweener newTweener = new TransformRotateTweener(_transform, endValue, duration);
+            TransformRotateTweener newTweener = new TransformRotateTweener(_transform, endValue, value);
 
             NonsensicalUnityInstance.Instance.tweenners.Add(newTweener);
 
             return newTweener;
         }
 
-        public static Tweenner DoQuaternionRotate(this Transform _transform, Quaternion endValue, float duration)
+        public static Tweenner DoQuaternionRotate(this Transform _transform, Quaternion endValue, float value)
         {
-            TransformQuaternionRotateTweener newTweener = new TransformQuaternionRotateTweener(_transform, endValue, duration);
+            TransformQuaternionRotateTweener newTweener = new TransformQuaternionRotateTweener(_transform, endValue, value);
 
             NonsensicalUnityInstance.Instance.tweenners.Add(newTweener);
 
             return newTweener;
         }
 
-        public static Tweenner DoLocalMove(this Transform _transform, Vector3 endValue, float duration)
+        public static Tweenner DoLocalMove(this Transform _transform, Vector3 endValue, float value)
         {
-            TransformLocalMoveTweener newTweener = new TransformLocalMoveTweener(_transform, endValue, duration);
+            TransformLocalMoveTweener newTweener = new TransformLocalMoveTweener(_transform, endValue, value);
 
             NonsensicalUnityInstance.Instance.tweenners.Add(newTweener);
 
@@ -53,56 +53,83 @@ namespace NonsensicalKit.Utility
         }
 
 
-        public static Tweenner DoLocalMoveX(this Transform _transform, float endValue, float duration)
+        public static Tweenner DoLocalMoveX(this Transform _transform, float endValue, float value)
         {
-            TransformLocalMoveXTweener newTweener = new TransformLocalMoveXTweener(_transform, endValue, duration);
+            TransformLocalMoveXTweener newTweener = new TransformLocalMoveXTweener(_transform, endValue, value);
 
             NonsensicalUnityInstance.Instance.tweenners.Add(newTweener);
 
             return newTweener;
         }
 
-        public static Tweenner DoLocalRotate(this Transform _transform, Vector3 endValue, float duration)
+        public static Tweenner DoLocalRotate(this Transform _transform, Vector3 endValue, float value)
         {
-            TransformLocalRotateTweener newTweener = new TransformLocalRotateTweener(_transform, endValue, duration);
+            TransformLocalRotateTweener newTweener = new TransformLocalRotateTweener(_transform, endValue, value);
 
             NonsensicalUnityInstance.Instance.tweenners.Add(newTweener);
 
             return newTweener;
         }
-        public static Tweenner DoLocalScale(this Transform _transform, Vector3 endValue, float duration)
+        public static Tweenner DoLocalRotate(this Transform _transform, Quaternion endValue, float value)
         {
-            TransformLocalScaleTweener newTweener = new TransformLocalScaleTweener(_transform, endValue, duration);
+            TransformQuaternionLocalRotateTweener newTweener = new TransformQuaternionLocalRotateTweener(_transform, endValue, value);
+
+            NonsensicalUnityInstance.Instance.tweenners.Add(newTweener);
+
+            return newTweener;
+        }
+        public static Tweenner DoLocalScale(this Transform _transform, Vector3 endValue, float value)
+        {
+            TransformLocalScaleTweener newTweener = new TransformLocalScaleTweener(_transform, endValue, value);
 
             NonsensicalUnityInstance.Instance.tweenners.Add(newTweener);
 
             return newTweener;
         }
 
+     
     }
 
     public abstract class Tweenner
     {
-        private readonly float duration;
+        /// <summary>
+        /// 默认是运动的总时间，依据速度运动时是速度值
+        /// </summary>
+        private readonly float value;
+        /// <summary>
+        /// 总运动量，用于以速度运动时的进度依据
+        /// </summary>
+        protected  float totalValue;
         private float delay;
 
-        protected float scheduleTime;
+        /// <summary>
+        /// 累积时间
+        /// </summary>
+        protected float accumulateTime;
 
         public bool NeedAbort;
         private bool isPause;
+        public bool speedBase;
 
         public delegate void OnCompleteHander();
         public OnCompleteHander OnCompleteEvent;
 
-        protected Tweenner(float _duration)
+        protected Tweenner(float _value)
         {
-            duration = _duration;
-            scheduleTime = 0;
+            NeedAbort = DoSpecificBySchedule(0);
+            value = _value;
+            accumulateTime = 0;
             delay = 0;
             NeedAbort = false;
             isPause = false;
         }
 
+
+        /// <summary>
+        /// 由NonsensicalUnityInstance每帧调用的方法
+        /// </summary>
+        /// <param name="_deltaTime"></param>
+        /// <returns></returns>
         public bool DoIt(float _deltaTime)
         {
             if (isPause)
@@ -110,19 +137,40 @@ namespace NonsensicalKit.Utility
                 return false;
             }
 
-            scheduleTime += _deltaTime;
-
-            float schedule = (scheduleTime - delay) / duration;
-
-            if (schedule > 1)
+            float schedule;
+            accumulateTime += _deltaTime;
+            if (speedBase)
             {
-                NeedAbort = DoSpecific(1);
+                if (value<=0|| totalValue == 0)
+                {
+                    schedule = 1;
+                }
+                else
+                {
+                    schedule = (accumulateTime - delay) * value / totalValue;
+                }
+            }
+            else
+            {
+                if (value<=0)
+                {
+                    schedule = 1;
+                }
+                else
+                {
+                    schedule = (accumulateTime - delay) / value;
+                }
+            }
+
+            if (schedule >= 1)
+            {
+                NeedAbort = DoSpecificBySchedule(1);
                 OnCompleteEvent?.Invoke();
                 return true;
             }
             else
             {
-                NeedAbort = DoSpecific(schedule);
+                NeedAbort = DoSpecificBySchedule(schedule);
                 return false;
             }
         }
@@ -142,11 +190,26 @@ namespace NonsensicalKit.Utility
             NeedAbort = true;
         }
 
-        public abstract bool DoSpecific(float _schedule);
+        /// <summary>
+        /// 某一次调用后以进度为依据执行的具体行为
+        /// </summary>
+        /// <param name="_schedule">区间为0到1的进度值</param>
+        /// <returns></returns>
+        public abstract bool DoSpecificBySchedule(float _schedule);
 
         public Tweenner SetDelay(float _time)
         {
-            delay += _time;
+            delay = _time;
+            return this;
+        }
+
+        /// <summary>
+        /// 将传入的第二个参数作为速度使用，其中位移的速度单位是m/s，旋转的速度单位是°/s
+        /// </summary>
+        /// <returns></returns>
+        public Tweenner SetSpeedBased()
+        {
+            speedBase = true;
             return this;
         }
 
@@ -164,14 +227,15 @@ namespace NonsensicalKit.Utility
         private readonly float startValue;
         private readonly float endValue;
 
-        public CanvasGroupTweener(CanvasGroup _canvasGroup, float _endValue, float _duration) : base(_duration)
+        public CanvasGroupTweener(CanvasGroup _canvasGroup, float _endValue, float _value) : base(_value)
         {
             canvasGroup = _canvasGroup;
             startValue = _canvasGroup.alpha;
             endValue = _endValue;
+            totalValue = Mathf.Abs( _endValue - startValue);
         }
 
-        public override bool DoSpecific(float schedule)
+        public override bool DoSpecificBySchedule(float schedule)
         {
             if (canvasGroup == null)
             {
@@ -188,14 +252,15 @@ namespace NonsensicalKit.Utility
         private readonly Transform transform;
         private readonly Vector3 startValue;
         private readonly Vector3 endValue;
-        public TransformRotateTweener(Transform _transform, Vector3 _endValue, float _duration) : base(_duration)
+        public TransformRotateTweener(Transform _transform, Vector3 _endValue, float _value) : base(_value)
         {
             transform = _transform;
             startValue = _transform.eulerAngles;
-            endValue = _endValue;
+            endValue = _endValue.AngleNear(startValue);
+            totalValue =Quaternion.Angle( Quaternion.Euler(startValue ), Quaternion.Euler(_endValue));
         }
 
-        public override bool DoSpecific(float schedule)
+        public override bool DoSpecificBySchedule(float schedule)
         {
             if (transform == null)
             {
@@ -212,14 +277,15 @@ namespace NonsensicalKit.Utility
         private readonly Transform transform;
         private readonly Quaternion startValue;
         private readonly Quaternion endValue;
-        public TransformQuaternionRotateTweener(Transform _transform, Quaternion _endValue, float _duration) : base(_duration)
+        public TransformQuaternionRotateTweener(Transform _transform, Quaternion _endValue, float _value) : base(_value)
         {
             transform = _transform;
             startValue = _transform.rotation;
             endValue = _endValue;
+            totalValue = Quaternion.Angle(startValue, _endValue);
         }
 
-        public override bool DoSpecific(float schedule)
+        public override bool DoSpecificBySchedule(float schedule)
         {
             if (transform == null)
             {
@@ -231,19 +297,45 @@ namespace NonsensicalKit.Utility
         }
     }
 
+    public class TransformQuaternionLocalRotateTweener : Tweenner
+    {
+        private readonly Transform transform;
+        private readonly Quaternion startValue;
+        private readonly Quaternion endValue;
+        public TransformQuaternionLocalRotateTweener(Transform _transform, Quaternion _endValue, float _value) : base(_value)
+        {
+            transform = _transform;
+            startValue = _transform.localRotation;
+            endValue = _endValue;
+            totalValue = Quaternion.Angle(startValue, _endValue);
+        }
+
+        public override bool DoSpecificBySchedule(float schedule)
+        {
+            if (transform == null)
+            {
+                return true;
+            }
+            transform.localRotation = Quaternion.Lerp(startValue, endValue, schedule);
+
+            return false;
+        }
+    }
+
     public class TransformMoveTweener : Tweenner
     {
         private readonly Transform transform;
         private readonly Vector3 startValue;
         private readonly Vector3 endValue;
-        public TransformMoveTweener(Transform _transform, Vector3 _endValue, float _duration) : base(_duration)
+        public TransformMoveTweener(Transform _transform, Vector3 _endValue, float _value) : base(_value)
         {
             transform = _transform;
             startValue = _transform.position;
             endValue = _endValue;
+            totalValue = Vector3.Distance(startValue, _endValue);
         }
 
-        public override bool DoSpecific(float schedule)
+        public override bool DoSpecificBySchedule(float schedule)
         {
             if (transform == null)
             {
@@ -260,14 +352,15 @@ namespace NonsensicalKit.Utility
         private readonly Transform transform;
         private readonly Vector3 startValue;
         private readonly Vector3 endValue;
-        public TransformLocalMoveTweener(Transform _transform, Vector3 _endValue, float _duration) : base(_duration)
+        public TransformLocalMoveTweener(Transform _transform, Vector3 _endValue, float _value) : base(_value)
         {
             transform = _transform;
             startValue = _transform.localPosition;
             endValue = _endValue;
+            totalValue = Vector3.Distance(startValue, _endValue);
         }
 
-        public override bool DoSpecific(float schedule)
+        public override bool DoSpecificBySchedule(float schedule)
         {
             if (transform == null)
             {
@@ -284,14 +377,15 @@ namespace NonsensicalKit.Utility
         private readonly Transform transform;
         private readonly Vector3 startValue;
         private readonly Vector3 endValue;
-        public TransformLocalRotateTweener(Transform _transform, Vector3 _endValue, float _duration) : base(_duration)
+        public TransformLocalRotateTweener(Transform _transform, Vector3 _endValue, float _value) : base(_value)
         {
             transform = _transform;
             startValue = _transform.localEulerAngles;
-            endValue = _endValue;
+            endValue = _endValue.AngleNear(startValue);
+            totalValue = Quaternion.Angle(Quaternion.Euler(startValue), Quaternion.Euler(_endValue));
         }
 
-        public override bool DoSpecific(float schedule)
+        public override bool DoSpecificBySchedule(float schedule)
         {
             if (transform == null)
             {
@@ -306,14 +400,15 @@ namespace NonsensicalKit.Utility
         private readonly Transform transform;
         private readonly Vector3 startValue;
         private readonly Vector3 endValue;
-        public TransformLocalScaleTweener(Transform _transform, Vector3 _endValue, float _duration) : base(_duration)
+        public TransformLocalScaleTweener(Transform _transform, Vector3 _endValue, float _value) : base(_value)
         {
             transform = _transform;
             startValue = _transform.localScale;
             endValue = _endValue;
+            totalValue = Vector3.Distance(startValue, _endValue);
         }
 
-        public override bool DoSpecific(float schedule)
+        public override bool DoSpecificBySchedule(float schedule)
         {
             if (transform == null)
             {
@@ -329,14 +424,15 @@ namespace NonsensicalKit.Utility
         private readonly Transform transform;
         private readonly float startValue;
         private readonly float endValue;
-        public TransformLocalMoveXTweener(Transform _transform, float _endValue, float _duration) : base(_duration)
+        public TransformLocalMoveXTweener(Transform _transform, float _endValue, float _value) : base(_value)
         {
             transform = _transform;
             startValue = _transform.localPosition.x;
             endValue = _endValue;
+            totalValue =Mathf.Abs( _endValue-startValue);
         }
 
-        public override bool DoSpecific(float schedule)
+        public override bool DoSpecificBySchedule(float schedule)
         {
             if (transform == null)
             {

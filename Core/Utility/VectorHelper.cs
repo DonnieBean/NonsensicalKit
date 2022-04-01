@@ -8,6 +8,158 @@ namespace NonsensicalKit.Utility
     /// </summary>
     public static class VectorHelper
     {
+        public static Vector3 Standardization(this Vector3 _value)
+        {
+            while (_value.x < 0)
+            {
+                _value.x += 360;
+            }
+            while (_value.y < 0)
+            {
+                _value.y += 360;
+            }
+            while (_value.z < 0)
+            {
+                _value.z += 360;
+            }
+            while (_value.x >= 360)
+            {
+                _value.x -= 360;
+            }
+            while (_value.y >= 360)
+            {
+                _value.y -= 360;
+            }
+            while (_value.y >= 360)
+            {
+                _value.y -= 360;
+            }
+            return _value;
+        }
+        public static Vector3 AngleNear(this Vector3 _value, Vector3 targetValue)
+        {
+            while (true)
+            {
+                if (_value.x == targetValue.x)
+                {
+                    break;
+                }
+                else if (_value.x > targetValue.x)
+                {
+                    if (_value.x - 360 > targetValue.x)
+                    {
+                        _value.x -= 360;
+                    }
+                    else if (Mathf.Abs(_value.x - targetValue.x) < Mathf.Abs(_value.x - 360 - targetValue.x))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        _value.x -= 360;
+                        break;
+                    }
+                }
+                else
+                {
+                    if (_value.x + 360 < targetValue.x)
+                    {
+                        _value.x += 360;
+                    }
+                    else if (Mathf.Abs(_value.x - targetValue.x) < Mathf.Abs(_value.x + 360 - targetValue.x))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        _value.x += 360;
+                        break;
+                    }
+                }
+            }
+            
+            while (true)
+            {
+                if (_value.y == targetValue.y)
+                {
+                    break;
+                }
+                else if (_value.y > targetValue.y)
+                {
+                    if (_value.y - 360 > targetValue.y)
+                    {
+                        _value.y -= 360;
+                    }
+                    else if (Mathf.Abs(_value.y - targetValue.y) < Mathf.Abs(_value.y - 360 - targetValue.y))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        _value.y -= 360;
+                        break;
+                    }
+                }
+                else
+                {
+                    if (_value.y + 360 < targetValue.y)
+                    {
+                        _value.y += 360;
+                    }
+                    else if (Mathf.Abs(_value.y - targetValue.y) < Mathf.Abs(_value.y + 360 - targetValue.y))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        _value.y += 360;
+                        break;
+                    }
+                }
+            } 
+            
+            while (true)
+            {
+                if (_value.z == targetValue.z)
+                {
+                    break;
+                }
+                else if (_value.z > targetValue.z)
+                {
+                    if (_value.z - 360 > targetValue.z)
+                    {
+                        _value.z -= 360;
+                    }
+                    else if (Mathf.Abs(_value.z - targetValue.z) < Mathf.Abs(_value.z - 360 - targetValue.z))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        _value.z -= 360;
+                        break;
+                    }
+                }
+                else
+                {
+                    if (_value.z + 360 < targetValue.z)
+                    {
+                        _value.z += 360;
+                    }
+                    else if (Mathf.Abs(_value.z - targetValue.z) < Mathf.Abs(_value.z + 360 - targetValue.z))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        _value.z += 360;
+                        break;
+                    }
+                }
+            }
+            return _value;
+        }
+
         public static Vector3 Division(this Vector3 detailed, Vector3 divisor)
         {
             return new Vector3(detailed.x / divisor.x, detailed.y / divisor.y, detailed.z / divisor.z);
@@ -315,7 +467,7 @@ namespace NonsensicalKit.Utility
         /// <param name="dir1"></param>
         /// <param name="dir2"></param>
         /// <returns></returns>
-        public static bool IsParallel(Vector3 dir1,Vector3 dir2)
+        public static bool IsParallel(Vector3 dir1, Vector3 dir2)
         {
             return Vector3.Cross(dir1, dir2) == Vector3.zero;
         }
@@ -337,7 +489,7 @@ namespace NonsensicalKit.Utility
         /// <returns></returns>
         public static float GetSkewLinesDistance(Vector3 dir1, Vector3 dir2, Vector3 point1, Vector3 point2)
         {
-            if(IsParallel(dir1, dir2))
+            if (IsParallel(dir1, dir2))
             {
                 return GetFootDropDistance(point1, point2, point2 + dir2);
             }

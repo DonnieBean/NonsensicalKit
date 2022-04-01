@@ -27,6 +27,7 @@ namespace NonsensicalKit
                 //Debug.Log("收到消息"); 
                 datas.Enqueue(msg); };
         }
+
         private void Update()
         {
             while (datas.Count > 0)

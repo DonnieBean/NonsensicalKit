@@ -29,7 +29,9 @@ public class UGUIAutoAnchor : EditorWindow
         foreach (var item in rts)
         {
             
-            if (item.GetComponent<ContentSizeFitter>()!=null|| item.parent==null||item.parent.GetComponent<LayoutGroup>()!=null)
+            if (UnityEditor.PrefabUtility.IsPartOfPrefabInstance(item)      //跳过预制体对象
+                || item.GetComponent<ContentSizeFitter>()!=null             //跳过自适应尺寸对象
+                || item.parent==null||item.parent.GetComponent<LayoutGroup>()!=null)    //跳过被LayoutGroup管理的对象
             {
                 continue;
             }
