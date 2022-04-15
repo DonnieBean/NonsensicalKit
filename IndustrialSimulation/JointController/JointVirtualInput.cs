@@ -14,10 +14,11 @@ namespace NonsensicalKit.Joint
 
         private void Awake()
         {
-#if !UNITY_EDITOR
-        Destroy(gameObject);
-        return;
-#endif
+            if (!PlatformInfo.Instance.isEditor)
+            {
+                Destroy(gameObject);
+                return;
+            }
             if (target)
             {
                 int num = target.joints.Length;

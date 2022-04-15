@@ -18,20 +18,27 @@ namespace NonsensicalKit
 
         // Grip - the extent to which the pincher is closed. 0: fully open, 1: fully closed.
         private float grip;
+        private float startGrip;
 
         private void Start()
         {
             float gripChange = (float)jointState * gripSpeed * Time.fixedDeltaTime;
             float gripGoal = CurrentGrip() + gripChange;
             grip = Mathf.Clamp01(gripGoal);
-
+            startGrip = grip;
             OnOpen?.Invoke(grip == 0);
             OnClose?.Invoke(grip == 1);
         }
 
-        void FixedUpdate()
+        private void FixedUpdate()
         {
             UpdateGrip();
+            UpdateFingersForGrip();
+        }
+
+        public void ResetPincher()
+        {
+            grip = startGrip;
             UpdateFingersForGrip();
         }
 
