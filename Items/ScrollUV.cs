@@ -1,6 +1,9 @@
 using UnityEngine;
 namespace NonsensicalKit
 {
+    /// <summary>
+    /// ×Ô¶¯¹ö¶¯ÌùÍ¼
+    /// </summary>
     public class ScrollUV : NonsensicalMono
     {
         public enum Direction
@@ -8,18 +11,18 @@ namespace NonsensicalKit
             Vertical, Horizontal
         }
 
-        public float speed;
-        public Direction direction;
-        public Material material;
-        private Vector2 offset;
-
+    public float speed;
+        [SerializeField] private Direction direction;
+        [SerializeField] private Material material;
         [SerializeField] private string stateSignal;
-        private bool state=true;
+
+        private Vector2 offset;
+        private bool state = true;
 
         protected override void Awake()
         {
             base.Awake();
-            Subscribe<bool>(stateSignal, (b)=> { state = b; });
+            Subscribe<bool>(stateSignal, (b) => { state = b; });
         }
 
         private void Update()

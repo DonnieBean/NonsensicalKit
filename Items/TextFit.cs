@@ -40,7 +40,7 @@ namespace NonsensicalKit
             _component.text = _text;
 
             //如果直接执行下边方法的话，那么_component.cachedTextGenerator.lines将会获取的是之前text中的内容，而不是_text的内容，所以需要等待一下
-            yield return new WaitForSeconds(0.001f);
+            yield return null;
 
             MExpalinTextLine = _component.cachedTextGenerator.lines;
 

@@ -4,14 +4,16 @@ using UnityEngine;
 
 namespace NonsensicalKit
 {
+    /// <summary>
+    /// 在非编辑器环境下自动销毁
+    /// </summary>
     public class JustEditor : MonoBehaviour
     {
         private void Awake()
         {
-            if (Application.platform != RuntimePlatform.OSXEditor
-                && Application.platform != RuntimePlatform.WindowsEditor
-                && Application.platform != RuntimePlatform.LinuxEditor)
+            if (PlatformInfo.Instance.isEditor)
             {
+                gameObject.SetActive(false);
                 Destroy(gameObject);
             }
         }
