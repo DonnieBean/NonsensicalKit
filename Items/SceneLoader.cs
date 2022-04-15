@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// 场景加载管理类
+/// </summary>
 public class SceneLoader : NonsensicalMono
 {
 

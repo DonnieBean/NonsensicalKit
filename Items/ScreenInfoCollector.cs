@@ -2,8 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 namespace NonsensicalKit
 {
+    /// <summary>
+    /// 屏幕信息收集
+    /// </summary>
     public class ScreenInfoCollector : MonoBehaviour
     {
         [SerializeField] private CanvasScaler cs;

@@ -7,6 +7,9 @@ using UnityEditor;
 #endif
 namespace NonsensicalKit
 {
+    /// <summary>
+    /// 获取包含子物体在内的包围盒
+    /// </summary>
     public class RenderBox : MonoBehaviour
     {
 
@@ -19,7 +22,6 @@ namespace NonsensicalKit
 
         public void CalculateBox()
         {
-
             Quaternion qn = transform.rotation;
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
 

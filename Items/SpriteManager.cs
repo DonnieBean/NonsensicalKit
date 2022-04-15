@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace NonsensicalKit
 {
+    /// <summary>
+    /// 精灵管理类
+    /// </summary>
     public class SpriteManager : MonoSingleton<SpriteManager>
     {
         private Dictionary<string, SpriteInfo> crtSprites=new Dictionary<string, SpriteInfo>();

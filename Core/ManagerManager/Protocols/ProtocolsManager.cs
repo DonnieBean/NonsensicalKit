@@ -12,6 +12,8 @@ namespace NonsensicalKit.Manager
 {
     /// <summary>
     /// 通过类的名字为键，使用接口快速对接数据源
+    /// 适用与对每个通信都建立一个类的情况
+    /// 当一个类会重复使用于多个通信时无法使用
     /// </summary>
     public class ProtocolsManager : NonsensicalManagerBase<ProtocolsManager>
     {

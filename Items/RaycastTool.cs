@@ -5,6 +5,7 @@ namespace NonsensicalKit
 {
     /// <summary>
     /// 保证同样的射线检测在同一帧只执行一次
+    /// 在需要大量射线检测时节省性能
     /// </summary>
     public class RaycastTool : MonoBehaviour
     {

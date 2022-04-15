@@ -1,6 +1,9 @@
 using UnityEngine;
 namespace NonsensicalKit
 {
+    /// <summary>
+    /// ×Ô¶¯¹ö¶¯ÌùÍ¼
+    /// </summary>
     public class ScrollUV : NonsensicalMono
     {
         public enum Direction

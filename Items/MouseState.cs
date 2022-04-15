@@ -3,7 +3,7 @@ using UnityEngine;
 namespace NonsensicalKit
 {
     /// <summary>
-    /// 鼠标当前状态，防止交互冲突
+    /// 自动更新鼠标当前状态，防止交互冲突
     /// </summary>
     public class MouseState : MonoBehaviour
     {

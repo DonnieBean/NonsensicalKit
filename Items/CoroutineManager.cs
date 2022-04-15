@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace NonsensicalKit
 {
+    /// <summary>
+    /// 以Transform为键管理协程
+    /// </summary>
     public class CoroutineManager
     {
         private Dictionary<Transform, CoroutineInfo> coroutines = new Dictionary<Transform, CoroutineInfo>();
