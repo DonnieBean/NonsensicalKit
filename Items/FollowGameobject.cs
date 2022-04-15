@@ -31,6 +31,7 @@ namespace NonsensicalKit
 
         private Vector3 lastTargetPostion;
         private Vector3 lastCameraPostion;
+        private Quaternion lastCameraRotation;
 
         private void Awake()
         {
@@ -47,13 +48,15 @@ namespace NonsensicalKit
         Vector3 pos;
         Vector3 targetPosition;
         Vector3 cameraPosition;
+        Quaternion cameraRotation;
         private void Update()
         {
             if ( target != null)
             {
                 targetPosition = target.transform.position;
                 cameraPosition = mainCamera.transform.position;
-                if (targetPosition!=lastTargetPostion||cameraPosition!=lastCameraPostion)
+                cameraRotation = mainCamera.transform.rotation;
+                if (targetPosition!=lastTargetPostion||cameraPosition!=lastCameraPostion|| cameraRotation != lastCameraRotation)
                 {
                     if (scaleByDistance && normalDistance != 0)
                     {
@@ -79,6 +82,7 @@ namespace NonsensicalKit
                     }
                     lastTargetPostion = targetPosition;
                     lastCameraPostion = cameraPosition;
+                    lastCameraRotation = cameraRotation;
                 }
             }
         }

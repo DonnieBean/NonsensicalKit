@@ -50,7 +50,8 @@ namespace NonsensicalKit.Manager
             {
                 Init(index, actions[index]);
             }
-            else if (coroutines.ContainsKey(index))
+            
+            if (coroutines.ContainsKey(index))
             {
                 StartCoroutine(Init(index, coroutines[index]));
             }

@@ -105,9 +105,10 @@ namespace NonsensicalKit.Manager
                         {
                             break;
                         }
-                        if (index > maxBatch)
+                        if (index >= maxBatch)
                         {
                             LogManager.Instance.LogFatal("管理类批次出现错误");
+                            return;
                         }
                     }
                     Publish((int)NonsensicalManagerEnum.InitStart, index );
