@@ -59,10 +59,6 @@ namespace NonsensicalKit.Editor
                 Data.useStates[i] = EditorGUILayout.Toggle(Data.Labels[i], Data.useStates[i]);
                 PlayerPrefs.SetInt(Data.PlayerPrefsStr[i], Data.useStates[i] ? 1 : 0);
             }
-            if (GUILayout.Button("修改配置", GUILayout.Height(30f)))
-            {
-
-            }
 
             if (GUILayout.Button("修改csc.rsp文件", GUILayout.Height(30f)))
             {

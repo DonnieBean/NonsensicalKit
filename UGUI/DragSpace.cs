@@ -28,7 +28,7 @@ namespace NonsensicalKit
         {
             rt_Self = GetComponent<RectTransform>();
 
-            if (canvasScaler!=null)
+            if (canvasScaler != null)
             {
                 mode = canvasScaler.uiScaleMode;
                 resolution = canvasScaler.referenceResolution;
@@ -63,7 +63,7 @@ namespace NonsensicalKit
         /// <returns></returns>
         private bool JudgmentUiInScreen(RectTransform rect, out Vector3 targetPos)
         {
-            if (mode==CanvasScaler.ScaleMode.ConstantPixelSize)
+            if (mode == CanvasScaler.ScaleMode.ConstantPixelSize)
             {
                 int screenWidth = Screen.width;
                 int screenHeight = Screen.height;
@@ -73,7 +73,7 @@ namespace NonsensicalKit
                 float moveX = 0;
                 float moveY = 0;
                 float realW = rect.sizeDelta.x;
-                float realH = rect.sizeDelta.y ;
+                float realH = rect.sizeDelta.y;
 
                 Vector3 worldPos = rect.transform.position;
                 float leftX = worldPos.x - realW / 2;
@@ -107,12 +107,12 @@ namespace NonsensicalKit
                 }
                 return isInView;
             }
-            else if(mode == CanvasScaler.ScaleMode.ScaleWithScreenSize)
+            else if (mode == CanvasScaler.ScaleMode.ScaleWithScreenSize)
             {
                 //ƒ¨»œ π”√MatchWidthOrHeight
                 int screenWidth = Screen.width;
                 int screenHeight = Screen.height;
-                float power = resolution.x / screenWidth * match+ resolution.y/ screenHeight * (1- match);
+                float power = resolution.x / screenWidth * match + resolution.y / screenHeight * (1 - match);
 
                 targetPos = Vector3.zero;
                 bool isInView = false;

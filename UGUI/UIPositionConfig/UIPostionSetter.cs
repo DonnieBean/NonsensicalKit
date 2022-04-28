@@ -38,9 +38,9 @@ public class UIPostionSetter : NonsensicalMono
     {
         if (AppConfigManager.Instance.TryGetConfig<UIPositionData>(out var v))
         {
-            for (int i = 0; i < v.ids.Length; i++)
+            for (int i = 0; i < v.buttonsParameter.Length; i++)
             {
-                if (configID == v.ids[i])
+                if (configID == v.buttonsParameter[i].id)
                 {
                     ChangePos(v.buttonsParameter[i]);
                     break;

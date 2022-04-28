@@ -56,7 +56,6 @@ namespace NonsensicalKit
             }
         }
 
-
         private void OnRun()
         {
             onBeginHandler?.Invoke();

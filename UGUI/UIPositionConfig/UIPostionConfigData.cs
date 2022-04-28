@@ -25,7 +25,6 @@ public class UIPostionConfigData : NonsensicalConfigDataBase
 [System.Serializable]
 public class UIPositionData:ConfigDataBase
 {
-    public string[] ids;
     public ButtonsParameter[] buttonsParameter;
 }
 
@@ -47,6 +46,7 @@ public enum VerticalType
 [System.Serializable]
 public class ButtonsParameter
 {
+    public string id = string.Empty;
     public HorizonType horizonType = 0;
     public VerticalType verticalType=0;
     public float distanceHorizon = 100;
