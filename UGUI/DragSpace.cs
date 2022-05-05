@@ -23,7 +23,6 @@ namespace NonsensicalKit
         //鼠标按下时与拖拽对象的偏差值
         private Vector3 offset;
 
-
         private void Awake()
         {
             rt_Self = GetComponent<RectTransform>();

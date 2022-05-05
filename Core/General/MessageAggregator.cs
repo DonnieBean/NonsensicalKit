@@ -2,6 +2,10 @@
 
 namespace NonsensicalKit
 {
+    /* 经简单测试，循环十万次调用单一方法时，publish的时间消耗是直接引用调用的20倍，但平均每次调用时间仍在接受范围内
+     * 消息聚合器应当只用于模块之间的通信，且当通信过于频繁时不应使用，模块内部使用应直接引用的方式进行值的传递
+     */
+
     public delegate void MessageHandler<T1, T2, T3>(T1 arg1, T2 arg2, T3 arg3);
     public delegate void MessageHandler<T1, T2>(T1 arg1, T2 arg2);
     public delegate void MessageHandler<T>(T arg);
@@ -56,7 +60,7 @@ namespace NonsensicalKit
 
         public void Publish(int name, T1 arg1, T2 arg2, T3 arg3)
         {
-            if (_messages.ContainsKey(name) && _messages[name] != null)
+            if (_messages.ContainsKey(name))
             {
                 _messages[name](arg1, arg2, arg3);
             }
@@ -97,7 +101,7 @@ namespace NonsensicalKit
 
         public void Publish(string name, T1 arg1, T2 arg2, T3 arg3)
         {
-            if (_strMessages.ContainsKey(name) && _strMessages[name] != null)
+            if (_strMessages.ContainsKey(name))
             {
                 _strMessages[name](arg1, arg2, arg3);
             }
@@ -153,7 +157,7 @@ namespace NonsensicalKit
 
         public void Publish(int name, T1 arg1, T2 arg2)
         {
-            if (_messages.ContainsKey(name) && _messages[name] != null)
+            if (_messages.ContainsKey(name))
             {
                 _messages[name](arg1, arg2);
             }
@@ -194,7 +198,7 @@ namespace NonsensicalKit
 
         public void Publish(string name, T1 arg1, T2 arg2)
         {
-            if (_strMessages.ContainsKey(name) && _strMessages[name] != null)
+            if (_strMessages.ContainsKey(name) )
             {
                 _strMessages[name](arg1, arg2);
             }
@@ -248,7 +252,7 @@ namespace NonsensicalKit
 
         public void Publish(int name, T args)
         {
-            if (_messages.ContainsKey(name) && _messages[name] != null)
+            if (_messages.ContainsKey(name))
             {
                 _messages[name](args);
             }
@@ -290,7 +294,7 @@ namespace NonsensicalKit
 
         public void Publish(string name, T args)
         {
-            if (_strMessages.ContainsKey(name) && _strMessages[name] != null)
+            if (_strMessages.ContainsKey(name))
             {
                 _strMessages[name](args); 
             }
@@ -345,7 +349,7 @@ namespace NonsensicalKit
 
         public void Publish(int name)
         {
-            if (_messages.ContainsKey(name) && _messages[name] != null)
+            if (_messages.ContainsKey(name))
             {
                 _messages[name]();
             }
@@ -387,7 +391,7 @@ namespace NonsensicalKit
 
         public void Publish(string name)
         {
-            if (_strMessages.ContainsKey(name) && _strMessages[name] != null)
+            if (_strMessages.ContainsKey(name) )
             {
                 _strMessages[name]();
             }
