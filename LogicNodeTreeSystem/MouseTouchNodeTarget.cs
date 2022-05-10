@@ -1,6 +1,4 @@
-#if USE_HIGHLIGHTINGSYSTEM
 using HighlightingSystem;
-#endif
 using NonsensicalKit;
 using NonsensicalKit.Manager;
 using System;
@@ -12,16 +10,12 @@ using UnityEngine.Serialization;
 /// <summary>
 /// 鼠标交互对象控制,当处于父节点时才能进行交互
 /// </summary>
-#if USE_HIGHLIGHTINGSYSTEM
 [RequireComponent(typeof(Highlighter))]
-#endif
 public class MouseTouchNodeTarget : NonsensicalMono
 {
     [SerializeField] protected int searchDeep = 1;        //第几级父节点之内被选中时才能交互
     [SerializeField] protected string nodeName;         //点击后跳转的节点名
-#if USE_HIGHLIGHTINGSYSTEM
     private Highlighter lighter;
-#endif
 
 
     private Collider[] colliders;
@@ -39,9 +33,7 @@ public class MouseTouchNodeTarget : NonsensicalMono
         esic = EventSystemInfoCenter.Instance;
         colliders = GetComponents<Collider>();
         logicNode = LogicNodeManager.Instance.GetNode(nodeName);
-#if USE_HIGHLIGHTINGSYSTEM
         lighter = GetComponent<Highlighter>();
-#endif
         Subscribe<LogicNode>((int)LogicNodeEnum.SwitchNode, OnSwitchNode);
     }
 
@@ -85,9 +77,7 @@ public class MouseTouchNodeTarget : NonsensicalMono
         }
         if (!isRunning)
         {
-#if USE_HIGHLIGHTINGSYSTEM
             lighter.ConstantOff();
-#endif
         }
     }
 
@@ -95,17 +85,13 @@ public class MouseTouchNodeTarget : NonsensicalMono
     {
         if (isRunning)
         {
-#if USE_HIGHLIGHTINGSYSTEM
             lighter.ConstantOn(Color.cyan);
-#endif
         }
     }
 
     private void OnMouseExit()
     {
-#if USE_HIGHLIGHTINGSYSTEM
         lighter.ConstantOff();
-#endif
     }
 
     private void OnMouseUpAsButton()

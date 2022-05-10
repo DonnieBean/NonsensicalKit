@@ -1,7 +1,6 @@
-﻿#if USE_NEWTONSOFTJSON
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-#endif
+
 
 using System.IO;
 using System.Linq;
@@ -13,15 +12,9 @@ namespace NonsensicalKit.Utility
     public static class JsonHelper
     {
         
-#if USE_NEWTONSOFTJSON
         public static MethodInfo deserializeMethod = typeof(JsonConvert).GetMethods().FirstOrDefault(
                         p => p.IsStatic == true && p.IsPublic == true && p.Name == "DeserializeObject" && p.ContainsGenericParameters == true);
-#else
-        public static MethodInfo deserializeMethod = typeof(JsonUtility).GetMethods().FirstOrDefault(
-                        p => p.IsStatic == true && p.IsPublic == true && p.Name == "FromJson" && p.ContainsGenericParameters == true);
-#endif
 
-#if USE_NEWTONSOFTJSON
         /// <summary>
         /// 动态生成json(使用递归)
         /// 输入：JsonData jd=test(new string[]{"1","2","3"},10086);
@@ -81,8 +74,6 @@ namespace NonsensicalKit.Utility
 
             return jd;
         }
-#endif
-
 
         /// <summary>
         /// 保存文件
@@ -122,20 +113,12 @@ namespace NonsensicalKit.Utility
         }
         public static string SerializeObject(object obj)
         {
-#if USE_NEWTONSOFTJSON
             return JsonConvert.SerializeObject(obj);
-#else
-            return JsonUtility.ToJson(obj);
-#endif
         }
         public static T DeserializeObject<T>(string str)
         {
-#if USE_NEWTONSOFTJSON
             str = str.TrimBOM();
             return JsonConvert.DeserializeObject<T>(str);
-#else
-            return JsonUtility.FromJson<T>(str);
-#endif
         }
     }
 }

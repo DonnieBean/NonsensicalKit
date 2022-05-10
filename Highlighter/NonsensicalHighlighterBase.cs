@@ -1,11 +1,8 @@
-#if USE_HIGHLIGHTINGSYSTEM
 using HighlightingSystem;
-#endif
 using UnityEngine;
 
 namespace NonsensicalKit.Highlight
 {
-#if USE_HIGHLIGHTINGSYSTEM
     [RequireComponent(typeof(Highlighter))]
     public abstract class NonsensicalHighlighterBase : NonsensicalMono
     {
@@ -63,6 +60,4 @@ namespace NonsensicalKit.Highlight
             }
         }
     }
-#endif
-
 }

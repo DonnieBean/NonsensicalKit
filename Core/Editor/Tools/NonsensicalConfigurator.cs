@@ -10,11 +10,11 @@ namespace NonsensicalKit.Editor
     public class NonsensicalConfigurator : EditorWindow
     {
 
-        [MenuItem("Tools/NonsensicalKit/配置管理")]
-        public static void ShowWindow()
-        {
-            EditorWindow.GetWindow(typeof(NonsensicalConfigurator));
-        }
+        //[MenuItem("Tools/NonsensicalKit/配置管理")]
+        //public static void ShowWindow()
+        //{
+        //    EditorWindow.GetWindow(typeof(NonsensicalConfigurator));
+        //}
 
         private static class Data
         {
