@@ -25,7 +25,7 @@ public class InterceptMouse : MonoBehaviour
 
     private static IntPtr SetHook(LowLevelMouseProc proc)
     {
-        using (Process curProcess = Process.GetCurrentProcess())
+        using (System.Diagnostics.Process curProcess = System.Diagnostics.Process.GetCurrentProcess())
         using (ProcessModule curModule = curProcess.MainModule)
         {
             return SetWindowsHookEx(WH_MOUSE_LL, proc, GetModuleHandle(curModule.ModuleName), 0);
