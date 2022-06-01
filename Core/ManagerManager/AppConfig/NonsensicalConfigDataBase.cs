@@ -9,7 +9,9 @@ namespace NonsensicalKit.Manager
     public abstract class NonsensicalConfigDataBase : ScriptableObject
     {
         public abstract ConfigDataBase GetData();
+
         public abstract void SetData(ConfigDataBase cd);
+
         public virtual void OnSetDataEnd()
         {
 
@@ -21,7 +23,7 @@ namespace NonsensicalKit.Manager
         }
     }
 
-    [Serializable]
+    [System.Serializable]
     public abstract class ConfigDataBase
     {
         public string ConfigID = "ID" + Guid.NewGuid().ToString().Substring(0, 4);

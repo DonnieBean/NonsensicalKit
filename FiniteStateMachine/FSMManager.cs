@@ -14,21 +14,31 @@ namespace NonsensicalKit.FiniteStateMachine
         /// <summary>
         /// ËùÓÐ×´Ì¬
         /// </summary>
-       private Dictionary<string, IState<T>> states = new Dictionary<string, IState<T>>();
+        private Dictionary<string, State<T>> states = new Dictionary<string, State<T>>();
 
         /// <summary>
         /// µ±Ç°×´Ì¬
         /// </summary>
-        private IState<T> crtState;
+        private State<T> crtState;
+
+        public string State { get; private set; }
+
+        private T t;
+
+        public void Init(T t)
+        {
+            this.t = t;
+        }
 
         /// <summary>
         /// ×¢²á×´Ì¬
         /// </summary>
-        protected void Register(string stateName, IState<T>i)
+        protected void Register(string stateName, State<T>i,float autoRunTime=-1)
         {
             if (states.ContainsKey(stateName)==false)
             {
                 states.Add(stateName, i);
+                i.Init(this,t, autoRunTime);
             }
         }
 
@@ -36,13 +46,13 @@ namespace NonsensicalKit.FiniteStateMachine
         /// ¸Ä±ä×´Ì¬
         /// </summary>
         /// <param name="targetState"></param>
-        protected void ChangeState(string targetState)
+        public void ChangeState(string targetState)
         {
             if (states.ContainsKey(targetState) == false)
             {
                 return;
             }
-
+            State = targetState;
             if (crtState!=null)
             {
                 crtState.OnExit();
