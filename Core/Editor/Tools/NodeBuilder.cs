@@ -11,6 +11,10 @@ using NonsensicalKit.Utility;
 
 namespace NonsensicalKit.Editor
 {
+    /// <summary>
+    /// 可视化配置自动生成和更新脚本
+    /// 但是没什么用。。
+    /// </summary>
     public class NodeBuilder : EditorWindow
     {
         public static readonly string ClassTemplate =

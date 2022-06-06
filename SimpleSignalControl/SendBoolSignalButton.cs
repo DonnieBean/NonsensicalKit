@@ -15,10 +15,6 @@ namespace NonsensicalKit
         private Button btn_Self;
         private bool crtState;
 
-        private void OnEnable()
-        {
-            crtState = false;
-        }
 
         protected override void Awake()
         {

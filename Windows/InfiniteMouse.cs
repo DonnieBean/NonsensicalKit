@@ -7,6 +7,10 @@ using UnityEngine.Serialization;
 
 namespace NonsensicalKit.WindowsTool
 {
+    /// <summary>
+    /// 在windows平台中，使鼠标移动到边缘后继续移动能将鼠标指针传送到另一侧
+    /// 使用时需要注意不能直接使用鼠标在屏幕中的位置来判断位移，需要额外判断传送次数
+    /// </summary>
     public class InfiniteMouse : MonoBehaviour
     {
         [Serializable]

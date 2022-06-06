@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 
 /// <summary>
+/// 查看内置GUI，方便设置编辑器工具格式
 /// https://blog.csdn.net/u011428080/article/details/106676213
 /// </summary>
 public class GUIStyleViewer : EditorWindow

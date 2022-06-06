@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 namespace NonsensicalKit
 {
     /// <summary>
+    /// 完全鼠标控制摄像机，用于键盘不方便操控的场景，如网页
+    /// 有一个虚拟的视点，左键围绕试点旋转，右键以当前正前方为基准向上下左右移动试点
     /// 分为四级
     /// 第一级挂载脚本，负责平移
     /// 第二级swivel负责旋转

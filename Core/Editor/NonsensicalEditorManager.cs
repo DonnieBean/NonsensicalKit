@@ -10,6 +10,9 @@ using UnityEngine;
 
 namespace NonsensicalKit.Editor
 {
+    /// <summary>
+    /// 编辑器总管理类，用于管理一些通用但使用较消耗性能的属性
+    /// </summary>
     public static class NonsensicalEditorManager
     {
         public static GameObject[] selectGameObjects;

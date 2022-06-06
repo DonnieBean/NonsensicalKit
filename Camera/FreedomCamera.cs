@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace NonsensicalKit
 {
+    /// <summary>
+    /// 自由飞行摄像机
+    /// 使用asdw移动，鼠标右键旋转
+    /// </summary>
     public class FreedomCamera : MonoBehaviour
     {
         public Texture2D handTexture;

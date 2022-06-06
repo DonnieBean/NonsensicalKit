@@ -4,6 +4,9 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
+/// <summary>
+/// 在windows平台中使用钩子（hook）获得键盘的输入
+/// </summary>
 class InterceptKeys : MonoBehaviour
 {
     private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);

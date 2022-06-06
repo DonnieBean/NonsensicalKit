@@ -5,6 +5,9 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
+/// <summary>
+/// 再windows平台中使用钩子（hook）获取鼠标输入
+/// </summary>
 public class InterceptMouse : MonoBehaviour
 {
     public static Action RMouseDown;

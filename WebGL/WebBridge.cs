@@ -7,6 +7,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using UnityEngine;
 
+/// <summary>
+/// 用于规范化与webgl的js代码通讯
+/// </summary>
 public class WebBridge : MonoSingleton<WebBridge>
 {
     [DllImport("__Internal")]

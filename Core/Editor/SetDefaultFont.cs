@@ -8,6 +8,7 @@ namespace NonsensicalKit.Editor
 {
     /// <summary>
     /// https://blog.csdn.net/zcaixzy5211314/article/details/79549149
+    /// 设置创建text时的默认字体
     /// </summary>
     public class SetDefaultFont : EditorWindow
     {

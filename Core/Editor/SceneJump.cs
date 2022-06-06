@@ -12,6 +12,10 @@ namespace NonsensicalKit.Editor
             EditorApplication.playModeStateChanged += PlayModeStateChange;
         }
 
+        /// <summary>
+        /// 运行后跳转至buildingSetting中的首个设置场景
+        /// </summary>
+        /// <param name="playModeStateChange"></param>
         static void PlayModeStateChange(PlayModeStateChange playModeStateChange)
         {
             bool needJump = PlayerPrefs.GetInt("nk_nonsensicalConfigurator_jumpFirstOnPlay", 0)==0?false:true;

@@ -5,7 +5,9 @@ using UnityEngine;
 
 namespace NonsensicalKit.Editor
 {
-
+    /// <summary>
+    /// 添加或修改成自适应大小的盒子碰撞体
+    /// </summary>
     public class AutoFixedBoxCollider : EditorWindow
     {
         private static string showText; //显示给用户的文本

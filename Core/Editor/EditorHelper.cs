@@ -1,5 +1,8 @@
 using UnityEditor;
 
+/// <summary>
+/// 用于改变编辑器设置的工具类
+/// </summary>
 public static class EditorHelper
 {
 #if UNITY_EDITOR

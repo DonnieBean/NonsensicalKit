@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace NonsensicalKit.Editor
 {
+    /// <summary>
+    /// assetBundle打包工具
+    /// </summary>
     public class AssetBundleAuxiliaryTool : EditorWindow
     {
 

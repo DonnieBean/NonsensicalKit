@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace NonsensicalKit.Editor
 {
+    /// <summary>
+    /// 快速命名工具，可以将一个节点树的所有名称复制到另一个相同结构的节点树上
+    /// </summary>
 
     public class NameCopyer : EditorWindow
     {

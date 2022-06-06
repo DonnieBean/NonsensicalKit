@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 namespace NonsensicalKit.Editor
 {
+    /// <summary>
+    /// 批量修改组件
+    /// </summary>
     public class ComponentModifier : EditorWindow
     {
         [MenuItem("Tools/NonsensicalKit/组件内容修改器")]

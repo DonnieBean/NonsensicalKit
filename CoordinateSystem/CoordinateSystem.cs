@@ -5,6 +5,7 @@ namespace NonsensicalKit
 {
     /// <summary>
     /// 坐标系
+    /// 构建对象的本地的坐标系，用于多坐标系计算
     /// </summary>
     public struct CoordinateSystem
     {

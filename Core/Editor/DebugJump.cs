@@ -7,6 +7,9 @@ namespace NonsensicalKit.Editor
 {
     public class DebugJump
     {
+        /// <summary>
+        /// 用于改变双击console中信息后的跳转
+        /// </summary>
         public static string className = nameof(LogManager) + ".cs";
         public static string class2Name = nameof(ConsoleLogStrategy) + ".cs";
 

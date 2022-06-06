@@ -6,7 +6,9 @@ using UnityEngine;
 
 namespace NonsensicalKit.Editor
 {
-
+    /// <summary>
+    /// 批量添加组件
+    /// </summary>
     public class ComponentMountModifier : EditorWindow
     {
         [MenuItem("Tools/NonsensicalKit/组件挂载修改器")]

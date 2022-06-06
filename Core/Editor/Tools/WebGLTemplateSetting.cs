@@ -4,6 +4,9 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
+/// <summary>
+/// 再webgl打包后可以动态修改文件，暂时未使用
+/// </summary>
 public class WebGLTemplateSetting : EditorWindow
 {
     /// <summary>
