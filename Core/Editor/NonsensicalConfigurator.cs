@@ -51,45 +51,33 @@ namespace NonsensicalKit.Editor
             Data.jumpFirstOnPlay = PlayerPrefs.GetInt("nk_nonsensicalConfigurator_jumpFirstOnPlay", 0) == 0 ? false : true;
             Data.jumpFirstOnPlay = EditorGUILayout.Toggle("运行时跳转至首个场景", Data.jumpFirstOnPlay);
             PlayerPrefs.SetInt("nk_nonsensicalConfigurator_jumpFirstOnPlay", Data.jumpFirstOnPlay ? 1 : 0);
+
+            bool flag = false;
             for (int i = 0; i < Data.Lines.Length; i++)
             {
                 Data.useStates[i] = EditorHelper.CheckScriptingDefine(Data.Lines[i]);
+                bool temp = Data.useStates[i];
                 Data.useStates[i] = EditorGUILayout.Toggle(Data.Labels[i], Data.useStates[i]);
-                if (Data.useStates[i])
+
+                if (temp != Data.useStates[i])
                 {
-                    EditorHelper.SetScriptingDefine(Data.Lines[i]);
-                }
-                else
-                {
-                    EditorHelper.RemoveScriptingDefine(Data.Lines[i]);
+                    flag = true;
                 }
             }
-            //bool flag = false;
-            //for (int i = 0; i < Data.Lines.Length; i++)
-            //{
-            //    Data.useStates[i] = EditorHelper.CheckScriptingDefine(Data.Lines[i]);
-            //    bool temp = Data.useStates[i];
-            //    Data.useStates[i] = EditorGUILayout.Toggle(Data.Labels[i], Data.useStates[i]);
-
-            //    if (temp != Data.useStates[i])
-            //    {
-            //        flag = true;
-            //    }
-            //}
-            //if (flag)
-            //{
-            //    for (int i = 0; i < Data.Lines.Length; i++)
-            //    {
-            //        if (Data.useStates[i])
-            //        {
-            //            EditorHelper.SetScriptingDefine(Data.Lines[i]);
-            //        }
-            //        else
-            //        {
-            //            EditorHelper.RemoveScriptingDefine(Data.Lines[i]);
-            //        }
-            //    }
-            //}
+            if (flag)
+            {
+                for (int i = 0; i < Data.Lines.Length; i++)
+                {
+                    if (Data.useStates[i])
+                    {
+                        EditorHelper.SetScriptingDefine(Data.Lines[i]);
+                    }
+                    else
+                    {
+                        EditorHelper.RemoveScriptingDefine(Data.Lines[i]);
+                    }
+                }
+            }
         }
     }
 }
