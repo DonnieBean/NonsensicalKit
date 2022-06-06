@@ -9,11 +9,12 @@ namespace NonsensicalKit.Highlight
         public Color TouchColor = Color.cyan;
         public Color SelectColor = Color.yellow;
 
-        private Highlighter highlighter;
 
         private bool isTouch;
         private bool isSelect;
 
+#if USE_HIGHLIGHTINGSYSTEM
+        private Highlighter highlighter;
         protected override void Awake()
         {
             base.Awake();
@@ -59,5 +60,7 @@ namespace NonsensicalKit.Highlight
                 highlighter.ConstantOnImmediate(Color.blue);
             }
         }
+#endif
+
     }
 }

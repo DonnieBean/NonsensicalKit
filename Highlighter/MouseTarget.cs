@@ -7,25 +7,27 @@ namespace NonsensicalKit.Highlight
 {
     public class MouseTarget : NonsensicalMono
     {
-        [SerializeField] protected Highlighter lighter;
         [SerializeField] protected string signal;
         protected Action onClick;
         protected bool isHover;
         protected bool isEnter;
 
-
+#if USE_HIGHLIGHTINGSYSTEM
+        [SerializeField] protected Highlighter lighter;
         private void OnMouseEnter()
         {
-            isHover = true; 
+            isHover = true;
             lighter.ConstantOn(Color.cyan);
         }
 
         private void OnMouseExit()
         {
-            isHover = false; 
+            isHover = false;
             isEnter = false;
             lighter.ConstantOff();
         }
+#endif
+
 
         private void OnMouseDown()
         {

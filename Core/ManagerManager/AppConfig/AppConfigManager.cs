@@ -46,7 +46,7 @@ namespace NonsensicalKit.Manager
                     Debug.LogError("NonsensicalAppConfig文件反序列化出错" + path + "\r\n" + e.ToString());
                 }
 
-                configDatas[i].SetData((ConfigDataBase)deserializeData); 
+                configDatas[i].SetData(deserializeData as ConfigDataBase);
                 configDatas[i].OnSetDataEnd();
             }
         }
@@ -130,17 +130,15 @@ namespace NonsensicalKit.Manager
             else
             {
                 Dictionary<Type, HashSet<string>> IDTable = new Dictionary<Type, HashSet<string>>();
-
                 for (int i = 0; i < configDatas.Length; i++)
                 {
                     var data = configDatas[i].GetData();
-                    datas[i] = data;
+                    datas[i] = data;    
                     Type t = data.GetType();
                     if (IDTable.ContainsKey(t) == false)
                     {
                         IDTable.Add(t, new HashSet<string>());
                     }
-
                     string crtID = data.ConfigID;
                     if (!IDTable[t].Contains(crtID))
                     {
@@ -153,9 +151,7 @@ namespace NonsensicalKit.Manager
                         break;
                     }
                 }
-               
             }
-
         }
 
         private IEnumerator LoadAppConfig()
@@ -181,7 +177,7 @@ namespace NonsensicalKit.Manager
                             Debug.LogError("NonsensicalAppConfig文件反序列化出错\r\n" + e.ToString());
                         }
 
-                        configDatas[j] .SetData( (ConfigDataBase)deserializeData);
+                        configDatas[j].SetData(deserializeData as ConfigDataBase);
                         configDatas[j].OnSetDataEnd();
                     }
                     count--;

@@ -9,11 +9,12 @@ public class SendSignalObject : NonsensicalMono
 {
     [SerializeField] private string signal;
 
-    [SerializeField] private Highlighter highlighter;
 
     protected Action OnEnter;
     protected Action OnExit;
 
+#if USE_HIGHLIGHTINGSYSTEM
+    [SerializeField] private Highlighter highlighter;
     private void OnMouseEnter()
     {
         highlighter.ConstantOn();
@@ -26,6 +27,7 @@ public class SendSignalObject : NonsensicalMono
         highlighter.ConstantOff();
         OnExit?.Invoke();
     }
+#endif
 
     private void OnMouseDown()
     {

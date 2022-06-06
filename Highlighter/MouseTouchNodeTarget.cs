@@ -13,6 +13,7 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(Highlighter))]
 public class MouseTouchNodeTarget : NonsensicalMono
 {
+#if USE_HIGHLIGHTINGSYSTEM
     [SerializeField] protected int searchDeep = 1;        //第几级父节点之内被选中时才能交互
     [SerializeField] protected string nodeName;         //点击后跳转的节点名
     private Highlighter lighter;
@@ -46,7 +47,7 @@ public class MouseTouchNodeTarget : NonsensicalMono
 
     public void OnSwitchNode(LogicNode node)
     {
-        if (logicNode==null)
+        if (logicNode == null)
         {
             return;
         }
@@ -55,7 +56,7 @@ public class MouseTouchNodeTarget : NonsensicalMono
         isRunning = false;
 
         //LogManager.Instance.Log(nodeName);
-        if (extraCheck==null || extraCheck.Invoke())
+        if (extraCheck == null || extraCheck.Invoke())
         {
             while (ln.ParentNode != null && crtDeep > 0)
             {
@@ -69,7 +70,7 @@ public class MouseTouchNodeTarget : NonsensicalMono
                 crtDeep--;
             }
         }
-     
+
 
         foreach (var item in colliders)
         {
@@ -96,7 +97,7 @@ public class MouseTouchNodeTarget : NonsensicalMono
 
     private void OnMouseUpAsButton()
     {
-        if (logicNode!=null && esic.MouseNotInUI&&isRunning )
+        if (logicNode != null && esic.MouseNotInUI && isRunning)
         {
             Touch();
         }
@@ -106,4 +107,5 @@ public class MouseTouchNodeTarget : NonsensicalMono
     {
         LogicNodeManager.Instance.SwitchNode(logicNode);
     }
+#endif
 }
