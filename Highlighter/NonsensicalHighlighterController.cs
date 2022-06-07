@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace NonsensicalKit.Highlight
 {
+#if USE_HIGHLIGHTINGSYSTEM
     public class NonsensicalHighlighterController : NonsensicalMono
     {
         private NonsensicalHighlighterBase lastTouch;
@@ -39,4 +40,5 @@ namespace NonsensicalKit.Highlight
             }
         }
     }
+#endif
 }

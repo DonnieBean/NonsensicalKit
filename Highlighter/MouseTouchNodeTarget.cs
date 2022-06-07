@@ -1,3 +1,4 @@
+#if USE_HIGHLIGHTINGSYSTEM
 using HighlightingSystem;
 using NonsensicalKit;
 using NonsensicalKit.Manager;
@@ -13,7 +14,6 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(Highlighter))]
 public class MouseTouchNodeTarget : NonsensicalMono
 {
-#if USE_HIGHLIGHTINGSYSTEM
     [SerializeField] protected int searchDeep = 1;        //第几级父节点之内被选中时才能交互
     [SerializeField] protected string nodeName;         //点击后跳转的节点名
     private Highlighter lighter;
@@ -107,5 +107,5 @@ public class MouseTouchNodeTarget : NonsensicalMono
     {
         LogicNodeManager.Instance.SwitchNode(logicNode);
     }
-#endif
 }
+#endif

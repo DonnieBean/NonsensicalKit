@@ -1,4 +1,7 @@
+#if USE_HIGHLIGHTINGSYSTEM
 using HighlightingSystem;
+#endif
+
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;

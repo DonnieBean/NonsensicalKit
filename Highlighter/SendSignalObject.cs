@@ -3,7 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if USE_HIGHLIGHTINGSYSTEM
 using HighlightingSystem;
+#endif
 
 public class SendSignalObject : NonsensicalMono
 {

@@ -1,3 +1,4 @@
+#if USE_HIGHLIGHTINGSYSTEM
 using HighlightingSystem;
 using UnityEngine;
 
@@ -13,7 +14,6 @@ namespace NonsensicalKit.Highlight
         private bool isTouch;
         private bool isSelect;
 
-#if USE_HIGHLIGHTINGSYSTEM
         private Highlighter highlighter;
         protected override void Awake()
         {
@@ -60,7 +60,6 @@ namespace NonsensicalKit.Highlight
                 highlighter.ConstantOnImmediate(Color.blue);
             }
         }
-#endif
-
     }
 }
+#endif
