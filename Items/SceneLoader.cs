@@ -9,8 +9,10 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class SceneLoader : NonsensicalMono
 {
+    [SerializeField] private string mainSceneName = "MainScene";
 
-    List<string> loadedScene = new List<string>();
+    private List<string> loadedScene = new List<string>();
+
     protected override void Awake()
     {
         base.Awake();
@@ -19,44 +21,6 @@ public class SceneLoader : NonsensicalMono
         Subscribe<string, bool>("loadScene", OnLoadScene);
         Subscribe("returnMainMenu", OnReturnMainMenu);
     }
-
-    bool showEscapePanel;
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            showEscapePanel = true;
-        }
-    }
-    private void OnGUI()
-    {
-        if (showEscapePanel)
-        {
-            GUIStyle guiStyle = GUIStyle.none;
-            guiStyle.fontSize = 25;
-            guiStyle.normal.textColor = Color.white;
-            guiStyle.alignment = TextAnchor.MiddleCenter;
-
-            int width = Screen.width;
-            int height = Screen.height;
-            GUI.Box(new Rect(width * 0.5f - 175, height * 0.5f - 112.5f, 350, 225), "");
-
-            GUI.Label(new Rect(width * 0.5f - 50, height * 0.5f - 100, 100, 50), "是否退出程序", guiStyle);
-            if (GUI.Button(new Rect(width * 0.5f - 130, height * 0.5f + 50, 60, 30), "确定"))
-            {
-#if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-#else
-                Application.Quit();
-#endif
-            }
-            if (GUI.Button(new Rect(width * 0.5f + 70, height * 0.5f + 50, 60, 30), "取消"))
-            {
-                showEscapePanel = false;
-            }
-        }
-    }
-
     private void OnReturnMainMenu()
     {
         Publish("showMainMenu", true);
@@ -69,11 +33,12 @@ public class SceneLoader : NonsensicalMono
 
     private void OnLoadComplete()
     {
-        SceneManager.LoadSceneAsync("Main Scene", LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync(mainSceneName, LoadSceneMode.Additive);
     }
 
     private void OnLoadScene(string sceneName, bool mainScene = true)
     {
+        //Debug.Log(sceneName+":"+mainScene);
         if (mainScene)
         {
             foreach (var item in loadedScene)

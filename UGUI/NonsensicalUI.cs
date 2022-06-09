@@ -39,6 +39,7 @@ namespace NonsensicalKit.UI
                 CloseSelf(true);
             }
         }
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
