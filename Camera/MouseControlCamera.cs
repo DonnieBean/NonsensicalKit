@@ -56,7 +56,7 @@ namespace NonsensicalKit
 
         protected InputCenter inputCenter;
 
-        [SerializeField] protected bool checkUI;
+        [SerializeField] protected bool checkUI=true;
 
         protected bool isOn=true;
 

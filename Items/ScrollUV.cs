@@ -11,7 +11,7 @@ namespace NonsensicalKit
             Vertical, Horizontal
         }
 
-    public float speed;
+        public float speed;
         [SerializeField] private Direction direction;
         [SerializeField] private Material material;
         [SerializeField] private string stateSignal;

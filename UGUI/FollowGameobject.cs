@@ -10,10 +10,10 @@ namespace NonsensicalKit
     public class FollowGameobject : MonoBehaviour
     {
 
-        [SerializeField] private GameObject target;
+        [SerializeField] private Transform target;
 
 
-        [SerializeField] private float scale=1;
+        [SerializeField] private float scale = 1;
 
 
         [SerializeField] private Camera mainCamera;
@@ -29,9 +29,9 @@ namespace NonsensicalKit
         [SerializeField] private float xOffset;
 
 
-        [SerializeField] private bool scaleByDistance;
+        [SerializeField] private bool scaleByDistance = false;
 
-        [SerializeField] private float normalDistance;
+        [SerializeField] private float normalDistance = 1;
 
         public bool back { get; set; }
 
@@ -59,16 +59,16 @@ namespace NonsensicalKit
         Quaternion cameraRotation;
         private void Update()
         {
-            if ( target != null)
+            if (target != null)
             {
-                targetPosition = target.transform.position;
+                targetPosition = target.position;
                 cameraPosition = mainCamera.transform.position;
                 cameraRotation = mainCamera.transform.rotation;
-                if (targetPosition!=lastTargetPostion||cameraPosition!=lastCameraPostion|| cameraRotation != lastCameraRotation)
+                if (targetPosition != lastTargetPostion || cameraPosition != lastCameraPostion || cameraRotation != lastCameraRotation)
                 {
                     if (scaleByDistance && normalDistance != 0)
                     {
-                        float dis = Vector3.Distance(target.transform.position, mainCamera.transform.position);
+                        float dis = Vector3.Distance(target.position, mainCamera.transform.position);
                         if (dis > 1f)
                         {
                             transform.localScale = Vector3.one * (normalDistance / dis) * scale;
@@ -79,20 +79,32 @@ namespace NonsensicalKit
                         transform.localScale = Vector3.one * scale;
                     }
 
-                    Vector3 pos = mainCamera.WorldToScreenPoint(target.transform.position);
+                    Vector3 pos = mainCamera.WorldToScreenPoint(target.position);
                     back = pos.z < 0;
-
-                    pos.x += xOffset;
-                    pos.y += yOffset;
-                    if (RectTransformUtility.ScreenPointToWorldPointInRectangle(rectTransformSelf, pos, RenderCamera, out Vector3 worldPoint))
+                    if (!back)
                     {
-                        transform.position = worldPoint;
+                        pos.x += xOffset;
+                        pos.y += yOffset;
+                        if (RectTransformUtility.ScreenPointToWorldPointInRectangle(rectTransformSelf, pos, RenderCamera, out Vector3 worldPoint))
+                        {
+                            transform.position = worldPoint;
+                        }
                     }
+
                     lastTargetPostion = targetPosition;
                     lastCameraPostion = cameraPosition;
                     lastCameraRotation = cameraRotation;
                 }
             }
+        }
+
+        public void SetTarget(GameObject newTarget)
+        {
+            target = newTarget.transform;
+        }
+        public void SetTarget(Transform newTarget)
+        {
+            target = newTarget;
         }
     }
 }

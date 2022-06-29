@@ -11,7 +11,7 @@ namespace NonsensicalKit.Editor
     /// </summary>
     public class ComponentModifier : EditorWindow
     {
-        [MenuItem("Tools/NonsensicalKit/组件内容修改器")]
+        [MenuItem("Tools/NonsensicalKit/批量修改/组件内容修改器")]
         public static void ShowWindow()
         {
             EditorWindow.GetWindow(typeof(ComponentModifier));

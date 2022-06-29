@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// 使用一维数组实现三维数组
+    /// 时间换空间
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public struct Array3<T>
@@ -38,7 +39,7 @@
         {
             get
             {
-                    return array3[index0 * step0 + index1 * step1 + index2];
+                return array3[index0 * step0 + index1 * step1 + index2];
             }
             set
             {

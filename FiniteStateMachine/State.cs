@@ -27,5 +27,4 @@ namespace NonsensicalKit.FiniteStateMachine
 
         public abstract void OnExit();
     }
-
 }

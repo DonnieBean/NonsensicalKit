@@ -25,6 +25,8 @@ namespace NonsensicalKit.FiniteStateMachine
 
         private T t;
 
+        protected bool Running=true;
+
         public void Init(T t)
         {
             this.t = t;
@@ -65,7 +67,10 @@ namespace NonsensicalKit.FiniteStateMachine
 
         protected virtual void Update()
         {
-            crtState?.OnUpdate();
+            if (Running)
+            {
+                crtState?.OnUpdate();
+            }
         }
     }
 }

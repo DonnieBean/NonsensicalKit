@@ -12,7 +12,7 @@ namespace NonsensicalKit.Editor
     {
         private static string showText; //显示给用户的文本
 
-        [MenuItem("Tools/NonsensicalKit/自动添加自适应大小盒子碰撞器包括子物体")]
+        [MenuItem("Tools/NonsensicalKit/批量修改/自动添加自适应大小盒子碰撞器包括子物体")]
         static void AddComponentToCrtTargetWithChilds()
         {
             if (Selection.gameObjects.Length == 0)
@@ -29,7 +29,7 @@ namespace NonsensicalKit.Editor
                 Debug.Log("盒子碰撞器自适应完成");
             }
         }
-        [MenuItem("Tools/NonsensicalKit/自动添加自适应大小盒子碰撞器")]
+        [MenuItem("Tools/NonsensicalKit/批量修改/自动添加自适应大小盒子碰撞器")]
         static void AddComponentToCrtTarget()
         {
             if (Selection.gameObjects.Length == 0)

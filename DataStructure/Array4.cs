@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// 使用一维数组实现四维数组
+    /// 时间换空间
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public struct Array4<T>

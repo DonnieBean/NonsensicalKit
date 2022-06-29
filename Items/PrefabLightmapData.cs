@@ -7,7 +7,9 @@ using UnityEngine.SceneManagement;
 namespace NonsensicalKit
 {
     /// <summary>
+    /// 将烘培信息导入预制体的工具类
     /// https://github.com/Ayfel/PrefabLightmapping
+    /// 实际使用时发现有bug且会影响到Lightmapping原始文件，所以可以将灭个预制体打包成单独的场景，各自场景中烘培后使用
     /// </summary>
     [ExecuteAlways]
     public class PrefabLightmapData : MonoBehaviour
