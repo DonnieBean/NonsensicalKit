@@ -7,6 +7,7 @@ namespace NonsensicalKit
 {
     /// <summary>
     /// 屏幕信息收集
+    /// 在屏幕大小改变时发布消息
     /// </summary>
     public class ScreenInfoCollector : NonsensicalMono
     {

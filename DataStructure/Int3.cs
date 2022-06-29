@@ -1,7 +1,11 @@
 ﻿namespace NonsensicalKit
 {
+    /// <summary>
+    /// 新版本可用Vector3Int
+    /// </summary>
     public struct Int3
     {
+       
         public int I1 { get; set; }
         public int I2 { get; set; }
         public int I3 { get; set; }

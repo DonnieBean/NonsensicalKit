@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace NonsensicalKit
 {
+    /// <summary>
+    /// 运行时生成一个cube
+    /// </summary>
     public class AutoBox : MonoBehaviour
     {
         [SerializeField] private Vector3 autoBoxSize;

@@ -6,7 +6,6 @@ namespace NonsensicalKit
     /// <summary>
     /// 添加时会在排序后再插入的链表，可以保证随时都是排序好的状态
     /// 性能较差
-    /// 新版本.net有SortedSet<T>
     /// </summary>
     /// <typeparam name="T"></typeparam>
     class AutoSortList<T> where T : IComparable

@@ -26,7 +26,7 @@ namespace NonsensicalKit
 
         private MessageAggregator()
         {
-         
+
         }
 
         public void Subscribe(int name, MessageHandler<T1, T2, T3> handler)
@@ -198,7 +198,7 @@ namespace NonsensicalKit
 
         public void Publish(string name, T1 arg1, T2 arg2)
         {
-            if (_strMessages.ContainsKey(name) )
+            if (_strMessages.ContainsKey(name))
             {
                 _strMessages[name](arg1, arg2);
             }
@@ -296,7 +296,7 @@ namespace NonsensicalKit
         {
             if (_strMessages.ContainsKey(name))
             {
-                _strMessages[name](args); 
+                _strMessages[name](args);
             }
         }
         public bool Check(string value)
@@ -391,11 +391,12 @@ namespace NonsensicalKit
 
         public void Publish(string name)
         {
-            if (_strMessages.ContainsKey(name) )
+            if (_strMessages.ContainsKey(name))
             {
                 _strMessages[name]();
             }
         }
+
         public bool Check(string value)
         {
             return _strMessages.ContainsKey(value);

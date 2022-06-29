@@ -57,7 +57,7 @@ namespace NonsensicalKit.Manager
             }
             catch (Exception)
             {
-                Manager.LogManager.Instance.Log("文件写入错误");
+                LogManager.Instance.Log("文件写入错误");
             }
         }
 

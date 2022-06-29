@@ -451,6 +451,7 @@ namespace NonsensicalKit.Utility
             EnsureDir(Application.streamingAssetsPath);
             string path = Path.Combine(Application.streamingAssetsPath, StringHelper.GetDateTimeString() + ".txt");
             File.WriteAllText(path, _text);
+            Debug.Log("文件已写入："+path);
         }
         public static bool FileAppendWrite(string _fullpath, string _text)
         {

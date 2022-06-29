@@ -3,6 +3,9 @@ using UnityEngine.UI;
 
 namespace NonsensicalKit
 {
+    /// <summary>
+    /// 图片运行中随机变色
+    /// </summary>
     [RequireComponent(typeof(Image))]
     public class RandomColor : MonoBehaviour
     {

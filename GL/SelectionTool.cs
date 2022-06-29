@@ -11,7 +11,7 @@ namespace NonsensicalKit
     {
         public List<Transform> crtSelectTargets;
         public Transform[] needCheckTargets;
-        public bool IsOpenSelect { get; set; } = false;//是否开启框选
+        public bool IsOpenSelect = true;//是否开启框选
         public Action OnSelectOver;
 
         [SerializeField]
@@ -36,8 +36,6 @@ namespace NonsensicalKit
         {
             frameColor = new Color(rectColor.r, rectColor.g, rectColor.b, frameAlpha);
             mainColor = new Color(rectColor.r, rectColor.g, rectColor.b, 0.1f);
-            rectMat.hideFlags = HideFlags.None;
-            rectMat.shader.hideFlags = HideFlags.None;//不显示在hierarchy面板中的组合，不保存到场景并且卸载Resources.UnloadUnusedAssets不卸载的对象。
         }
 
         void Update()
@@ -127,29 +125,20 @@ namespace NonsensicalKit
                 GL.Vertex3(p1.x, p1.y + frameWidth, 0);
                 GL.Vertex3(p1.x, p2.y - frameWidth, 0);
                 GL.Vertex3(p1.x - frameWidth, p2.y - frameWidth, 0);
-                GL.End();
 
                 //绘制边框的上方
-                GL.Begin(GL.QUADS);
-                GL.Color(frameColor);
                 GL.Vertex3(p1.x, p1.y + frameWidth, 0);
                 GL.Vertex3(p2.x, p1.y + frameWidth, 0);
                 GL.Vertex3(p2.x, p1.y, 0);
                 GL.Vertex3(p1.x, p1.y, 0);
-                GL.End();
 
                 //绘制边框的右侧
-                GL.Begin(GL.QUADS);
-                GL.Color(frameColor);
                 GL.Vertex3(p2.x, p1.y + frameWidth, 0);
                 GL.Vertex3(p2.x + frameWidth, p1.y + frameWidth, 0);
                 GL.Vertex3(p2.x + frameWidth, p2.y - frameWidth, 0);
                 GL.Vertex3(p2.x, p2.y - frameWidth, 0);
-                GL.End();
 
                 //绘制边框的下方
-                GL.Begin(GL.QUADS);
-                GL.Color(frameColor);
                 GL.Vertex3(p1.x, p2.y, 0);
                 GL.Vertex3(p2.x, p2.y, 0);
                 GL.Vertex3(p2.x, p2.y - frameWidth, 0);
