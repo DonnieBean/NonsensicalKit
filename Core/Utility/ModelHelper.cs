@@ -18,6 +18,12 @@ namespace NonsensicalKit.Utility
             return diffuse;
         }
 
+        /// <summary>
+        /// 自定义大小的盒子
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="singleSize"></param>
+        /// <returns></returns>
         public static Mesh GetCustomCube(Array3<bool> state, float singleSize)
         {
             MeshBuffer crtMeshBuffer = new MeshBuffer();
@@ -624,6 +630,39 @@ namespace NonsensicalKit.Utility
             meshbuffer.AddRound(start, radius, end - start, smoothness);
             meshbuffer.AddRing3D(start, radius, end, radius, end - start, smoothness);
             meshbuffer.AddRound(end, radius, start - end, smoothness);
+
+            return meshbuffer.ToMesh();
+        }
+
+        /// <summary>
+        /// 创建贝塞尔曲线
+        /// 尚未完成，需要求出每个点的斜率，带斜率信息获取两个点之间的边缘部分
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <param name="radius"></param>
+        /// <param name="segmentNum"></param>
+        /// <param name="smoothness"></param>
+        /// <returns></returns>
+        public static Mesh CreateBezierCurve(Vector3 start,  Vector3 p1,Vector3 p2, Vector3 end, float radius,int segmentNum=16, int smoothness = 16)
+        {
+            MeshBuffer meshbuffer = new MeshBuffer();
+
+            var v = BezierHelper.GetThreePowerBeizerListWithSlope(start, p1, p2, end, 16);
+
+            var point = v[0];
+            var slopes = v[1];
+
+            meshbuffer.AddRound(start, radius, slopes[0], smoothness);
+
+            for (int i = 0; i < point.Length-1; i++)
+            {
+                meshbuffer.AddRing3D(point[i], radius, slopes[i], point[i+1], radius, slopes[i+1], smoothness);
+            }
+
+            meshbuffer.AddRound(end, radius, -slopes[segmentNum-1], smoothness);
 
             return meshbuffer.ToMesh();
         }

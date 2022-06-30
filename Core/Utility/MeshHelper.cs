@@ -666,6 +666,50 @@ namespace NonsensicalKit.Utility
             }
         }
 
+        /// <summary>
+        /// 用两个不平行的圆相连作成环
+        /// </summary>
+        /// <param name="ringSide1"></param>
+        /// <param name="ringSide1Radius"></param>
+        /// <param name="dir2"></param>
+        /// <param name="ringSide2"></param>
+        /// <param name="ringSide2Radius"></param>
+        /// <param name="dir2"></param>
+        /// <param name="smoothness"></param>
+        /// <exception cref="Exception"></exception>
+        public void AddRing3D(Vector3 ringSide1, float ringSide1Radius, Vector3 d1, Vector3 ringSide2, float ringSide2Radius, Vector3 d2, int smoothness)
+        {
+            if (smoothness < 3)
+            {
+                throw new Exception("点数过少");
+            }
+
+            Vector3 d1V = VectorHelper.GetCommonVerticalLine(d1, d1);
+            Vector3 d1VV = VectorHelper.GetCommonVerticalLine(d1, d1V);
+            Vector3 d2V = VectorHelper.GetCommonVerticalLine(d2, d2);
+            Vector3 d2VV = VectorHelper.GetCommonVerticalLine(d2, d2V);
+
+            float partAngle = (2 * Mathf.PI) / smoothness;
+            Vector3[] pointArray1 = new Vector3[smoothness];
+            Vector3[] pointArray2 = new Vector3[smoothness];
+            for (int i = 0; i < smoothness; i++)
+            {
+                pointArray1[i] = ringSide1 + ringSide1Radius * d1V * Mathf.Sin(partAngle * i) + ringSide1Radius * d1VV * Mathf.Cos(partAngle * i);
+                pointArray2[i] = ringSide2 + ringSide2Radius * d2V * Mathf.Sin(partAngle * i) + ringSide2Radius * d2VV * Mathf.Cos(partAngle * i);
+            }
+
+            for (int i = 0; i < smoothness; i++)
+            {
+                int next = i + 1;
+                if (next >= smoothness)
+                {
+                    next = 0;
+                }
+                // AddQuad(new Vector3[] { pointArray1[i], pointArray2[i], pointArray2[next], pointArray1[next] }, (pointArray1[i] + pointArray2[i] + pointArray2[next] + pointArray1[next]) * 0.25f- (ringSide1+ringSide2)*0.5f, new Vector2(0.5f, 0.5f));
+                AddQuad_3(new Vector3[] { pointArray1[i], pointArray2[i], pointArray2[next], pointArray1[next] }, new Vector3[] { ringSide1, ringSide2, ringSide2, ringSide1 }, new Vector2(0.5f, 0.5f));
+            }
+        }
+
         #region Subdivide4 (2x2)
         private int GetNewVertex4(int i1, int i2)
         {
