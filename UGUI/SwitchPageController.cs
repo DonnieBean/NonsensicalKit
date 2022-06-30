@@ -5,9 +5,9 @@ namespace NonsensicalKit.UI
 {
     public class SwitchPageController : NonsensicalUI
     {
-        [SerializeField] private Button[] buttons;
+        [SerializeField] protected Button[] buttons;
 
-        [SerializeField] private GameObject[] targets;
+        [SerializeField] protected GameObject[] targets;
 
         [SerializeField] private int initSelect = 0;
 

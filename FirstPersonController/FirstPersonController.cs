@@ -119,7 +119,6 @@ namespace NonsensicalKit
             }
         }
     
-
         protected void ResetState()
         {
             transform.localPosition = startPos;
