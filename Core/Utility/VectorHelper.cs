@@ -30,9 +30,9 @@ namespace NonsensicalKit.Utility
             {
                 _value.y -= 360;
             }
-            while (_value.y >= 360)
+            while (_value.z >= 360)
             {
-                _value.y -= 360;
+                _value.z -= 360;
             }
             return _value;
         }
@@ -77,7 +77,7 @@ namespace NonsensicalKit.Utility
                     }
                 }
             }
-            
+
             while (true)
             {
                 if (_value.y == targetValue.y)
@@ -116,8 +116,8 @@ namespace NonsensicalKit.Utility
                         break;
                     }
                 }
-            } 
-            
+            }
+
             while (true)
             {
                 if (_value.z == targetValue.z)
@@ -200,7 +200,8 @@ namespace NonsensicalKit.Utility
 
         public static Vector3 GetNearVector3Use2(Vector3 rawVector3, int level)
         {
-            return new Vector3(NumHelper.GetNearValueUse2(rawVector3.x, level),
+            return new Vector3(
+                NumHelper.GetNearValueUse2(rawVector3.x, level),
                 NumHelper.GetNearValueUse2(rawVector3.y, level),
                 NumHelper.GetNearValueUse2(rawVector3.z, level));
         }
@@ -513,8 +514,7 @@ namespace NonsensicalKit.Utility
         /// <returns></returns>
         public static Vector3 GetCommonVerticalLine(Vector3 dir1, Vector3 dir2)
         {
-            Vector3 normal = Vector3.zero;
-            normal = Vector3.Cross(dir1, dir2);
+            Vector3 normal = Vector3.Cross(dir1, dir2);
 
 
             //当两个向量平行时，Vector3.Cross求出来的公垂线为Vector3.Zero
@@ -573,7 +573,7 @@ namespace NonsensicalKit.Utility
         }
 
         /// <summary>
-        /// 获取圆内一点
+        /// 获取圆内随机一点
         /// </summary>
         /// <param name="m_Radius"></param>
         /// <returns></returns>
@@ -764,6 +764,27 @@ namespace NonsensicalKit.Utility
                 case 7: return new Float3(-size, -size, -size);
                 default: return Float3.zero;
             }
+        } 
+        
+        //Returns the rotated Vector3 using a Quaterion
+        public static Vector3 RotateAroundPivot(this Vector3 Point, Vector3 Pivot, Quaternion Angle)
+        {
+            return Angle * (Point - Pivot) + Pivot;
+        }
+        //Returns the rotated Vector3 using Euler
+        public static Vector3 RotateAroundPivot(this Vector3 Point, Vector3 Pivot, Vector3 Euler)
+        {
+            return RotateAroundPivot(Point, Pivot, Quaternion.Euler(Euler));
+        }
+        //Rotates the Transform's position using a Quaterion
+        public static void RotateAroundPivot(this Transform Me, Vector3 Pivot, Quaternion Angle)
+        {
+            Me.position = Me.position.RotateAroundPivot(Pivot, Angle);
+        }
+        //Rotates the Transform's position using Euler
+        public static void RotateAroundPivot(this Transform Me, Vector3 Pivot, Vector3 Euler)
+        {
+            Me.position = Me.position.RotateAroundPivot(Pivot, Quaternion.Euler(Euler));
         }
     }
 }

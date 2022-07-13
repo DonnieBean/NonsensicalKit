@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,93 @@ namespace NonsensicalKit.Utility
     /// </summary>
     public static class NumHelper
     {
+        /// <summary>
+        /// 交换
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="values"></param>
+        /// <param name="i1"></param>
+        /// <param name="i2"></param>
+        public static void Swap<T>(T[] values, int i1, int i2)
+        {
+            T tmp = values[i1];
+            values[i1] = values[i2];
+            values[i2] = tmp;
+        }
+        /// <summary>
+        /// 排序大顶堆
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static T[] SortMaxHeap<T>(T[] values) where T : struct, IComparable<T>
+        {
+            for (int i = values.Length - 1; i > 0; i--)
+            {
+                Swap(values, 0, i);
+
+                int index = 0;
+                while (2 * index + 1 < i)
+                {
+                    int child = 2 * index + 1;
+
+                    if (child + 1 < i)
+                    {
+                        if (values[child].CompareTo(values[index]) < 0 && values[child + 1].CompareTo(values[index]) < 0)
+                            break;
+                        if (values[child].CompareTo(values[child + 1]) < 0) child++;
+                        Swap(values, index, child);
+                        index = child;
+                    }
+                    else
+                    {
+                        if (values[child].CompareTo(values[index]) < 0)
+                            break;
+                        Swap(values, index, child);
+                        index = child;
+                    }
+                }
+            }
+            return values;
+        }
+
+        /// <summary>
+        /// 排序小顶堆
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static T[] SortHeap<T>(T[] values) where T : struct, IComparable<T>
+        {
+            for (int i = values.Length - 1; i > 0; i--)
+            {
+                Swap(values, 0, i);
+
+                int index = 0;
+                while (2 * index + 1 < i)
+                {
+                    int child = 2 * index + 1;
+
+                    if (child + 1 < i)
+                    {
+                        if (values[child].CompareTo(values[index]) > 0 && values[child + 1].CompareTo(values[index]) > 0)
+                            break;
+                        if (values[child].CompareTo(values[child + 1]) > 0) child++;
+                        Swap(values, index, child);
+                        index = child;
+                    }
+                    else
+                    {
+                        if (values[child].CompareTo(values[index]) > 0)
+                            break;
+                        Swap(values, index, child);
+                        index = child;
+                    }
+                }
+            }
+            return values;
+        }
+
         /// <summary>
         /// 获取传入数值的级数
         /// </summary>

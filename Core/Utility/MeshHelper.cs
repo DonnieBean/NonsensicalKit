@@ -346,7 +346,7 @@ namespace NonsensicalKit.Utility
             mesh.SetUVs(1, uv2);
             mesh.SetUVs(2, uv3);
             mesh.SetTriangles(triangles, 0);
-
+            //mesh.RecalculateNormals();    //不使用时效果更加平滑
             return mesh;
         }
 
@@ -684,18 +684,18 @@ namespace NonsensicalKit.Utility
                 throw new Exception("点数过少");
             }
 
-            Vector3 d1V = VectorHelper.GetCommonVerticalLine(d1, d1);
-            Vector3 d1VV = VectorHelper.GetCommonVerticalLine(d1, d1V);
-            Vector3 d2V = VectorHelper.GetCommonVerticalLine(d2, d2);
-            Vector3 d2VV = VectorHelper.GetCommonVerticalLine(d2, d2V);
+            Vector3 d3= VectorHelper.GetCommonVerticalLine(d1, d2);
+            Vector3 d1V = VectorHelper.GetCommonVerticalLine(d1, d3);
+            Vector3 d2V = VectorHelper.GetCommonVerticalLine(d2, d3);
 
             float partAngle = (2 * Mathf.PI) / smoothness;
             Vector3[] pointArray1 = new Vector3[smoothness];
             Vector3[] pointArray2 = new Vector3[smoothness];
+
             for (int i = 0; i < smoothness; i++)
             {
-                pointArray1[i] = ringSide1 + ringSide1Radius * d1V * Mathf.Sin(partAngle * i) + ringSide1Radius * d1VV * Mathf.Cos(partAngle * i);
-                pointArray2[i] = ringSide2 + ringSide2Radius * d2V * Mathf.Sin(partAngle * i) + ringSide2Radius * d2VV * Mathf.Cos(partAngle * i);
+                pointArray1[i] = ringSide1 + ringSide1Radius * d3 * Mathf.Sin(partAngle * i) + ringSide1Radius * d1V * Mathf.Cos(partAngle * i);
+                pointArray2[i] = ringSide2 + ringSide2Radius * d3 * Mathf.Sin(partAngle * i) + ringSide2Radius * d2V * Mathf.Cos(partAngle * i);
             }
 
             for (int i = 0; i < smoothness; i++)

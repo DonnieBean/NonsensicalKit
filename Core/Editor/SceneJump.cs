@@ -21,10 +21,10 @@ namespace NonsensicalKit.Editor
             bool needJump = PlayerPrefs.GetInt("nk_nonsensicalConfigurator_jumpFirstOnPlay", 0)==0?false:true;
             if (needJump&& playModeStateChange == UnityEditor.PlayModeStateChange.EnteredPlayMode)
             {
-                var logEntries = System.Type.GetType("UnityEditor.LogEntries, UnityEditor.dll");
-                Debug.Log(logEntries);
-                var clearMethod = logEntries.GetMethod("Clear", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
-                clearMethod.Invoke(null, null);
+                //var logEntries = System.Type.GetType("UnityEditor.LogEntries, UnityEditor.dll");
+                //Debug.Log(logEntries);
+                //var clearMethod = logEntries.GetMethod("Clear", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
+                //clearMethod.Invoke(null, null);
 
                 if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex != 0)
                 {
